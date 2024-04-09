@@ -1,0 +1,191 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        baseUV: { value: [0,0,1,1] }
+        toneFactor: { value: 1.0, editor: { slide: true, type: float, range: [0.0,1.0], step: 0.01 }}
+        colorFactor: { value: 1.0, editor: { slide: true, type: float, range: [0.0,1.0], step: 0.01 }}
+        blurTextureSize: { value: [100, 100], editor: { type: vector } }   
+        blurFactor: { value: 0.5, editor: { type: int, slide: true , range : [0.0, 1.0], step: 0.01 } }
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: *props
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include "./chunks/util.chunk"
+
+  in vec4 color;
+  in vec2 uv0;
+
+  uniform constant {
+    vec4 baseUV;
+    vec2 blurTextureSize;
+    float toneFactor;
+    float colorFactor;
+    float blurFactor;
+  };
+
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+
+  vec4 transformColorTone (vec4 o) {
+    #if USE_COLOR_TONE_TRANSFORM
+      #if IS_GRAY
+        float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+        o = mix(o, vec4(gray, gray, gray, o.a), toneFactor);
+      #endif
+      #if IS_NEGA
+        o = mix(o, vec4(1.0 - o.rgb, o.a), toneFactor);
+      #endif
+      #if IS_SEPIA
+        o = mix(o, vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)), 
+                        dot(o.rgb, vec3(0.349, 0.686, 0.168)), 
+                        dot(o.rgb, vec3(0.272, 0.534, 0.131)), 
+                        o.a), 
+                        toneFactor);
+      #endif
+
+
+      #if IS_ADD
+        o = mix(o, vec4(color.rgb + o.rgb, color.a * o.a), colorFactor);
+      #endif
+      #if IS_SUB
+        o = mix(o, vec4(color.rgb - o.rgb, color.a * o.a), colorFactor);
+      #endif
+      #if IS_FILL
+        o = mix(o, vec4(color.rgb, color.a * o.a), colorFactor);
+      #endif
+      #if IS_MULT
+        o = mix(o, o * color, colorFactor);
+      #endif
+    #endif
+
+    return o;
+  }
+
+  float BLUR_KERNEL_[5];
+
+  vec4 Tex2DBlurring(sampler2D tex, vec2 texcood, vec2 blur, vec4 mask) {
+    const int BLUR_KERNEL_SIZE = 5;
+    BLUR_KERNEL_[0] = 0.2486;
+    BLUR_KERNEL_[1] = 0.7046;
+    BLUR_KERNEL_[2] = 1.0;
+    BLUR_KERNEL_[3] = 0.7046;
+    BLUR_KERNEL_[4] = 0.2486;
+
+    vec4 o = vec4(0.0);
+    float sum = 0.0;
+    vec2 shift = vec2(0.0);
+
+    for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
+      shift.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
+
+      for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
+        shift.y = blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0);
+        
+        float weight = BLUR_KERNEL_[x] * BLUR_KERNEL_[y];
+        sum += weight;
+
+        vec2 uv = denormalizeUV(texcood + shift, baseUV);
+        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
+      }
+    }
+    return o / sum;
+  }
+
+  vec4 frag () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+  #if USE_NORMALIZE_UV
+    vec2 uv = normalizeUV(uv0, baseUV);
+  #else
+    vec2 uv = uv0;
+  #endif
+
+  #if USE_BLUR
+    o = Tex2DBlurring(cc_spriteTexture, uv, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0 , vec4(0.0, 0.0, 1.0, 1.0));
+  #else
+    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv);
+  #endif
+
+  #if USE_COLOR_TONE_TRANSFORM
+    o = transformColorTone(o);
+  #endif
+
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

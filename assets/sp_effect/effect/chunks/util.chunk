@@ -1,0 +1,35 @@
+// 正推化: 將0~1的貼圖座標，轉換成Atlas上的UV
+vec2 normalizeUV (vec2 uv, vec4 baseUV) {
+   return vec2((uv.x - baseUV.x)/baseUV.z, (uv.y - baseUV.y)/baseUV.w);
+}
+
+// 反正規化: 將0~1的貼圖座標，轉換回Atlas上的UV
+vec2 denormalizeUV (vec2 uv, vec4 baseUV) {
+  return vec2(uv.x * baseUV.z + baseUV.x, uv.y * baseUV.w + baseUV.y);
+}
+
+// 旋轉uv座標
+vec2 rotate(vec2 i_uv, float _rotation) { 
+  //以貼圖中心为旋转中心  
+  vec2 uv = i_uv.xy - vec2(0.5, 0.5);
+
+  //旋转矩阵公式 
+  float s = sin(_rotation);
+  float c = cos(_rotation);
+  uv = vec2((uv.x * c - uv.y * s),  
+            (uv.x * s + uv.y * c));  
+
+  //恢复纹理位置  
+  uv += vec2(0.5, 0.5);  
+  return uv;
+}
+
+// 重新映射
+float remap(float value, float inputMin, float inputMax, float outputMin, float outputMax) {
+  return outputMin + (value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin);
+}
+
+// 反映射
+float invLerp(float a, float b, float value) {
+  return clamp((value - a) / (b - a), 0.0, 1.0);
+}

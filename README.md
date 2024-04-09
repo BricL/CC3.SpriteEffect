@@ -1,0 +1,350 @@
+# CC.SpriteEffect
+受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.x.x 開發 Sprite 的客製化 Effect 組件(Component)。
+
+<p align="center"><img src="doc/img/demo.gif" width="512"></p>
+
+<p align="center"><img src="doc/img/anim_demo.gif" width="512"></p>
+
+## 使用方式
+
+1. 選取欲添加 Effect 的 Sprite Node。
+2. 選擇想要的 Effect，Add Component。
+3. 在 effect property 選擇與對應（同名）的 effect asset。
+
+> :warning: 注意！步驟3因為暫時不知道怎動態把對應的 Effect 檔案指給 Component，故需使用者手動指定。
+
+> :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
+
+## RenderRoot2D Component
+
+在 CC 中 RenderRoot2D 組件可讓 Sprite 於 3D 空間中呈現，達到 3D UI 的效果。而組件下子節點渲染順序與 Canvas 規則相同，但與其他 3D 物件的深度順序，需要開啟 Material 中的深度測試 (Depth Test)。
+
+Effect Component 提供了簡單的設定，開啟方式如下：
+
+<p align="center"><img src="doc/img/2D_in_3D.gif" width="512"></p>
+
+# 各 Effect 實作思路：
+
+0. [Effect Color](#effect-color)
+1. [Effect Flow Light](#effect-flow-light)
+2. [Effect Distort](#effect-distort)
+3. [Effect Gaussian Blur](#effect-gaussian-blur)
+4. [Effect Shadow](#effect-shadow)
+5. [Effect Water Surface](#effect-water-surface)
+6. [Effect Disappear](#effect-disappear)
+7. [Effect Wave](#effect-wave)
+8. [Effect Dissolve](#effect-dissolve)
+9. [Effect Colorizing](#effect-colorizing)
+
+## Effect Color
+
+<p align="center"><img src="doc/img/effect_color.png" width="512"></p>
+
+### 實作思路
+
+* Tone Mode
+    * GRAY (顏色灰階)
+        
+        ``` GLSL
+        float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+        ```
+
+    * NEGA (顏色反轉)
+        
+        ``` GLSL
+        float color = 1.0 - o.rgb
+        ```
+
+    * SEPIA (棕色舊化)
+        
+        一种带有暖色调的棕色，常用于描述古老的照片或者画作中的色调，計算如下：
+
+        ``` GLSL
+        o = vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)), 
+                dot(o.rgb, vec3(0.349, 0.686, 0.168)), 
+                dot(o.rgb, vec3(0.272, 0.534, 0.131)), 
+                o.a)
+        ```
+
+* Color Mode
+
+    * 針對指定顏色與Sprite上顏色進行常用的ADD(相加)、SUB(相減)、MUT(相乘)、FILL(填色)處理。
+
+* Blur Mode
+
+    * 採用快速的One-Pass高斯模糊進行處理。詳細算法請見EffectGaussian。
+
+## Effect Flow Light
+
+<p align="center"><img src="doc/img/effect_flow_light.gif" width="512"></p>
+
+### 實作思路
+
+* 流光貼圖
+
+    * 利用 SmoothStep function 產生流光貼圖，再與 Sprite 顏色相加。
+
+        ```GLSL
+        float c = smoothstep(_lightWidth, _lightWidth - _soft, abs(uv.x + _offset));
+        o = (o * color) + vec4(_lightColor.rgb * c * 1.5, 0.0);
+        ```
+
+        <p align="center"><img src="doc/img/flow_light_smooth_step.png" width="512"></p>
+
+    * SmoothStep數學定義如下：
+
+        $$
+        smoothstep(edge0, edge1, x) = 0, \text{ if } x \leq edge0
+        $$
+
+        $$
+        smoothstep(edge0, edge1, x) = 1, \text{ if } x \geq edge1
+        $$
+
+        $$
+        smoothstep(edge0, edge1, x) = t * t * (3 - 2 * t), \text{ where } t = \frac{x - edge0}{edge1 - edge0}, \text{ if } edge0 < x < edge1
+        $$
+
+* 流光旋轉
+
+    * 利用2D旋轉矩陣，對uv座標進行轉動，便可達成轉動流光的方向。
+
+        ```GLSL
+        //以貼圖中心为旋转中心  
+        vec2 uv = i_uv.xy - vec2(0.5, 0.5);
+
+        //旋转矩阵公式 
+        float s = sin(_rotation);
+        float c = cos(_rotation);
+        uv = vec2((uv.x * c - uv.y * s),  
+                    (uv.x * s + uv.y * c));  
+
+        //恢复纹理位置  
+        uv += vec2(0.5, 0.5);  
+        return uv;
+        ```
+
+## Effect Distort
+
+<p align="center"><img src="doc/img/effect_distort.gif" width="256"></p>
+
+### 實作思路
+
+* 要形成流動的效果，就對 uv 進行 "時間" 上的偏移。
+* 利用Offset後的uv采样噪声纹理
+* 將噪声纹理的值加到原始uv上，近似实现uv的扰动。
+
+    ```GLSL
+    // 采样噪声纹理，根据时间计算偏移
+    float px = mod(cc_time.x * _speed, 1.0);
+    vec2 uv_offset_by_time = base_uv + px;
+    uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
+    uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
+
+    // 利用Offset後的uv采样噪声纹理
+    vec4 noise_uv = texture(_noisetex, uv_offset_by_time);
+
+    // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
+    base_uv.xy += (noise_uv.xy) * _strength;
+    base_uv = denormalizeUV(base_uv, _baseUV);
+    ```
+
+## Effect Gaussian Blur
+
+<p align="center"><img src="doc/img/effect_gaussian_blur.gif" width="512"></p>
+
+### 實作思路
+
+* 採用 5x5 的 Kernel 進行模糊處理，演算步驟如下：
+
+    <p align="center"><img src="doc/img/gaussian_blur.png" width="1024"></p>
+
+    ```GLSL
+    vec4 Tex2DBlurring(sampler2D tex, vec2 texcood, vec2 blur) {
+        // 設定 5個 Kernel 權重值 (x、y方向都用同一組)
+        const int BLUR_KERNEL_SIZE = 5;
+        BLUR_KERNEL_[0] = 0.2486;
+        BLUR_KERNEL_[1] = 0.7046;
+        BLUR_KERNEL_[2] = 1.0;
+        BLUR_KERNEL_[3] = 0.7046;
+        BLUR_KERNEL_[4] = 0.2486;
+
+        vec4 o = vec4(0.0);
+        float sum = 0.0;
+        vec2 offset = vec2(0.0);
+
+        // 迴圈計算 5x5 個像素篇偏移
+        for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
+        offset.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
+
+        for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
+            offset.y = blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0);
+            
+            // 對 x、y 方向權重相乘後，數值進行加總。
+            float weight = BLUR_KERNEL_[x] * BLUR_KERNEL_[y];
+            sum += weight;
+
+            // 依據 uv offset 取出對應的像素顏色，並乘上對 x、y 方向權重的乘積
+            vec2 uv = denormalizeUV(texcood + offset, _baseUV);
+            o += texture(tex, uv) * weight;
+        }
+        }
+        return o / sum;
+    }
+    ```
+
+## Effect Shadow
+
+### One-Pass Shadow (a.k.a Limited Bound shadow) 實作思路
+
+<p align="center"><img src="doc/img/limited_bound_shadow.png" width="256"></p>
+
+* 在 Pixel Shader 下，根據設定 Shadow 的顏色(RGB)、Sprite Alpha，加上對 uv 的偏移量(Offset)繪製出 Shadow，再將其結果與 Sprite 原來的顏色進行lerp。
+
+    ```GLSL
+    vec4 shadow = vec4(_shadowColor.rgb, texture(cc_spriteTexture, uv0 - _offset).a * _shadowColor.a);
+
+    // lerp 在 GLSL 中叫 mix
+    o = mix(shadow, o, o.a) * color;
+    ```
+
+* 該方法的缺點就是偏移量會被 Sprite 的大小所限制，但優點是速度快。
+
+### Two-Pass Shadow 實作思路
+
+<p align="center"><img src="doc/img/shadow.png" width="256"></p>
+
+* 此方法不受限於Sprite的大小範圍，可任意距離的shadow，但需要兩個Pass來完成。
+
+* Pass 1
+    
+    將 Uniform 的 Offset 參數在 Vertex Shader 中對頂點(Vertex)進行偏移。
+
+    ```GLSL
+    CGProgram shadow-vs {
+        uniform Constant {
+            vec4 _shadowColor;
+            vec2 _offset;
+        };
+
+        ...
+
+        vec4 vert() {
+            ...
+
+            //Shadow 偏移
+            pos.x += _offset.x; 
+            pos.y += _offset.y;
+
+            //將Shadow推離Camera一點距離，避免與下一個Pass的Sprite產生Z-fighting
+            pos.z += 0.01;
+
+            return pos;
+        }
+    }
+    ```
+* Pass 2
+    
+    正常繪製Sprite圖。
+
+## Effect Water Surface
+
+### Water Flow
+
+```GLSL
+vec4 offset = texture(_noticeTex, uv0 + cc_time.w * _frequency);
+vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed, 
+                 uv0.y + cc_time.w * _flowDir.y * _speed);
+                       
+o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
+```
+
+### Water Ripple
+
+```GLSL
+#define TAU 6.12
+#define MAX_ITER 5  //迭代次数
+
+float calculateBrightness(vec2 uv)
+{
+    vec2 noisePos = mod(uv*TAU, TAU) - 250.0;  // Calculate the position of the noise
+
+    vec2 i = vec2(noisePos);  // Initialize i to the noise position
+    float brightness = 1.0;  // Initialize brightness to 1.0
+    float noiseIntensity = .0065;  // Noise intensity
+
+    for (int iter = 0; iter < MAX_ITER; iter++)  // Loop MAX_ITER times
+    {
+        float timeFactor =  _speed * cc_time.x * (1.0 - (3.5 / float(iter+1)));  // Calculate time factor
+        i = noisePos + vec2(cos(timeFactor - i.x) + sin(timeFactor + i.y), sin(timeFactor - i.y) + cos(1.5*timeFactor + i.x));  // Calculate new noise position
+        brightness += 1.0 / length(vec2(noisePos.x / (cos(i.x+timeFactor)/noiseIntensity), noisePos.y / (cos(i.y+timeFactor)/noiseIntensity)));  // Calculate brightness
+    }
+
+    brightness /= float(MAX_ITER);  // Take the average
+    brightness = 1.17-pow(brightness, 1.4);  // Calculate brightness value
+    return pow(abs(brightness), 20.0); // Calculate color value
+}
+```
+
+## Effect Disappear
+
+<p align="center"><img src="doc/img/effect_disappear.gif" width="512"></p>
+
+### Component 參數說明
+
+* Dir Mode
+
+    VERTICAL，垂直消失方向。
+
+    HORIZATION，水平消失方向。
+
+* Offset
+
+    效果的偏移量。
+
+* Soft
+
+    效果的柔和程度。
+
+### 實作思路
+
+* 採用SmoothStep
+    * t0 = _offset
+    * t1 = t0 + _soft，控制柔和程度。
+    * uv0.y，對垂直方向進行效果，也可以改為uv0.x對橫向進行效果。
+
+        ```GLSL
+        float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
+        ```
+    * 如下圖所示：
+
+    <p align="center"><img src="doc/img/disapppear_smoothstep.gif" width="512"></p>
+
+## Effect Wave
+
+## Effect Dissolve
+
+## Effect Colorizing
+
+<p align="center"><img src="doc/img/effect_colorizing.gif" width="512"></p>
+
+### 實作思路
+
+* 對 Sprite 灰階化
+
+* 利用灰階後的數值，對各通道 invLerp remap 至各通道的 Min ~ Max 區間。
+
+    ```GLSL
+    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+    o.r = o.g = o.b = gray;
+
+    o = vec4(invLerp(rChannel.x, rChannel.y, gray), 
+             invLerp(bChannel.x, bChannel.y, gray), 
+             invLerp(gChannel.x, gChannel.y, gray), 
+             o.a);
+    ```
+
+## 參考文獻
+* [Functional Shaders: A Colorful Intro-Part5 Tinting With Sepia Tone](https://medium.com/@rupertontheloose/functional-shaders-a-colorful-intro-part5-tinting-with-sepia-tone-cd6c2b49806)
+* [Desmos](https://www.desmos.com/calculator?lang=zh-TW)

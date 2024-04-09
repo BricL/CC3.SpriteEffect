@@ -1,0 +1,114 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        _offset: { value : 0, editor: { slide: true, range: [0, 1], step: 0.01 }} #消失偏移
+        _soft: { value : 0, editor: { slide: true, range: [0, 0.5], step: 0.01 }} #半透明偏移
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: *props
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <cc-global>
+  #include <alpha-test>
+
+  #if USE_TEXTURE  
+    #include <sprite-texture>
+  #endif
+
+  in vec4 i_color;
+  in vec2 uv0;
+
+  uniform Constant {
+    float _offset;
+    float _soft;
+  };
+
+  vec4 frag () {
+    vec4 o = vec4(1.0);
+    #if USE_TEXTURE  
+        o = texture(cc_spriteTexture, uv0);
+    #endif
+    #if DIR_VERTICAL
+    float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
+    #else
+    float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.x);
+    #endif
+    o.a *= val;
+    ALPHA_TEST(o);
+    return o;
+  }
+}%
