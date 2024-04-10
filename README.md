@@ -290,22 +290,6 @@ float calculateBrightness(vec2 uv)
 
 <p align="center"><img src="doc/img/effect_disappear.gif" width="512"></p>
 
-### Component 參數說明
-
-* Dir Mode
-
-    VERTICAL，垂直消失方向。
-
-    HORIZATION，水平消失方向。
-
-* Offset
-
-    效果的偏移量。
-
-* Soft
-
-    效果的柔和程度。
-
 ### 實作思路
 
 * 採用SmoothStep
