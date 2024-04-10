@@ -23,7 +23,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 28
+      "__id__": 22
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 29
+      "__id__": 23
     },
     "_id": "5a9c1dba-8a80-41b3-9930-56a6f286c601"
   },
@@ -84,12 +84,6 @@
       },
       {
         "__id__": 21
-      },
-      {
-        "__id__": 22
-      },
-      {
-        "__id__": 23
       }
     ],
     "_prefab": null,
@@ -368,7 +362,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "5728105b-483f-44c1-bd46-c65bf458687f@f9941",
+      "__uuid__": "74fe5063-124d-4407-a5de-05a1d6551f41@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -526,7 +520,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "5728105b-483f-44c1-bd46-c65bf458687f@f9941",
+      "__uuid__": "74fe5063-124d-4407-a5de-05a1d6551f41@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -740,165 +734,6 @@
     "_id": "c5V1EV8IpMtrIvY1OE9t2u"
   },
   {
-    "__type__": "14523eB6X9M15f4bDozRQdQ",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "_id": "fcovpfFsBHe43idL0hwvhQ"
-  },
-  {
-    "__type__": "75e3dQTaStMppLjcqN3ur7f",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "sprite": {
-      "__id__": 24
-    },
-    "disappear_offset": 0,
-    "translucent_Offset": 0.1,
-    "_id": "b6BxJfzXZLBLhhG78Cz+Zh"
-  },
-  {
-    "__type__": "cc.Sprite",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 25
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "_customMaterial": null,
-    "_srcBlendFactor": 2,
-    "_dstBlendFactor": 4,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_spriteFrame": {
-      "__uuid__": "5728105b-483f-44c1-bd46-c65bf458687f@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
-    "_id": "71oJjHISZMFKqzwBun6Vpz"
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "disappear_sp",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "_parent": null,
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 26
-      },
-      {
-        "__id__": 24
-      },
-      {
-        "__id__": 27
-      }
-    ],
-    "_prefab": null,
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": -5.684341886080802e-14,
-      "z": 0
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_mobility": 0,
-    "_layer": 33554432,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_id": "5drF902z9F66vXOt9+ClxI"
-  },
-  {
-    "__type__": "cc.UITransform",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 25
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 366.76,
-      "height": 528.4909722222221
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_id": "7fO97NvspDO50/y6vyPxWu"
-  },
-  {
-    "__type__": "c2366lIpCxNm4K2X9yFj8F6",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 25
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "effectAsset": {
-      "__uuid__": "87c683ed-0be7-4552-8ef8-9ac7ef3f406e",
-      "__expectedType__": "cc.EffectAsset"
-    },
-    "_is2Din3D": false,
-    "_dirMode": 1,
-    "_offset": 0,
-    "_soft": 0,
-    "_id": "0ed4xFpC5Li6RzkjwpGqxA"
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "root": null,
     "asset": null,
@@ -909,28 +744,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 30
+      "__id__": 24
     },
     "shadows": {
-      "__id__": 31
+      "__id__": 25
     },
     "_skybox": {
-      "__id__": 32
+      "__id__": 26
     },
     "fog": {
-      "__id__": 33
+      "__id__": 27
     },
     "octree": {
-      "__id__": 34
+      "__id__": 28
     },
     "skin": {
-      "__id__": 35
+      "__id__": 29
     },
     "lightProbeInfo": {
-      "__id__": 36
+      "__id__": 30
     },
     "postSettings": {
-      "__id__": 37
+      "__id__": 31
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
