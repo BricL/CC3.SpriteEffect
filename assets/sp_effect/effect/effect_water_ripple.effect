@@ -17,7 +17,8 @@ CCEffect %{
       rasterizerState:
         cullMode: none
       properties: &props
-        _speed:   { value: 0.8, editor: { type:  range(0,2) } }  #变化速度
+        _speed: { value: 0.8, editor: { type: range(0,2) } }  #变化速度
+        _density: { value: 6.12, editor: { type: range(1,100) } }  #密度
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert 
@@ -82,10 +83,7 @@ CCProgram sprite-vs %{
 CCProgram sprite-fs %{
   precision highp float;
   #include <cc-global>
-
-  #if USE_TEXTURE  
-    #include <sprite-texture>
-  #endif
+  #include <sprite-texture>
 
   #define TAU 6.12
   #define MAX_ITER 5  //最大迭代次数
@@ -95,12 +93,13 @@ CCProgram sprite-fs %{
 
   uniform Constant {
     float _speed;
+    float _density;
   };
 
 #if USE_Brightness
   float calculateBrightness(vec2 uv)
   {
-      vec2 noisePos = mod(uv*TAU, TAU) - 250.0;  // Calculate the position of the noise
+      vec2 noisePos = mod(uv * _density, _density) - 250.0;  // Calculate the position of the noise
 
       vec2 i = vec2(noisePos);  // Initialize i to the noise position
       float brightness = 1.0;  // Initialize brightness to 1.0
@@ -125,18 +124,15 @@ CCProgram sprite-fs %{
 
     #if USE_Brightness  
       o = calculateBrightness(uv) * color;  // 计算颜色值
-      o.a = color.a;
     #endif
 
-    #if USE_TEXTURE
-      vec4 tex = texture(cc_spriteTexture, uv0);
+    vec4 tex = texture(cc_spriteTexture, uv0);
 
-      // 混合光和纹理贴图
-      tex.r = tex.r + o.r * tex.a; 
-      tex.g = tex.g + o.g * tex.a; 
-      tex.b = tex.b + o.b * tex.a; 
-      o = tex;  
-    #endif
+    // 混合光和纹理贴图
+    tex.r = tex.r + o.r * tex.a * color.a; 
+    tex.g = tex.g + o.g * tex.a * color.a; 
+    tex.b = tex.b + o.b * tex.a * color.a; 
+    o = tex;  
 
     return o;
   }
