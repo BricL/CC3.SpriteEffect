@@ -1,4 +1,4 @@
-import { Enum, _decorator } from 'cc';
+import { Enum, Texture2D, _decorator } from 'cc';
 import { EffectBase } from './EffectBase';
 import { error } from 'cc';
 import { Material } from 'cc';
@@ -13,6 +13,9 @@ export enum Direction {
 
 @ccclass('EffectDisappear')
 export class EffectDisappear extends EffectBase {
+    @property({ type: Texture2D, tooltip: '指定噪声貼圖' })
+    public secondSprite: Texture2D | null = null;
+
     //#region toneMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(Direction), visible: true })
     public get dirMode(): Direction {
@@ -64,6 +67,11 @@ export class EffectDisappear extends EffectBase {
         DIR_VERTICAL: true
     };
 
+    public setSecondSprite(sprite: Texture2D) {
+        this.secondSprite = sprite;
+        this._sprite.material.setProperty('_secondSprite', this.secondSprite);
+    }
+
     protected _instMaterial(): void {
         if (this.effectAsset) {
             let mat: Material = new Material();
@@ -72,6 +80,7 @@ export class EffectDisappear extends EffectBase {
                 defines: this._define_macro,
                 technique: this._is2Din3D ? 1 : 0
             });
+            mat.setProperty('_secondSprite', this.secondSprite);
 
             this._setParams('_dirMode', -1);
             this._setParams('_offset', mat.passes[0].getHandle('_offset'));

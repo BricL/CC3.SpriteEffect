@@ -292,7 +292,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -193.38,
+      "x": -138,
       "y": -5.684341886080802e-14,
       "z": 0
     },
@@ -331,8 +331,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 366.76,
-      "height": 528.4909722222221
+      "width": 256,
+      "height": 256
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -362,7 +362,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "74fe5063-124d-4407-a5de-05a1d6551f41@f9941",
+      "__uuid__": "47444575-3aca-489f-b19f-0b6b6a6ddfb9@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -395,10 +395,14 @@
       "__expectedType__": "cc.EffectAsset"
     },
     "_is2Din3D": false,
+    "secondSprite": {
+      "__uuid__": "56701215-5d51-4e6b-9a80-6ce7525bb7e5@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    },
     "_dirMode": 1,
     "_offset": 0,
-    "_soft": 0.3,
-    "_id": "ddjwjP0LBMW7cDLzMRHEFD"
+    "_soft": 0,
+    "_id": "09FqC/xmNOtre/8H23XFGC"
   },
   {
     "__type__": "cc.Animation",
@@ -421,7 +425,7 @@
       "__uuid__": "e6270bb6-b108-434c-825d-ae7967dc52ce",
       "__expectedType__": "cc.AnimationClip"
     },
-    "_id": "9b18Qz2zxI9YrORsxYbha+"
+    "_id": "3e5UbKChNJXL6Mdn4+uANl"
   },
   {
     "__type__": "cc.Node",
@@ -450,7 +454,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 193.38,
+      "x": 138,
       "y": -5.684341886080802e-14,
       "z": 0
     },
@@ -489,8 +493,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 366.76,
-      "height": 528.4909722222221
+      "width": 256,
+      "height": 256
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -520,7 +524,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "74fe5063-124d-4407-a5de-05a1d6551f41@f9941",
+      "__uuid__": "47444575-3aca-489f-b19f-0b6b6a6ddfb9@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -553,6 +557,10 @@
       "__expectedType__": "cc.EffectAsset"
     },
     "_is2Din3D": false,
+    "secondSprite": {
+      "__uuid__": "56701215-5d51-4e6b-9a80-6ce7525bb7e5@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    },
     "_dirMode": 0,
     "_offset": 0,
     "_soft": 0.31,
@@ -593,7 +601,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 753.52,
+      "width": 532,
       "height": 720
     },
     "_anchorPoint": {

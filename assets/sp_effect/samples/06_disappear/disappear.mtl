@@ -10,9 +10,7 @@
   },
   "_techIdx": 0,
   "_defines": [
-    {
-      "USE_TEXTURE": true
-    }
+    {}
   ],
   "_states": [
     {
@@ -26,6 +24,12 @@
     }
   ],
   "_props": [
-    {}
+    {
+      "_soft": 0.09,
+      "_secondTexture": {
+        "__uuid__": "56701215-5d51-4e6b-9a80-6ce7525bb7e5@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    }
   ]
 }

@@ -20,6 +20,7 @@ CCEffect %{
         alphaThreshold: { value: 0.5 }
         _offset: { value : 0, editor: { slide: true, range: [0, 1], step: 0.01 }} #消失偏移
         _soft: { value : 0, editor: { slide: true, range: [0, 0.5], step: 0.01 }} #半透明偏移
+        _secondSprite: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert 
@@ -84,13 +85,12 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <cc-global>
   #include <alpha-test>
-
-  #if USE_TEXTURE  
-    #include <sprite-texture>
-  #endif
+  #include <sprite-texture>
 
   in vec4 i_color;
   in vec2 uv0;
+
+  uniform sampler2D _secondSprite;
 
   uniform Constant {
     float _offset;
@@ -98,16 +98,17 @@ CCProgram sprite-fs %{
   };
 
   vec4 frag () {
-    vec4 o = vec4(1.0);
-    #if USE_TEXTURE  
-        o = texture(cc_spriteTexture, uv0);
-    #endif
+    vec4 o = texture(cc_spriteTexture, uv0);
+    vec4 s = texture(_secondSprite, uv0);
+
     #if DIR_VERTICAL
-    float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
+      float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
     #else
-    float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.x);
+      float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.x);
     #endif
-    o.a *= val;
+    
+    o = mix(o, s, val);
+    // o.a *= val;
     ALPHA_TEST(o);
     return o;
   }
