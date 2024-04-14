@@ -259,7 +259,26 @@ vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed,
 o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 ```
 
-### Water Ripple
+### Water Ripple 實作思路
+
+* 計算 水波紋貼圖：
+   * 以每個 UV 為中心
+     
+   * 取樣 MAX_ITER(這裡為5) 個偏移量
+     
+   * 以 UV + 偏移量成取樣點
+     
+      * 偏移量函數是一個 cos(x) + sin(x) 構成的表示式 (in: vec2) = vec2(cos(time - in.x) + sin(time + in.y), cos(1.5 * time + in.x) + sin(time - in.y))
+        
+   * 將取樣點的 x 與 y 分量，分別帶入 1/cos(x), 1/sin(y)，形成一個 vec2
+     
+   * 計算向量 vec2 長度 (1/cos(x), 1/sin(x))
+     
+      * 取倒數 1/length(vec2)，讓距離 UV 越遠的取樣點引響亮度越小
+        
+   * 將取樣的每個點進行加總成為水波亮度值
+     
+* 將 水波紋貼圖 ＋ Sprite 貼圖，得到結果
 
 ```GLSL
 #define TAU 6.12
