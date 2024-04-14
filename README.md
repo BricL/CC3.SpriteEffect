@@ -38,7 +38,7 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 ## Effect Color
 
-<p align="center"><img src="doc/img/effect_color.png" width="512"></p>
+<p align="center"><img src="doc/img/effect_color.png" width="1024"></p>
 
 ### 實作思路
 
