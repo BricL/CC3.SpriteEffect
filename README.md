@@ -327,6 +327,21 @@ float calculateBrightness(vec2 uv)
 
 ## Effect Dissolve
 
+### 實作思路
+
+```GLSL
+float alpha = texture(_noisetex, uv0).r;
+
+// Constants
+float width = _width * 0.25;
+float endgeBlend = smoothstep(0.0, _softness, (_effectFactor + width) - alpha);
+float alphaBlend = smoothstep(0.0, _softness, alpha - _effectFactor);
+
+// Edge blending & Adjust alpha
+o.rgb += _dissolveColor.rgb * endgeBlend;
+o.a *= alphaBlend;
+```
+
 ## Effect Colorizing
 
 <p align="center"><img src="doc/img/effect_colorizing.gif" width="512"></p>
