@@ -328,9 +328,10 @@ float calculateBrightness(vec2 uv)
 ### 實作思路
 
 * 基礎公式如下
-    $$
-    d \cdot \sin\left(x\cdot a+b\right)
-    $$
+
+$$
+d \cdot \sin\left(x\cdot a+b\right)
+$$
 
     ```GLSL
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
