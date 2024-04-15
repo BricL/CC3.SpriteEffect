@@ -86,11 +86,7 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <alpha-test>
   #include <output>
-
-
-  #if USE_TEXTURE  
-    #include <sprite-texture>
-  #endif
+  #include <sprite-texture>
 
   in vec4 color;
   in vec2 uv0;
@@ -107,13 +103,12 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 o = color;
-    #if USE_TEXTURE  
-        o = texture(cc_spriteTexture, uv0);
-    #endif
+    o = texture(cc_spriteTexture, uv0);
+
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
-    float i = (uv0.y < _horizontalPlane + value) ? 0.0:1.0; 
-    o *= i;
-    o *= color;
+    float i = (uv0.y < _horizontalPlane + value) ? 0.0 : 1.0; 
+    o *= i * color;
+    
     ALPHA_TEST(o);
     return CCFragOutput(o);
   }

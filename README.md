@@ -325,6 +325,19 @@ float calculateBrightness(vec2 uv)
 
 ## Effect Wave
 
+### 實作思路
+
+* 基礎公式如下
+    $$
+    d \cdot \sin\left(x\cdot a+b\right)
+    $$
+
+    ```GLSL
+    float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
+    float i = (uv0.y < _horizontalPlane + value) ? 0.0 : 1.0; 
+    o *= i * color;
+    ```
+
 ## Effect Dissolve
 
 ### 實作思路
@@ -332,21 +345,21 @@ float calculateBrightness(vec2 uv)
 * 兩個smoothstep
 
     * 一個負責edge color blend
-    
+
     * 一個負責alpha blend
 
-```GLSL
-float alpha = texture(_noisetex, uv0).r;
+    ```GLSL
+    float alpha = texture(_noisetex, uv0).r;
 
-// Constants
-float width = _width * 0.25;
-float endgeBlend = smoothstep(0.0, _softness, (_effectFactor + width) - alpha);
-float alphaBlend = smoothstep(0.0, _softness, alpha - _effectFactor);
+    // Constants
+    float width = _width * 0.25;
+    float endgeBlend = smoothstep(0.0, _softness, (_effectFactor + width) - alpha);
+    float alphaBlend = smoothstep(0.0, _softness, alpha - _effectFactor);
 
-// Edge blending & Adjust alpha
-o.rgb += _dissolveColor.rgb * endgeBlend;
-o.a *= alphaBlend;
-```
+    // Edge blending & Adjust alpha
+    o.rgb += _dissolveColor.rgb * endgeBlend;
+    o.a *= alphaBlend;
+    ```
 
 ## Effect Colorizing
 

@@ -301,7 +301,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "5ed7725b-54b7-45e8-934c-6fc04248176d@f9941",
+      "__uuid__": "fe37e48d-b260-4157-b852-bccca28ca187@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -342,12 +342,12 @@
       "__type__": "cc.Color",
       "r": 255,
       "g": 255,
-      "b": 0,
+      "b": 255,
       "a": 255
     },
-    "_effectFactor": 0.48,
-    "_softness": 0.31,
-    "_width": 0.76,
+    "_effectFactor": 0.25,
+    "_softness": 0.11,
+    "_width": 0.72,
     "play": true,
     "duration": 1,
     "loop": true,
