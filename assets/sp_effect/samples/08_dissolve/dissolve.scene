@@ -89,8 +89,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 360,
-      "y": 640,
+      "x": 640,
+      "y": 360,
       "z": 0
     },
     "_lrot": {
@@ -175,7 +175,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 640,
+    "_orthoHeight": 455.344262295082,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -345,9 +345,9 @@
       "b": 0,
       "a": 255
     },
-    "_effectFactor": 0.45,
-    "_softness": 0.26,
-    "_width": 0.36,
+    "_effectFactor": 0.48,
+    "_softness": 0.31,
+    "_width": 0.76,
     "play": true,
     "duration": 1,
     "loop": true,
@@ -366,8 +366,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 720,
-      "height": 1280
+      "width": 1280,
+      "height": 720
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

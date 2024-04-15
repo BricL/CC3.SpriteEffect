@@ -102,20 +102,25 @@ CCProgram sprite-fs %{
   layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
   vec4 frag () {
-    vec4 o = vec4(1, 1, 1, 1);
-    o = texture(cc_spriteTexture, uv0);
-    float alpha = texture(_noisetex, uv0).r;
+      vec4 o = texture(cc_spriteTexture, uv0);
+      float alpha = texture(_noisetex, uv0).r;
 
-    float width = _width / 4.0;
-    float softness = _softness;
-    vec3 dissolveColor = _dissolveColor.rgb;
-    float factor = alpha - _effectFactor * (1.0 + width) + width;
-    float edgeLerp = step(factor, o.a) * clamp((width - factor) * 16.0 / softness, 0.0, 1.0);
-    o.rgb = o.rgb + (dissolveColor.rgb * edgeLerp);
-    o.a *= clamp((factor) * 32.0 / softness, 0.0, 1.0);
-    o *= color;
+      // Constants
+      float width = _width * 0.25;
+      float endgeBlend = smoothstep(0.0, _softness, (_effectFactor + width) - alpha);
+      float alphaBlend = smoothstep(0.0, _softness, alpha - _effectFactor);
 
-    ALPHA_TEST(o);
-    return o;
+      // Edge blending & Adjust alpha
+      o.rgb += _dissolveColor.rgb * endgeBlend;
+      o.a *= alphaBlend;
+
+      // Apply color
+      o *= color;
+
+      // Alpha test
+      ALPHA_TEST(o);
+
+      return o;
   }
+
 }%
