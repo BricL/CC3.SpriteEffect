@@ -329,6 +329,12 @@ float calculateBrightness(vec2 uv)
 
 ### 實作思路
 
+* 兩個smoothstep
+
+    * 一個負責edge color blend
+    
+    * 一個負責alpha blend
+
 ```GLSL
 float alpha = texture(_noisetex, uv0).r;
 
