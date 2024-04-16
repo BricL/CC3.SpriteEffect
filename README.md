@@ -333,6 +333,8 @@ $$
 d \cdot \sin\left(x\cdot a+b\right)
 $$
 
+* 以uv.x為橫軸帶入sin，在以uv.y為水波高
+
     ```GLSL
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
     float i = (uv0.y < _horizontalPlane + value) ? 0.0 : 1.0; 
