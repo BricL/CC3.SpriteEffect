@@ -8,8 +8,8 @@
 ## 使用方式
 
 1. 選取欲添加 Effect 的 Sprite Node。
-2. 選擇想要的 Effect，Add Component。
-3. 在 effect property 選擇與對應（同名）的 effect asset。
+2. 點擊Add Component，選擇想要的 Effect。
+3. 在 effect property 選擇與對應 Effect Component（同名）的 effect asset。
 
 > :warning: 注意！步驟3因為暫時不知道怎動態把對應的 Effect 檔案指給 Component，故需使用者手動指定。
 
