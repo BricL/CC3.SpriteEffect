@@ -85,7 +85,7 @@ CCProgram sprite-fs %{
   #include <cc-global>
   #include <sprite-texture>
 
-  #define TAU 6.12
+  // #define TAU 6.12
   #define MAX_ITER 5  //最大迭代次数
 
   in vec4 color;

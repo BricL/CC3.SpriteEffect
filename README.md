@@ -290,30 +290,27 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
      
 * 將 水波紋貼圖 ＋ Sprite 貼圖，得到結果
 
-```GLSL
-#define TAU 6.12
-#define MAX_ITER 5  //迭代次数
-
-float calculateBrightness(vec2 uv)
-{
-    vec2 noisePos = mod(uv*TAU, TAU) - 250.0;  // Calculate the position of the noise
-
-    vec2 i = vec2(noisePos);  // Initialize i to the noise position
-    float brightness = 1.0;  // Initialize brightness to 1.0
-    float noiseIntensity = .0065;  // Noise intensity
-
-    for (int iter = 0; iter < MAX_ITER; iter++)  // Loop MAX_ITER times
+    ```GLSL
+    float calculateBrightness(vec2 uv)
     {
-        float timeFactor =  _speed * cc_time.x * (1.0 - (3.5 / float(iter+1)));  // Calculate time factor
-        i = noisePos + vec2(cos(timeFactor - i.x) + sin(timeFactor + i.y), sin(timeFactor - i.y) + cos(1.5*timeFactor + i.x));  // Calculate new noise position
-        brightness += 1.0 / length(vec2(noisePos.x / (cos(i.x+timeFactor)/noiseIntensity), noisePos.y / (cos(i.y+timeFactor)/noiseIntensity)));  // Calculate brightness
-    }
+        vec2 noisePos = mod(uv * _density, _density) - 250.0;  // Calculate the position of the noise
 
-    brightness /= float(MAX_ITER);  // Take the average
-    brightness = 1.17-pow(brightness, 1.4);  // Calculate brightness value
-    return pow(abs(brightness), 20.0); // Calculate color value
-}
-```
+        vec2 i = vec2(noisePos);  // Initialize i to the noise position
+        float brightness = 1.0;  // Initialize brightness to 1.0
+        float noiseIntensity = .0065;  // Noise intensity
+
+        for (int iter = 0; iter < MAX_ITER; iter++)  // Loop MAX_ITER times
+        {
+            float timeFactor =  _speed * cc_time.x * (1.0 - (3.5 / float(iter+1)));  // Calculate time factor
+            i = noisePos + vec2(cos(timeFactor - i.x) + sin(timeFactor + i.y), sin(timeFactor - i.y) + cos(1.5*timeFactor + i.x));  // Calculate new noise position
+            brightness += 1.0 / length(vec2(noisePos.x / (cos(i.x+timeFactor)/noiseIntensity), noisePos.y / (cos(i.y+timeFactor)/noiseIntensity)));  // Calculate brightness
+        }
+
+        brightness /= float(MAX_ITER);  // Take the average
+        brightness = 1.17-pow(brightness, 1.4);  // Calculate brightness value
+        return pow(abs(brightness), 20.0); // Calculate color value
+    }
+    ```
 
 ## Effect Disappear
 
