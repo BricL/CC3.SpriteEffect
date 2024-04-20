@@ -195,9 +195,11 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 ## Effect Shadow
 
-### One-Pass Shadow (a.k.a Limited Bound shadow) 實作思路
+### One-Pass Shadow (a.k.a Limited Bound shadow)
 
 <p align="center"><img src="doc/img/limited_bound_shadow.png" width="256"></p>
+
+### 實作思路
 
 * 在 Pixel Shader 下，根據設定 Shadow 的顏色(RGB)、Sprite Alpha，加上對 uv 的偏移量(Offset)繪製出 Shadow，再將其結果與 Sprite 原來的顏色進行lerp。
 
@@ -210,9 +212,11 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 * 該方法的缺點就是偏移量會被 Sprite 的大小所限制，但優點是速度快。
 
-### Two-Pass Shadow 實作思路
+### Two-Pass Shadow 
 
 <p align="center"><img src="doc/img/shadow.png" width="256"></p>
+
+### 實作思路
 
 * 此方法不受限於Sprite的大小範圍，可任意距離的shadow，但需要兩個Pass來完成。
 
@@ -249,7 +253,11 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 ## Effect Water Surface
 
-### Water Flow
+<p align="center"><img src="doc/img/effect_water.gif" width="512"></p>
+
+### Water Flow 
+
+### 實作思路
 
 ```GLSL
 vec4 offset = texture(_noticeTex, uv0 + cc_time.w * _frequency);
@@ -259,7 +267,9 @@ vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed,
 o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 ```
 
-### Water Ripple 實作思路
+### Water Ripple
+
+### 實作思路
 
 * 計算 水波紋貼圖：
    * 以每個 UV 為中心
