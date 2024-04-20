@@ -1,5 +1,5 @@
 # CC.SpriteEffect
-受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.x.x 開發 Sprite 的客製化 Effect 組件(Component)。
+受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.x.x 開發的 Sprite Effect 組件。
 
 <p align="center"><img src="doc/img/demo.gif" width="512"></p>
 
