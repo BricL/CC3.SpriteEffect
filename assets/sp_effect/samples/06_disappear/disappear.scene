@@ -175,7 +175,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 372.10928961748635,
+    "_orthoHeight": 455.344262295082,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -400,8 +400,8 @@
       "__expectedType__": "cc.Texture2D"
     },
     "_dirMode": 1,
-    "_offset": 0,
-    "_soft": 0,
+    "_offset": 0.27,
+    "_soft": 0.12,
     "_id": "09FqC/xmNOtre/8H23XFGC"
   },
   {

@@ -345,7 +345,7 @@
       "b": 255,
       "a": 255
     },
-    "_effectFactor": 0.25,
+    "_factor": 0.43,
     "_softness": 0.11,
     "_width": 0.72,
     "play": true,

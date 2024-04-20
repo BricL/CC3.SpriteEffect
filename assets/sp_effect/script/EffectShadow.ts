@@ -15,7 +15,7 @@ export enum ShadowType {
 @ccclass('EffectShadow')
 export class EffectShadow extends EffectBase {
     //#region ShadowType
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ShadowType) })
+    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ShadowType), tooltip: "陰影模式" })
     public get shadowType(): ShadowType {
         return this._shadowType;
     }
@@ -25,13 +25,13 @@ export class EffectShadow extends EffectBase {
         this._setParamsDirty('_shadowType');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, tooltip: "陰影模式", visible: true })
     private _shadowType: ShadowType = ShadowType.LIMITED_BOUND;
     //#endregion
 
 
     //#region ShadowColor
-    @property({ group: { name: "Setter/Getter", id: "1" } })
+    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: "陰影顏色" })
     public get shadowColor(): Color {
         return this._shadowColor;
     }
@@ -41,13 +41,13 @@ export class EffectShadow extends EffectBase {
         this._setParamsDirty('_shadowColor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, tooltip: "陰影顏色", visible: true })
     private _shadowColor: Color = new Color(0, 0, 0, 1.0);
     //#endregion
 
 
     //#region Offset
-    @property({ group: { name: "Setter/Getter", id: "1" } })
+    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: "偏移量" })
     public get offset(): Vec2 {
         return this._offset;
     }
@@ -57,7 +57,7 @@ export class EffectShadow extends EffectBase {
         this._setParamsDirty('_offset');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "偏移量", visible: true })
     private _offset: Vec2 = new Vec2(0.1, 0.1);
     //#endregion
 

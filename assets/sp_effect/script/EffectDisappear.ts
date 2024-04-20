@@ -17,7 +17,7 @@ export class EffectDisappear extends EffectBase {
     public secondSprite: Texture2D | null = null;
 
     //#region toneMode
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(Direction), visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(Direction),  tooltip: '指定方向' })
     public get dirMode(): Direction {
         return this._dirMode;
     }
@@ -27,7 +27,7 @@ export class EffectDisappear extends EffectBase {
         this._setParamsDirty('_dirMode');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(Direction), visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: Enum(Direction),  tooltip: '指定方向', visible: true })
     private _dirMode: Direction = Direction.VERTICAL;
     //#endregion
 
@@ -48,7 +48,7 @@ export class EffectDisappear extends EffectBase {
 
 
     //#region translucentOffset
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 0.5, 0.01], tooltip: '透明偏移' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 0.5, 0.01], tooltip: '柔邊程度' })
     public get soft(): number {
         return this._soft;
     }
@@ -58,7 +58,7 @@ export class EffectDisappear extends EffectBase {
         this._setParamsDirty('_soft');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 0.5, 0.01], tooltip: '透明偏移', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 0.5, 0.01], tooltip: '柔邊程度', visible: true })
     private _soft: number = 0.0;
     //#endregion
 

@@ -47,7 +47,7 @@ export class EffectFlowLight extends EffectBase {
 
 
     //#region soft
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 10.0, 0.001], tooltip: '流光柔和度' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 10.0, 0.001], tooltip: '柔邊程度' })
     public get soft(): number {
         return this._soft;
     }
@@ -57,13 +57,13 @@ export class EffectFlowLight extends EffectBase {
         this._setParamsDirty('_lightProp');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: CCFloat, slide: true, range: [0.0, 10.0, 0.001], tooltip: '流光柔和度', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: CCFloat, slide: true, range: [0.0, 10.0, 0.001], tooltip: '柔邊程度', visible: true })
     private _soft: number = 0.7;
     //#endregion
 
 
     //#region offset
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [-3.0, 3.0, 0.001], tooltip: '流光位置' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [-3.0, 3.0, 0.001], tooltip: '偏移量' })
     public get offset(): number {
         return this._offset;
     }
@@ -73,17 +73,17 @@ export class EffectFlowLight extends EffectBase {
         this._setParamsDirty('_lightProp');
     }
 
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 6.28, 0.1], tooltip: '流光角度' })
-    public get rotation(): number {
-        return this._rotation;
-    }
-
-    @property({ group: { name: "Private Props", id: "1" }, type: CCFloat, slide: true, range: [-3.0, 3.0, 0.001], tooltip: '流光位置', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: CCFloat, slide: true, range: [-3.0, 3.0, 0.001], tooltip: '偏移量', visible: true })
     private _offset: number = -8.0;
     //#endregion
 
 
     //#region rotation
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 6.28, 0.1], tooltip: '流光角度' })
+    public get rotation(): number {
+        return this._rotation;
+    }
+
     public set rotation(val: number) {
         this._rotation = val;
         this._setParamsDirty('_lightProp');

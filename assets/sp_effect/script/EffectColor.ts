@@ -32,7 +32,7 @@ export enum BlurMode {
 @ccclass('EffectColor')
 export class EffectColor extends EffectBase {
     //#region toneMode
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ToneMode), visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ToneMode), tooltip: "色調模式" })
     public get toneMode(): ToneMode {
         return this._toneMode;
     }
@@ -42,13 +42,13 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_toneMode');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ToneMode), visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ToneMode), tooltip: "色調模式", visible: true })
     private _toneMode: ToneMode = ToneMode.NORMAL;
     //#endregion
 
 
     //#region toneFactor
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "色調程度" })
     public get toneFactor(): number {
         return this._toneFactor;
     }
@@ -58,13 +58,13 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_toneFactor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "色調程度", visible: true })
     private _toneFactor: number = 1.0;
     //#endregion
 
 
     //#region colorMode
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ColorMode), visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ColorMode), tooltip: "顏色模式" })
     public get colorMode(): ColorMode {
         return this._colorMode;
     }
@@ -74,13 +74,13 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_colorMode');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ColorMode), visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ColorMode), tooltip: "顏色模式", visible: true })
     private _colorMode: ColorMode = ColorMode.MULT;
     //#endregion
 
 
     //#region colorFactor
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "顏色程度"})
     public get colorFactor(): number {
         return this._colorFactor;
     }
@@ -90,13 +90,13 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_colorFactor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "顏色程度", visible: true })
     private _colorFactor: number = 1.0;
     //#endregion
 
 
     //#region blurMode
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(BlurMode), visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(BlurMode), tooltip: "模糊模式" })
     public get blurMode(): BlurMode {
         return this._blurMode;
     }
@@ -106,13 +106,13 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_blurMode');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(BlurMode), visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, type: Enum(BlurMode), tooltip: "模糊模式", visible: true })
     private _blurMode: BlurMode = BlurMode.NONE;
     //#endregion
 
 
     //#region blurFactor
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], visible: true })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: "模糊程度" })
     public get blurFactor(): number {
         return this._blurFactor;
     }
@@ -122,7 +122,7 @@ export class EffectColor extends EffectBase {
         this._setParamsDirty('_blurFactor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: "模糊程度", visible: true })
     private _blurFactor: number = 1.0;
     //#endregion
 

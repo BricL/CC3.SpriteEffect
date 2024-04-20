@@ -19,7 +19,7 @@ CCEffect %{
         alphaThreshold: { value: 0.5 }
         _noisetex: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
         _dissolveColor: { value: [0, 0, 0, 1.0], editor: { type: color } }
-        _effectFactor: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
+        _factor: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
         _softness: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
         _width: { value: 0.5, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
   - name: 2d-in-3d
@@ -93,7 +93,7 @@ CCProgram sprite-fs %{
   uniform sampler2D _noisetex;
   uniform constant {
     vec4 _dissolveColor;
-    float _effectFactor;
+    float _factor;
     float _softness;
     float _width;
   };
@@ -107,8 +107,8 @@ CCProgram sprite-fs %{
 
       // Constants
       float width = _width * 0.25;
-      float endgeBlend = smoothstep(0.0, _softness, (_effectFactor + width) - alpha);
-      float alphaBlend = smoothstep(0.0, _softness, alpha - _effectFactor);
+      float endgeBlend = smoothstep(0.0, _softness, (_factor + width) - alpha);
+      float alphaBlend = smoothstep(0.0, _softness, alpha - _factor);
 
       // Edge blending & Adjust alpha
       o.rgb += _dissolveColor.rgb * endgeBlend;

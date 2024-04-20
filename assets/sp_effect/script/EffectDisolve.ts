@@ -10,11 +10,11 @@ const { ccclass, property } = _decorator;
 
 @ccclass('EffectDisolve')
 export class EffectDisolve extends EffectBase {
-    @property({ type: Texture2D, tooltip: "噪聲貼圖" })
+    @property({ type: Texture2D, tooltip: "指定噪聲貼圖" })
     public noiseTexture: Texture2D | null = null;
 
     //#region dissolveColor
-    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: "效果" })
+    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: "溶解顏色" })
     public get dissolveColor(): Color {
         return this._dissolveColor;
     }
@@ -24,29 +24,29 @@ export class EffectDisolve extends EffectBase {
         this._setParamsDirty('_dissolveColor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, tooltip: "顏色", visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, tooltip: "溶解顏色", visible: true })
     private _dissolveColor: Color = new Color(0, 0, 0, 1);
     //#endregion
 
 
     //#region effectFactor
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "效果" })
-    public get effectFactor(): number {
-        return this._effectFactor;
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "溶解程度" })
+    public get factor(): number {
+        return this._factor;
     }
 
-    public set effectFactor(val: number) {
-        this._effectFactor = val;
-        this._setParamsDirty('_effectFactor');
+    public set factor(val: number) {
+        this._factor = val;
+        this._setParamsDirty('_factor');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "效果", visible: true })
-    private _effectFactor: number = 0.5;
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "溶解程度", visible: true })
+    private _factor: number = 0.5;
     //#endregion
 
 
     //#region softness
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "柔和" })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "柔邊程度" })
     public get softness(): number {
         return this._softness;
     }
@@ -56,13 +56,13 @@ export class EffectDisolve extends EffectBase {
         this._setParamsDirty('_softness');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "柔和", visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "柔邊程度", visible: true })
     private _softness: number = 0.1;
     //#endregion
 
 
     //#region width
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "寬度" })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "溶解寬度" })
     public get width(): number {
         return this._width;
     }
@@ -72,7 +72,7 @@ export class EffectDisolve extends EffectBase {
         this._setParamsDirty('_width');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "寬度", visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "溶解寬度", visible: true })
     private _width: number = 0.1;
     //#endregion
 
@@ -100,7 +100,7 @@ export class EffectDisolve extends EffectBase {
             mat.setProperty('_noisetex', this.noiseTexture);
 
             this._setParams('_dissolveColor', mat.passes[0].getHandle('_dissolveColor'));
-            this._setParams('_effectFactor', mat.passes[0].getHandle('_effectFactor'));
+            this._setParams('_factor', mat.passes[0].getHandle('_factor'));
             this._setParams('_softness', mat.passes[0].getHandle('_softness'));
             this._setParams('_width', mat.passes[0].getHandle('_width'));
 
@@ -118,8 +118,8 @@ export class EffectDisolve extends EffectBase {
         if (key === '_dissolveColor') {
             this._sprite.material?.passes[0].setUniform(idx, this._dissolveColor);
         }
-        else if (key === '_effectFactor') {
-            this._sprite.material?.passes[0].setUniform(idx, this._effectFactor);
+        else if (key === '_factor') {
+            this._sprite.material?.passes[0].setUniform(idx, this._factor);
         }
         else if (key === '_softness') {
             this._sprite.material?.passes[0].setUniform(idx, this._softness);
@@ -134,7 +134,7 @@ export class EffectDisolve extends EffectBase {
 
         tween(tweenTarget).to(this.duration, { factor: 1.0 }, {
             onUpdate: () => {
-                this.effectFactor = tweenTarget.factor;
+                this.factor = tweenTarget.factor;
             },
             onComplete: () => {
                 if (this.loop) {

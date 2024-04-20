@@ -337,7 +337,7 @@
       "__expectedType__": "cc.EffectAsset"
     },
     "_is2Din3D": false,
-    "_horizontalPlane": 0.5,
+    "_offset": 0.5,
     "_waveWidth": 20,
     "_waveHeight": 0.06,
     "_waveSpeed": 10,
@@ -470,9 +470,9 @@
       "__expectedType__": "cc.EffectAsset"
     },
     "_is2Din3D": false,
-    "_horizontalPlane": 0.68,
+    "_offset": 0.73,
     "_waveWidth": 20,
-    "_waveHeight": 0.19,
+    "_waveHeight": 0.14,
     "_waveSpeed": 20,
     "_id": "fbOCZAjABExrQgwSWeriln"
   },

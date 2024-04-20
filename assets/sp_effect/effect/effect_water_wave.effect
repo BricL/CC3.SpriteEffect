@@ -18,7 +18,7 @@ CCEffect %{
         cullMode: none
       properties: &props
         alphaThreshold: { value: 0.5 }
-        _horizontalPlane: { value : 0.5,  editor: {tooltip: "水平面高度"} }
+        _offset: { value : 0.5,  editor: {tooltip: "水平面高度"} }
         _waveWidth: { value: 20.0,  editor: {tooltip: "波浪宽度"}  }
         _waveHeight: {value: 0.01,  editor: {tooltip: "波浪高度"}}
         _waveSpeed: {value: 10.0,  editor: {tooltip: "波浪速度"}}
@@ -94,7 +94,7 @@ CCProgram sprite-fs %{
   uniform sampler2D _WaveTex;
 
     uniform Constant {
-    float  _horizontalPlane;
+    float  _offset;
     float  _waveWidth; 
     float  _waveHeight; 
     float  _waveSpeed;
@@ -106,7 +106,7 @@ CCProgram sprite-fs %{
     o = texture(cc_spriteTexture, uv0);
 
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
-    float i = (uv0.y < _horizontalPlane + value) ? 0.0 : 1.0; 
+    float i = (uv0.y < _offset + value) ? 0.0 : 1.0; 
     o *= i * color;
     
     ALPHA_TEST(o);

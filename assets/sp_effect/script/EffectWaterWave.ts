@@ -7,24 +7,24 @@ const { ccclass, property } = _decorator;
 
 @ccclass('EffectWaterWave')
 export class EffectWaterWave extends EffectBase {
-    //#region horizontalPlane
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '水平面' })
-    public get horizontalPlane(): number {
-        return this._horizontalPlane;
+    //#region offset
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '偏移量' })
+    public get offset(): number {
+        return this._offset;
     }
 
-    public set horizontalPlane(val: number) {
-        this._horizontalPlane = val;
-        this._setParamsDirty('_horizontalPlane');
+    public set offset(val: number) {
+        this._offset = val;
+        this._setParamsDirty('_offset');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '水平面', visible: true })
-    private _horizontalPlane: number = 0.5;
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '偏移量', visible: true })
+    private _offset: number = 0.5;
     //#endregion
 
 
     //#region waveWidth
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '波宽' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '水波寬' })
     public get waveWidth(): number {
         return this._waveWidth;
     }
@@ -34,13 +34,13 @@ export class EffectWaterWave extends EffectBase {
         this._setParamsDirty('_waveWidth');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '波宽', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '水波寬', visible: true })
     private _waveWidth: number = 20.0;
     //#endregion
 
 
     //#region waveHeight
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '波高' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '水波高' })
     public get waveHeight(): number {
         return this._waveHeight;
     }
@@ -50,13 +50,13 @@ export class EffectWaterWave extends EffectBase {
         this._setParamsDirty('_waveHeight');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '波高', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '水波高', visible: true })
     private _waveHeight: number = 0.01;
     //#endregion
 
 
     //#region waveSpeed
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '波速' })
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '速度' })
     public get waveSpeed(): number {
         return this._waveSpeed;
     }
@@ -66,7 +66,7 @@ export class EffectWaterWave extends EffectBase {
         this._setParamsDirty('_waveSpeed');
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '波速', visible: true })
+    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 20, 0.01], tooltip: '速度', visible: true })
     private _waveSpeed: number = 10.0;
     //#endregion
 
@@ -80,7 +80,7 @@ export class EffectWaterWave extends EffectBase {
                 technique: this._is2Din3D ? 1 : 0
             });
 
-            this._setParams('_horizontalPlane', mat.passes[0].getHandle('_horizontalPlane'));
+            this._setParams('_offset', mat.passes[0].getHandle('_offset'));
             this._setParams('_waveWidth', mat.passes[0].getHandle('_waveWidth'));
             this._setParams('_waveHeight', mat.passes[0].getHandle('_waveHeight'));
             this._setParams('_waveSpeed', mat.passes[0].getHandle('_waveSpeed'));
@@ -93,8 +93,8 @@ export class EffectWaterWave extends EffectBase {
     }
 
     protected _updateParams(key: string, idx: number): void {
-        if (key === '_horizontalPlane') {
-            this._sprite.customMaterial?.passes[0].setUniform(idx, 1.0 - this._horizontalPlane);
+        if (key === '_offset') {
+            this._sprite.customMaterial?.passes[0].setUniform(idx, 1.0 - this._offset);
         }
         else if (key === '_waveWidth') {
             this._sprite.customMaterial?.passes[0].setUniform(idx, this._waveWidth);
