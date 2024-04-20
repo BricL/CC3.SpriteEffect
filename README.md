@@ -151,7 +151,7 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 ## Effect Gaussian Blur
 
-<p align="center"><img src="doc/img/effect_gaussian_blur.gif" width="512"></p>
+<p align="center"><img src="doc/img/effect_gaussian_blur.png" width="512"></p>
 
 ### 實作思路
 
