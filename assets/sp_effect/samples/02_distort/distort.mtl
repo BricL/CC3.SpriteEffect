@@ -11,8 +11,7 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_TEXTURE": true,
-      "USE_NOISETEX": true
+      "USE_TEXTURE": true
     }
   ],
   "_states": [
@@ -28,8 +27,15 @@
   ],
   "_props": [
     {
+      "_baseUV": {
+        "__type__": "cc.Vec4",
+        "x": 0,
+        "y": 0,
+        "z": 1,
+        "w": 1
+      },
       "_noisetex": {
-        "__uuid__": "d205f326-f8cf-4b75-86c3-567958d54936@6c48a",
+        "__uuid__": "36c5663b-6fd8-4a31-aded-01ada75d3b22@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
     }

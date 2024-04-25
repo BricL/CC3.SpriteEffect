@@ -17,7 +17,7 @@ CCEffect %{
       rasterizerState:
         cullMode: none
       properties: &props
-        _baseUV: { vlaue: [0,0,1,1], editor: { visible: false } }
+        _baseUV: { vlaue: [0,0,1,1], editor: { visible: true } }
         _noisetex: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
         _speed:   { value: 0.05, editor: { type:  range(0,2) } }  #变化速度
         _strength:   { value: 0.05, editor: { type:  range(0,2) } }  #变化强度
