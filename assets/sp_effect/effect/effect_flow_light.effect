@@ -89,6 +89,10 @@ CCProgram sprite-fs %{
   #include "./chunks/util.chunk"
 
   in vec4 color;
+  in vec2 uv0;
+
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
   uniform Constant {
     vec4 _baseUV;
@@ -96,14 +100,8 @@ CCProgram sprite-fs %{
     vec4 _lightProp; // x: width, y: soft, z: offset, w: rotation
   };
 
-  #if USE_TEXTURE
-    in vec2 uv0;
-    #pragma builtin(local)
-    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
-  #endif
-
   vec4 frag () {
-    vec4 o = vec4(1,1,1,1);
+    vec4 o = vec4(1, 1, 1, 1);
 
     float _lightWidth = _lightProp.x;
     float _soft = _lightProp.y + 0.01;
@@ -112,12 +110,10 @@ CCProgram sprite-fs %{
 
     vec2 uv = normalizeUV(uv0, _baseUV);
   
-    #if USE_TEXTURE
-      o = texture(cc_spriteTexture, uv0);
-      #if IS_GRAY
-        float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
-        o.r = o.g = o.b = gray;
-      #endif
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    #if IS_GRAY
+      float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+      o.r = o.g = o.b = gray;
     #endif
 
     uv = (uv * 2.0) - vec2(0.5);

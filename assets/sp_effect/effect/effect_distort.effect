@@ -90,6 +90,7 @@ CCProgram sprite-fs %{
 
   in vec4 color;
   in vec2 uv0;
+  
   #pragma builtin(local)
   layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
@@ -120,7 +121,7 @@ CCProgram sprite-fs %{
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, base_uv);
     o *= color;
-    
+
     ALPHA_TEST(o);
     return o;
   }
