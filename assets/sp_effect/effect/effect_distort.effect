@@ -18,7 +18,7 @@ CCEffect %{
         cullMode: none
       properties: &props
         _baseUV: { vlaue: [0,0,1,1], editor: { visible: true } }
-        _noisetex: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
+        _noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
         _speed:   { value: 0.05, editor: { type:  range(0,2) } }  #变化速度
         _strength:   { value: 0.05, editor: { type:  range(0,2) } }  #变化强度
   - name: 2d-in-3d
@@ -93,7 +93,7 @@ CCProgram sprite-fs %{
   in vec4 color;
   in vec2 uv0;
 
-  uniform sampler2D _noisetex;
+  uniform sampler2D _noiseTexture;
   uniform Constant {
     vec4 _baseUV;
     float _speed;
@@ -114,7 +114,7 @@ CCProgram sprite-fs %{
       uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
 
       // 利用Offset後的uv采样噪声纹理
-      vec4 noise_uv = texture(_noisetex, uv_offset_by_time);
+      vec4 noise_uv = texture(_noiseTexture, uv_offset_by_time);
 
       // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
       base_uv.xy += (noise_uv.xy) * _strength;

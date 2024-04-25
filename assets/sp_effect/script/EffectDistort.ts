@@ -53,7 +53,7 @@ export class EffectDistort extends EffectBase {
                 technique: this._is2Din3D ? 1 : 0
             });
 
-            mat.setProperty('_noisetex', this.noiseTexture);
+            mat.setProperty('_noiseTexture', this.noiseTexture);
 
             this._setParams('_baseUV', mat.passes[0].getHandle('_baseUV'));
             this._setParams('_speed', mat.passes[0].getHandle('_speed'));

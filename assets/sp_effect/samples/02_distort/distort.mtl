@@ -34,7 +34,7 @@
         "z": 1,
         "w": 1
       },
-      "_noisetex": {
+      "_noiseTexture": {
         "__uuid__": "36c5663b-6fd8-4a31-aded-01ada75d3b22@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
