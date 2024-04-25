@@ -83,15 +83,15 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <cc-global>
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include <builtin/uniforms/cc-global>
   #include "./chunks/util.chunk"
-
-  #if USE_TEXTURE  
-    #include <sprite-texture>
-  #endif
 
   in vec4 color;
   in vec2 uv0;
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
   uniform sampler2D _noiseTexture;
   uniform Constant {
@@ -102,28 +102,26 @@ CCProgram sprite-fs %{
   };
 
   vec4 frag () {
-    vec4 o = vec4(1);
+    vec4 o = vec4(1, 1, 1, 1);
+    vec2 base_uv = normalizeUV(uv0, _baseUV);
 
-    #if USE_TEXTURE
-      vec2 base_uv = normalizeUV(uv0, _baseUV);
+    // 采样噪声纹理，根据时间计算偏移
+    float px = mod(cc_time.x * _speed, 1.0);
+    vec2 uv_offset_by_time = base_uv + px;
+    uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
+    uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
 
-      // 采样噪声纹理，根据时间计算偏移
-      float px = mod(cc_time.x * _speed, 1.0);
-      vec2 uv_offset_by_time = base_uv + px;
-      uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
-      uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
+    // 利用Offset後的uv采样噪声纹理
+    vec4 noise_uv = CCSampleWithAlphaSeparated(_noiseTexture, uv_offset_by_time);
 
-      // 利用Offset後的uv采样噪声纹理
-      vec4 noise_uv = texture(_noiseTexture, uv_offset_by_time);
+    // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
+    base_uv.xy += (noise_uv.xy) * _strength;
+    base_uv = denormalizeUV(base_uv, _baseUV);
 
-      // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
-      base_uv.xy += (noise_uv.xy) * _strength;
-      base_uv = denormalizeUV(base_uv, _baseUV);
-
-      o = texture(cc_spriteTexture, base_uv);
-    #endif
-  
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, base_uv);
     o *= color;
+    
+    ALPHA_TEST(o);
     return o;
   }
 }%

@@ -49,7 +49,7 @@ export class EffectDistort extends EffectBase {
             let mat: Material = new Material();
             mat.initialize({
                 effectAsset: this.effectAsset,
-                defines: { USE_TEXTURE: true },
+                defines: {},
                 technique: this._is2Din3D ? 1 : 0
             });
 
