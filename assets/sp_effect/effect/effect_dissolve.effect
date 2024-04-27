@@ -85,6 +85,7 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
+  #include <sprite-texture>
   #include "./chunks/util.chunk"
 
   in vec4 color;
@@ -98,12 +99,9 @@ CCProgram sprite-fs %{
     float _width;
   };
 
-  #pragma builtin(local)
-  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
-
   vec4 frag () {
-      vec4 o = texture(cc_spriteTexture, uv0);
-      float alpha = texture(_noisetex, uv0).r;
+      vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+      float alpha = CCSampleWithAlphaSeparated(_noisetex, uv0).r;
 
       // Constants
       float width = _width * 0.25;
@@ -117,9 +115,7 @@ CCProgram sprite-fs %{
       // Apply color
       o *= color;
 
-      // Alpha test
       ALPHA_TEST(o);
-
       return o;
   }
 

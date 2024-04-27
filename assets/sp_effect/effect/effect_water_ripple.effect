@@ -82,7 +82,9 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <cc-global>
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include <builtin/uniforms/cc-global>
   #include <sprite-texture>
 
   // #define TAU 6.12
@@ -126,7 +128,7 @@ CCProgram sprite-fs %{
       o = calculateBrightness(uv) * color;  // 计算颜色值
     #endif
 
-    vec4 tex = texture(cc_spriteTexture, uv0);
+    vec4 tex = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
 
     // 混合光和纹理贴图
     tex.r = tex.r + o.r * tex.a * color.a; 
@@ -134,6 +136,7 @@ CCProgram sprite-fs %{
     tex.b = tex.b + o.b * tex.a * color.a; 
     o = tex;  
 
+    ALPHA_TEST(o);
     return o;
   }
 }%

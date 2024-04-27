@@ -83,13 +83,11 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
+  #include <sprite-texture>
   #include "./chunks/util.chunk"
 
   in vec4 color;
   in vec2 uv0;
-
-  #pragma builtin(local)
-  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
   uniform Constant {
     vec2 rChannel;

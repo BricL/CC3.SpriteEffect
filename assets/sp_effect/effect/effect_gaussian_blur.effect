@@ -82,7 +82,9 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <cc-global>
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include <builtin/uniforms/cc-global>
   #include <sprite-texture>
   #include "./chunks/util.chunk"
 
@@ -123,7 +125,7 @@ CCProgram sprite-fs %{
 
         // 依據 uv offset 取出對應的像素顏色，並乘上對 x、y 方向權重的乘積
         vec2 uv = denormalizeUV(texcood + offset, _baseUV);
-        o += texture(tex, uv) * weight;
+        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
       }
     }
     // 將加總的權重值進行歸一化

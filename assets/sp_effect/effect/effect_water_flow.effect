@@ -87,16 +87,15 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <alpha-test>
-  #include <output>
-
-  #if USE_TEXTURE  
-    #include <sprite-texture>
-  #endif
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include <builtin/uniforms/cc-global>
+  #include <sprite-texture>
 
   in vec4 color;
   in vec2 uv0;
 
+  uniform sampler2D  _noticeTex;
   uniform Constant {
     vec2 _flowDir;
     float _frequency;
@@ -104,19 +103,17 @@ CCProgram sprite-fs %{
     float _speed;
   };
 
-  uniform sampler2D  _noticeTex;
-
   vec4 frag () {
     vec4 o = color;
-    #if USE_TEXTURE  
-      vec4 offset = texture(_noticeTex, uv0 + cc_time.w * _frequency);
-      vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed, 
-                       uv0.y + cc_time.w * _flowDir.y * _speed);
+
+    vec4 offset = CCSampleWithAlphaSeparated(_noticeTex, uv0 + cc_time.w * _frequency);
+    vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed, 
+                     uv0.y + cc_time.w * _flowDir.y * _speed);
                        
-      o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
-      o *= color;
-    #endif
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv1 + offset.xy * _amplitude);
+    o *= color;
+    
     ALPHA_TEST(o);
-    return CCFragOutput(o);
+    return o;
   }
 }%

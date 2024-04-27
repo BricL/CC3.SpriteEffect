@@ -85,6 +85,7 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
+  #include <sprite-texture>
   #include "./chunks/util.chunk"
 
   in vec4 color;
@@ -97,9 +98,6 @@ CCProgram sprite-fs %{
     float colorFactor;
     float blurFactor;
   };
-
-  #pragma builtin(local)
-  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
 
   vec4 transformColorTone (vec4 o) {
     #if USE_COLOR_TONE_TRANSFORM

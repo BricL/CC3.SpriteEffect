@@ -86,14 +86,12 @@ CCProgram sprite-fs %{
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
   #include <builtin/uniforms/cc-global>
+  #include <sprite-texture>
   #include "./chunks/util.chunk"
 
   in vec4 color;
   in vec2 uv0;
   
-  #pragma builtin(local)
-  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
-
   uniform sampler2D _noiseTexture;
   uniform Constant {
     vec4 _baseUV;

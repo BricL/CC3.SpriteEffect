@@ -84,33 +84,33 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <alpha-test>
-  #include <output>
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  #include <builtin/uniforms/cc-global>
   #include <sprite-texture>
 
   in vec4 color;
   in vec2 uv0;
 
   uniform sampler2D _WaveTex;
-
-    uniform Constant {
+  uniform Constant {
     float  _offset;
     float  _waveWidth; 
     float  _waveHeight; 
     float  _waveSpeed;
   };
 
-
   vec4 frag () {
     vec4 o = color;
-    o = texture(cc_spriteTexture, uv0);
 
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
     float i = (uv0.y < _offset + value) ? 0.0 : 1.0; 
     o *= i * color;
     
     ALPHA_TEST(o);
-    return CCFragOutput(o);
+    return o;
   }
 }%
 

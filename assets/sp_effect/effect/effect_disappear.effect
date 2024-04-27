@@ -83,23 +83,22 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <cc-global>
-  #include <alpha-test>
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
   #include <sprite-texture>
 
   in vec4 i_color;
   in vec2 uv0;
 
   uniform sampler2D _secondSprite;
-
   uniform Constant {
     float _offset;
     float _soft;
   };
 
   vec4 frag () {
-    vec4 o = texture(cc_spriteTexture, uv0);
-    vec4 s = texture(_secondSprite, uv0);
+    vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    vec4 s = CCSampleWithAlphaSeparated(_secondSprite, uv0);
 
     #if DIR_VERTICAL
       float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
@@ -108,7 +107,7 @@ CCProgram sprite-fs %{
     #endif
     
     o = mix(o, s, val);
-    // o.a *= val;
+
     ALPHA_TEST(o);
     return o;
   }

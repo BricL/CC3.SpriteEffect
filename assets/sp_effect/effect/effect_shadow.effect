@@ -112,15 +112,11 @@ CCProgram shadow-vs %{
   }
 }%
 
-
-//阴影渲染
 CCProgram shadow-fs %{
   precision highp float;
-
-  #include <cc-global>
-#if USE_TEXTURE  
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
   #include <sprite-texture>
-#endif
 
   in vec4 i_color;
   in vec2 uv0;
@@ -131,16 +127,15 @@ CCProgram shadow-fs %{
   };
 
   vec4 frag () {
-    vec4 color = vec4(1.0);
+    vec4 o = vec4(1.0);
 
-  #if USE_TEXTURE  
-    color *= texture(cc_spriteTexture, uv0);
-    if (color.a >= 0.5) {
-      color = _shadowColor;
+    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    if (o.a >= 0.5) {
+      o = _shadowColor;
     }
-  #endif
 
-    return color;
+    ALPHA_TEST(o);
+    return o;
   }
 }%
 
@@ -189,27 +184,22 @@ CCProgram sprite-fs %{
   precision highp float;
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
+  #include <sprite-texture>
 
   in vec4 color;
-
-  #if USE_TEXTURE
-    in vec2 uv0;
-    #pragma builtin(local)
-    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
-  #endif
+  in vec2 uv0;
 
   vec4 frag () {
     vec4 o = vec4(1, 1, 1, 1);
 
-    #if USE_TEXTURE
-      o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-      #if IS_GRAY
-        float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
-        o.r = o.g = o.b = gray;
-      #endif
+    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    #if IS_GRAY
+      float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+      o.r = o.g = o.b = gray;
     #endif
 
     o *= color;
+
     ALPHA_TEST(o);
     return o;
   }
@@ -219,33 +209,28 @@ CCProgram sprite-1pass-fs %{
   precision highp float;
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
+  #include <sprite-texture>
 
   in vec4 color;
+  in vec2 uv0;
 
   uniform Constant {
     vec4 _shadowColor;
     vec2 _offset;
   };
 
-  #if USE_TEXTURE
-    in vec2 uv0;
-    #pragma builtin(local)
-    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
-  #endif
-
   vec4 frag () {
     vec4 o = vec4(1, 1, 1, 1);
 
-    #if USE_TEXTURE
-      o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-      #if IS_GRAY
-        float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
-        o.r = o.g = o.b = gray;
-      #endif
+    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    #if IS_GRAY
+      float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+      o.r = o.g = o.b = gray;
     #endif
 
     vec4 shadow = vec4(_shadowColor.rgb, texture(cc_spriteTexture, uv0 - _offset).a * _shadowColor.a);
     o = mix(shadow, o, o.a) * color;
+
     ALPHA_TEST(o);
     return o;
   }
