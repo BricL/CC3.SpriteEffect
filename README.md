@@ -15,13 +15,23 @@
 
 > :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
 
-## RenderRoot2D Component
+## 注意事項
+
+### RenderRoot2D Component
 
 在 CC 中 RenderRoot2D 組件可讓 Sprite 於 3D 空間中呈現，達到 3D UI 的效果。而組件下子節點渲染順序與 Canvas 規則相同，但與其他 3D 物件的深度順序，需要開啟 Material 中的深度測試 (Depth Test)。
 
 Effect Component 提供了簡單的設定，開啟方式如下：
 
 <p align="center"><img src="doc/img/2D_in_3D.gif" width="512"></p>
+
+### 取消圖集自動的包 (Packable)
+
+<p align="center"><img src="doc/img/packable.png" width="512"></p>
+
+* 理由
+    
+    啟用自動打包會在遊戲打包時，自動產生的圖集給予 sprite 新的 uv 位置，導致相關的 uv 計算錯誤。（除非官方可以提供相關的 shader function，否則很難解決這問題）
 
 # 各 Effect 實作思路：
 
