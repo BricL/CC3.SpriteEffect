@@ -40,9 +40,9 @@ CCEffect %{
 
 CCProgram sprite-vs %{
   precision highp float;
-  #include <builtin/uniforms/cc-global>
+  #include <cc-global>
   #if USE_LOCAL
-    #include <builtin/uniforms/cc-local>
+    #include <cc-local>
   #endif
   #if SAMPLE_FROM_RT
     #include <common/common-define>
@@ -82,9 +82,9 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <builtin/internal/embedded-alpha>
-  #include <builtin/internal/alpha-test>
-  #include <builtin/uniforms/cc-global>
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <cc-global>
   #include <sprite-texture>
 
   // #define TAU 6.12

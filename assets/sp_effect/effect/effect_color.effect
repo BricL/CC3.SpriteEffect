@@ -42,9 +42,9 @@ CCEffect %{
 
 CCProgram sprite-vs %{
   precision highp float;
-  #include <builtin/uniforms/cc-global>
+  #include <cc-global>
   #if USE_LOCAL
-    #include <builtin/uniforms/cc-local>
+    #include <cc-local>
   #endif
   #if SAMPLE_FROM_RT
     #include <common/common-define>
@@ -83,8 +83,8 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <builtin/internal/embedded-alpha>
-  #include <builtin/internal/alpha-test>
+  #include <embedded-alpha>
+  #include <alpha-test>
   #include <sprite-texture>
   #include "./chunks/util.chunk"
 

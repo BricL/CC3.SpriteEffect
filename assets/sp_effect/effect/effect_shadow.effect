@@ -114,8 +114,8 @@ CCProgram shadow-vs %{
 
 CCProgram shadow-fs %{
   precision highp float;
-  #include <builtin/internal/embedded-alpha>
-  #include <builtin/internal/alpha-test>
+  #include <embedded-alpha>
+  #include <alpha-test>
   #include <sprite-texture>
 
   in vec4 i_color;
@@ -141,9 +141,9 @@ CCProgram shadow-fs %{
 
 CCProgram sprite-vs %{
   precision highp float;
-  #include <builtin/uniforms/cc-global>
+  #include <cc-global>
   #if USE_LOCAL
-    #include <builtin/uniforms/cc-local>
+    #include <cc-local>
   #endif
   #if SAMPLE_FROM_RT
     #include <common/common-define>
@@ -182,8 +182,8 @@ CCProgram sprite-vs %{
 
 CCProgram sprite-fs %{
   precision highp float;
-  #include <builtin/internal/embedded-alpha>
-  #include <builtin/internal/alpha-test>
+  #include <embedded-alpha>
+  #include <alpha-test>
   #include <sprite-texture>
 
   in vec4 color;
@@ -207,8 +207,8 @@ CCProgram sprite-fs %{
 
 CCProgram sprite-1pass-fs %{
   precision highp float;
-  #include <builtin/internal/embedded-alpha>
-  #include <builtin/internal/alpha-test>
+  #include <embedded-alpha>
+  #include <alpha-test>
   #include <sprite-texture>
 
   in vec4 color;
