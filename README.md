@@ -9,9 +9,6 @@
 
 1. 選取欲添加 Effect 的 Sprite Node。
 2. 點擊Add Component，選擇想要的 Effect。
-3. 在 effect property 選擇與對應 Effect Component（同名）的 effect asset。
-
-> :warning: 注意！步驟3因為暫時不知道怎動態把對應的 Effect 檔案指給 Component，故需使用者手動指定。
 
 > :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
 
