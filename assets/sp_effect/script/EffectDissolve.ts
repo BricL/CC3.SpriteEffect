@@ -8,8 +8,8 @@ import { tween } from 'cc';
 
 const { ccclass, property } = _decorator;
 
-@ccclass('EffectDisolve')
-export class EffectDisolve extends EffectBase {
+@ccclass('EffectDissolve')
+export class EffectDissolve extends EffectBase {
     @property({ type: Texture2D, tooltip: "指定噪聲貼圖" })
     public noiseTexture: Texture2D | null = null;
 
