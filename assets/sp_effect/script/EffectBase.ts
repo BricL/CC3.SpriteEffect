@@ -41,11 +41,59 @@ export abstract class EffectBase extends Component {
         this.reloadTsFile();
     }
 
-    protected async reloadTsFile() {
+    private async reloadTsFile() {
         if (EDITOR_NOT_IN_PREVIEW) {
             const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "853e8fbf-9769-49a8-b2d2-0016390b6953");
         }
     };
+
+    private autoAssignEffectAsset() {
+        if (EDITOR_NOT_IN_PREVIEW && this.effectAsset === null) {
+            setTimeout(async () => {
+                try {
+                    const uuids = Editor.Selection.getSelected('node');
+                    const node = await Editor.Message.request('scene', 'query-node', uuids[0]);
+                    if (!node) {
+                        console.warn(`未選中節點`);
+                        return;
+                    }
+
+                    const effectCompName = this.constructor.name;
+                    const index = node.__comps__.findIndex((v: any) => v.type === effectCompName);
+                    if (index === -1) {
+                        console.warn(`節點未掛載${effectCompName}組件`);
+                        return;
+                    }
+
+                    const effectFileName = effectCompName.replace(/([A-Z])/g, '_$1').toLowerCase().slice(1);
+                    const url = `db://assets/sp_effect/effect/${effectFileName}.effect`;
+                    const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
+
+                    const uuid = res.uuid;
+                    const success = await Editor.Message.request('scene', 'set-property', {
+                        uuid: node.uuid.value as string,
+                        path: `__comps__.${index}.effectAsset`,
+                        dump: {
+                            type: 'cc.EffectAsset',
+                            value: {
+                                uuid,
+                            },
+                        },
+                    });
+
+                    if (success) {
+                        console.log(`Effect自動掛載成功`);
+                        await this.reloadTsFile();
+                    }
+                    else {
+                        console.log(`Effect自動掛載失敗`);
+                    }
+                } catch (ex) {
+                    console.error(`autoAssignEffectAsset: ${ex}`);
+                }
+            }, 100);
+        }
+    }
     //#endregion
 
     protected _sprite: Sprite | null = null;
@@ -57,6 +105,10 @@ export abstract class EffectBase extends Component {
     protected onLoad(): void {
         this._sprite = this.getComponent(Sprite);
         this._instMaterial();
+    }
+
+    protected start(): void {
+        this.autoAssignEffectAsset();
     }
 
     protected update(dt: number): void {
@@ -75,17 +127,13 @@ export abstract class EffectBase extends Component {
      * @virtual
      * @description: 实例化材质
      */
-    protected _instMaterial(): void {
-
-    }
+    protected abstract _instMaterial(): void;
 
     /**
      * @virtual
      * @description: 更新材质参数
      */
-    protected _updateParams(key: string, idx: number): void {
-
-    }
+    protected abstract _updateParams(key: string, idx: number): void;
 
     /**
      * @virtual
