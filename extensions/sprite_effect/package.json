@@ -12,8 +12,9 @@
     "description": "i18n:sprite_effect.description",
     "main": "./dist/main.js",
     "dependencies": {
-        "vue": "^3.1.4",
-        "fs-extra": "^10.0.0"
+        "fs-extra": "^10.0.0",
+        "typescript": "^4.3.4",
+        "vue": "^3.1.4"
     },
     "devDependencies": {
         "@cocos/creator-types": "^3.8.2",
@@ -34,14 +35,20 @@
         }
     },
     "contributions": {
+        "asset-db": {
+            "mount": {
+                "path": "./source/assets",
+                "readonly": true
+            }
+        },
         "menu": [
             {
-                "path": "i18n:menu.panel/sprite_effect",
+                "path": "Formalin/SpriteEffect",
                 "label": "i18n:sprite_effect.open_panel",
                 "message": "open-panel"
             },
             {
-                "path": "i18n:menu.develop/sprite_effect",
+                "path": "Formalin/SpriteEffect",
                 "label": "i18n:sprite_effect.send_to_panel",
                 "message": "send-to-panel"
             }
