@@ -21,48 +21,11 @@
         "@types/fs-extra": "^9.0.5",
         "@types/node": "^18.17.1"
     },
-    "panels": {
-        "default": {
-            "title": "sprite_effect Default Panel",
-            "type": "dockable",
-            "main": "dist/panels/default",
-            "size": {
-                "min-width": 400,
-                "min-height": 300,
-                "width": 1024,
-                "height": 600
-            }
-        }
-    },
     "contributions": {
         "asset-db": {
             "mount": {
                 "path": "./source/assets",
                 "readonly": true
-            }
-        },
-        "menu": [
-            {
-                "path": "Formalin/SpriteEffect",
-                "label": "i18n:sprite_effect.open_panel",
-                "message": "open-panel"
-            },
-            {
-                "path": "Formalin/SpriteEffect",
-                "label": "i18n:sprite_effect.send_to_panel",
-                "message": "send-to-panel"
-            }
-        ],
-        "messages": {
-            "open-panel": {
-                "methods": [
-                    "openPanel"
-                ]
-            },
-            "send-to-panel": {
-                "methods": [
-                    "default.hello"
-                ]
             }
         }
     }
