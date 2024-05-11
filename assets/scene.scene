@@ -525,13 +525,13 @@
       "__expectedType__": "cc.EffectAsset"
     },
     "_is2Din3D": false,
-    "_toneMode": 1,
+    "_toneMode": 2,
     "_toneFactor": 1,
     "_colorMode": 3,
     "_colorFactor": 1,
     "_blurMode": 0,
     "_blurFactor": 1,
-    "_id": "1f64CQg4VB1p6gQZWh30Vz"
+    "_id": "58NS+JjABEAqdn+ueLsKnv"
   },
   {
     "__type__": "cc.UITransform",
