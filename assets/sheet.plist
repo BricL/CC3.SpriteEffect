@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>1.png</key>
+            <key>sheep_jump_0.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -19,7 +19,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>2.png</key>
+            <key>sheep_jump_1.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -30,7 +30,52 @@
                 <key>spriteSourceSize</key>
                 <string>{228,159}</string>
                 <key>textureRect</key>
-                <string>{{231,1},{228,159}}</string>
+                <string>{{1,162},{228,159}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>sheep_jump_2.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{228,159}</string>
+                <key>spriteSourceSize</key>
+                <string>{228,159}</string>
+                <key>textureRect</key>
+                <string>{{1,323},{228,159}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>sheep_jump_3.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{228,159}</string>
+                <key>spriteSourceSize</key>
+                <string>{228,159}</string>
+                <key>textureRect</key>
+                <string>{{1,484},{228,159}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>sheep_jump_4.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{228,159}</string>
+                <key>spriteSourceSize</key>
+                <string>{228,159}</string>
+                <key>textureRect</key>
+                <string>{{1,645},{228,159}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -46,9 +91,9 @@
             <key>realTextureFileName</key>
             <string>sheet.png</string>
             <key>size</key>
-            <string>{460,161}</string>
+            <string>{230,805}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:1863295ea9b6ae3a041fd99d75006019:08c2d53a43ee85e9719876ead3726601:e9c8e58805a65805a9872e91554d7434$</string>
+            <string>$TexturePacker:SmartUpdate:4a4f223e02ad6c3fc0e63de24c1b3456:45ac0760e4f106f71752cc5624aa9393:e9c8e58805a65805a9872e91554d7434$</string>
             <key>textureFileName</key>
             <string>sheet.png</string>
         </dict>
