@@ -7,7 +7,7 @@ const sizeOfPropTexture = 512;
 @ccclass('TestEffect')
 export class TestEffect extends Sprite {
     //##region Static Props
-    private static _effectMap = new Map<string, Node>();
+    private static _effectMap = new Map<string, string[]>();
     private static _mat: Material | null = null;
     private static _propBuffer: Float32Array | null = null;
     private static _propTexture: Texture2D | null = null;
@@ -55,8 +55,9 @@ export class TestEffect extends Sprite {
             TestEffect._mat.setProperty('_propTexture', TestEffect._propTexture);
         }
 
-        const effectArray = Array.from(TestEffect._effectMap.values());
-        this._myIndex = effectArray.findIndex((node) => node === this.node);
+        this._myIndex = TestEffect._effectMap.get(this.constructor.name)!.findIndex((v) => v === this.node.uuid);
+        // const effectArray = Array.from(TestEffect._effectMap.values());
+        // this._myIndex = effectArray.findIndex((node) => node === this.node);
 
         console.log("My index in the map is:", this._myIndex);
         this.color = new Color(this._myIndex, 0, 0, 255);
@@ -66,9 +67,14 @@ export class TestEffect extends Sprite {
     }
 
     onDestroy(): void {
-        if (TestEffect._effectMap.has(this.node.uuid)) {
-            TestEffect._effectMap.delete(this.node.uuid);
+        if (TestEffect._effectMap.has(this.constructor.name)) {
+            const index = TestEffect._effectMap.get(this.constructor.name)!.findIndex((v) => v === this.node.uuid);
+            TestEffect._effectMap.get(this.constructor.name)!.splice(index, 1);
         }
+
+        // if (TestEffect._effectMap.has(this.node.uuid)) {
+        //     TestEffect._effectMap.delete(this.node.uuid);
+        // }
     }
 
     lateUpdate(dt: number): void {
@@ -82,9 +88,18 @@ export class TestEffect extends Sprite {
     protected _instMaterial(): void {
         this.autoAssignEffectAsset();
 
-        if (!TestEffect._effectMap.has(this.node.uuid)) {
-            TestEffect._effectMap.set(this.node.uuid, this.node);
+        if (!TestEffect._effectMap.has(this.constructor.name)) {
+            TestEffect._effectMap.set(this.constructor.name, []);
         }
+
+        if (TestEffect._effectMap.get(this.constructor.name)!.findIndex((v) => v === this.node.uuid) === -1) {
+            TestEffect._effectMap.get(this.constructor.name)!.push(this.node.uuid);
+        }
+
+        // if (!TestEffect._effectMap.has(this.node.uuid)) {
+        //     TestEffect._effectMap.set(this.constructor.name, 
+        //     TestEffect._effectMap.set(this.node.uuid, this.node);
+        // }
 
         if (!TestEffect._propBuffer) {
             TestEffect._propBuffer = new Float32Array(sizeOfPropTexture * sizeOfPropTexture * 4);
