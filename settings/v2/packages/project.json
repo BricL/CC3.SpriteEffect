@@ -7,5 +7,6 @@
       "fitHeight": true,
       "fitWidth": false
     }
-  }
+  },
+  "custom_joint_texture_layouts": []
 }

@@ -17,27 +17,8 @@ CCEffect %{
       rasterizerState:
         cullMode: none
       properties: &props
-        _baseUV: { vlaue: [0,0,1,1], editor: { visible: true } }
+        _propTexture: { value: white, editor: { type:  sampler2D }}
         _noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
-        _speed:   { value: 0.05, editor: { type:  range(0,2) } }  #变化速度
-        _strength:   { value: 0.05, editor: { type:  range(0,2) } }  #变化强度
-  - name: 2d-in-3d
-    passes:
-    - vert: sprite-vs:vert 
-      frag: sprite-fs:frag
-      depthStencilState:
-        depthTest: true
-        depthWrite: false
-      blendState:
-        targets:
-        - blend: true
-          blendSrc: src_alpha
-          blendDst: one_minus_src_alpha
-          blendSrcAlpha: src_alpha
-          blendDstAlpha: one_minus_src_alpha
-      rasterizerState:
-        cullMode: none
-      properties: *props
 }%
 
 CCProgram sprite-vs %{
@@ -87,19 +68,37 @@ CCProgram sprite-fs %{
   #include <alpha-test>
   #include <cc-global>
   #include <sprite-texture>
-  #include "./chunks/util.chunk"
 
   in vec4 color;
   in vec2 uv0;
   
+  uniform sampler2D _propTexture;
   uniform sampler2D _noiseTexture;
-  uniform Constant {
-    vec4 _baseUV;
-    float _speed;
-    float _strength;
-  };
+
+  const int prop1 = 0;
+  const int prop2 = 1;
+
+  // 正推化: 將0~1的貼圖座標，轉換成Atlas上的UV
+  vec2 normalizeUV (vec2 uv, vec4 baseUV) {
+    return vec2((uv.x - baseUV.x)/baseUV.z, (uv.y - baseUV.y)/baseUV.w);
+  }
+
+  // 反正規化: 將0~1的貼圖座標，轉換回Atlas上的UV
+  vec2 denormalizeUV (vec2 uv, vec4 baseUV) {
+    return vec2(uv.x * baseUV.z + baseUV.x, uv.y * baseUV.w + baseUV.y);
+  }
 
   vec4 frag () {
+    // 从属性纹理中获取属性
+    vec2 prop1_uv = vec2(float(prop1)/512.0, (color.r*255.0)/512.0);
+    vec4 _baseUV = texture(_propTexture, prop1_uv);
+
+    vec2 prop2_uv = vec2(float(prop2)/512.0, (color.r*255.0)/512.0);
+    vec4 _props = texture(_propTexture, prop2_uv);
+    float _speed = _props.r;
+    float _strength = _props.g;
+
+    // 初始化输出颜色
     vec4 o = vec4(1, 1, 1, 1);
     vec2 base_uv = normalizeUV(uv0, _baseUV);
 
@@ -117,7 +116,7 @@ CCProgram sprite-fs %{
     base_uv = denormalizeUV(base_uv, _baseUV);
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, base_uv);
-    o *= color;
+    // o *= color;
 
     ALPHA_TEST(o);
     return o;

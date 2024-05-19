@@ -1,0 +1,89 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        _propTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <cc-global>
+  #if USE_LOCAL
+    #include <cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <sprite-texture>
+
+  in vec4 color;
+  in vec2 uv0;
+
+  const int prop1 = 0;
+  uniform sampler2D _propTexture;
+
+  vec4 frag () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    vec2 prop1_uv = vec2(float(prop1)/512.0, (color.r*255.0)/512.0);
+    vec4 myColor = texture(_propTexture, prop1_uv);
+
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    o = vec4(o.rgb + myColor.rgb, o.a * myColor.a);
+
+    // o = texture(_propTexture, uv0);
+    ALPHA_TEST(o);
+    return o;
+  }
+}%
