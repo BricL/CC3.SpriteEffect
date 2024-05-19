@@ -16,7 +16,10 @@ export async function autoAssignEffectAsset(effectCompName: string) {
         }
 
         const effectFileName = effectCompName.replace(/([A-Z])/g, '_$1').toLowerCase().slice(1);
-        const url = `db://assets/${effectFileName}.effect`;
+        const url = `db://assets/sprite_effect/effect/${effectFileName}.effect`;
+
+        console.log(`url: ${url}`);
+        
         const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
 
         const uuid = res!.uuid;

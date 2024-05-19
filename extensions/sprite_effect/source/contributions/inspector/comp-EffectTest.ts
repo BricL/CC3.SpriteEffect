@@ -50,5 +50,5 @@ export async function ready(this: Selector<typeof $>) {
         const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "853e8fbf-9769-49a8-b2d2-0016390b6953");
     });
 
-    await autoAssignEffectAsset('TestEffect');
+    await autoAssignEffectAsset('EffectTest');
 }

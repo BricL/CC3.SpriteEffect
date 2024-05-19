@@ -31,7 +31,7 @@
         "inspector": {
             "section" : {
                 "node": {
-                    "TestEffect": "./dist/contributions/inspector/comp-TestEffect.js"
+                    "EffectTest": "./dist/contributions/inspector/comp-EffectTest.js"
                 }
             }
         }
