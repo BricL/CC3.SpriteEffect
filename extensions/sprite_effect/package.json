@@ -27,6 +27,13 @@
                 "path": "./source/assets",
                 "readonly": true
             }
+        },
+        "inspector": {
+            "section" : {
+                "node": {
+                    "TestEffect": "./dist/contributions/inspector/comp-TestEffect.js"
+                }
+            }
         }
     }
 }

@@ -18,12 +18,12 @@ export class TestEffect extends Sprite {
 
     //##region myColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
-    public get myColor(): Color {
-        return this._myColor;
+    public get effectColor(): Color {
+        return this._effectColor;
     }
 
-    public set myColor(val: Color) {
-        this._myColor = val;
+    public set effectColor(val: Color) {
+        this._effectColor = val;
 
         if (EDITOR_NOT_IN_PREVIEW)
             this._updateParams();
@@ -32,26 +32,12 @@ export class TestEffect extends Sprite {
     }
 
     @property({ group: { name: "Private Props", id: "1" }, visible: true })
-    private _myColor: Color = new Color(255, 255, 255, 255);
-    //##endregion
-
-
-    //#region reloadEffect
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: CCBoolean, tooltip: '手動刷新，當效果在Editor沒有顯示時' })
-    private get reloadEffect() {
-        return this._reload;
-    }
-
-    private set reloadEffect(val: boolean) {
-        this._reload = val;
-        this.reloadTsFile();
-    }
+    private _effectColor: Color = new Color(255, 255, 255, 255);
     //##endregion
 
 
     private _myIndex: number = -1;
     private _isPropDirty: boolean = false;
-    private _reload: boolean = false;
 
     onLoad(): void {
         this._instMaterial();
@@ -132,10 +118,10 @@ export class TestEffect extends Sprite {
         let y = this._myIndex;
         let x = 0;
         const index = (y * sizeOfPropTexture + x) * 4;
-        TestEffect._propBuffer[index] = this._myColor.r / 255;
-        TestEffect._propBuffer[index + 1] = this._myColor.g / 255;
-        TestEffect._propBuffer[index + 2] = this._myColor.b / 255;
-        TestEffect._propBuffer[index + 3] = this._myColor.a / 255;
+        TestEffect._propBuffer[index] = this._effectColor.r / 255;
+        TestEffect._propBuffer[index + 1] = this._effectColor.g / 255;
+        TestEffect._propBuffer[index + 2] = this._effectColor.b / 255;
+        TestEffect._propBuffer[index + 3] = this._effectColor.a / 255;
 
         TestEffect._propTexture!.uploadData(TestEffect._propBuffer);
     }
@@ -184,11 +170,5 @@ export class TestEffect extends Sprite {
             }
         }
     }
-
-    private async reloadTsFile() {
-        if (EDITOR_NOT_IN_PREVIEW) {
-            const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "853e8fbf-9769-49a8-b2d2-0016390b6953");
-        }
-    };
 }
 
