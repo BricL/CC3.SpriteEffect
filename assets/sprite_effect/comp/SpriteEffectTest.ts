@@ -49,7 +49,14 @@ export class SpriteEffectTest extends SpriteEffectBase {
     @property({ group: { name: "Private Props", id: "1" }, visible: true, tooltip: '當使用RenderRoot2D時使用' })
     protected _is2Din3D: boolean = false;
     //#endregion
-    
+
+
+    /**
+     * @override SpriteEffectBase
+     */
+    protected get sizeOfPropTexture(): number {
+        return 512;
+    }
 
     /**
      * @override SpriteEffectBase
@@ -88,13 +95,6 @@ export class SpriteEffectTest extends SpriteEffectBase {
             }
         );
         return mat;
-    }
-
-    /**
-     * @override SpriteEffectBase
-     */
-    protected get sizeOfPropTexture(): number {
-        return 512;
     }
 }
 
