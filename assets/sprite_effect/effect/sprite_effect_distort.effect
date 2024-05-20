@@ -19,6 +19,23 @@ CCEffect %{
       properties: &props
         _propTexture: { value: white, editor: { type:  sampler2D }}
         _noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: *props
 }%
 
 CCProgram sprite-vs %{
@@ -68,6 +85,7 @@ CCProgram sprite-fs %{
   #include <alpha-test>
   #include <cc-global>
   #include <sprite-texture>
+  #include "./chunks/util.chunk"
 
   in vec4 color;
   in vec2 uv0;
@@ -75,26 +93,10 @@ CCProgram sprite-fs %{
   uniform sampler2D _propTexture;
   uniform sampler2D _noiseTexture;
 
-  const int prop1 = 0;
-  const int prop2 = 1;
-
-  // 正推化: 將0~1的貼圖座標，轉換成Atlas上的UV
-  vec2 normalizeUV (vec2 uv, vec4 baseUV) {
-    return vec2((uv.x - baseUV.x)/baseUV.z, (uv.y - baseUV.y)/baseUV.w);
-  }
-
-  // 反正規化: 將0~1的貼圖座標，轉換回Atlas上的UV
-  vec2 denormalizeUV (vec2 uv, vec4 baseUV) {
-    return vec2(uv.x * baseUV.z + baseUV.x, uv.y * baseUV.w + baseUV.y);
-  }
-
   vec4 frag () {
     // 从属性纹理中获取属性
-    vec2 prop1_uv = vec2(float(prop1)/512.0, (color.r*255.0)/512.0);
-    vec4 _baseUV = texture(_propTexture, prop1_uv);
-
-    vec2 prop2_uv = vec2(float(prop2)/512.0, (color.r*255.0)/512.0);
-    vec4 _props = texture(_propTexture, prop2_uv);
+    vec4 _baseUV = getPropFromPropTexture(_propTexture, color, 0);
+    vec4 _props = getPropFromPropTexture(_propTexture, color, 1);
     float _speed = _props.r;
     float _strength = _props.g;
 

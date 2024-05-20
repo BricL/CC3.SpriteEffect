@@ -82,23 +82,20 @@ CCProgram sprite-fs %{
   #include <embedded-alpha>
   #include <alpha-test>
   #include <sprite-texture>
+  #include "./chunks/util.chunk"
 
   in vec4 color;
   in vec2 uv0;
 
-  const int prop1 = 0;
   uniform sampler2D _propTexture;
 
   vec4 frag () {
     vec4 o = vec4(1, 1, 1, 1);
-
-    vec2 prop1_uv = vec2(float(prop1)/512.0, (color.r*255.0)/512.0);
-    vec4 myColor = texture(_propTexture, prop1_uv);
+    vec4 myColor = getPropFromPropTexture(_propTexture, color, 0);
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
     o = vec4(o.rgb + myColor.rgb, o.a * myColor.a);
 
-    // o = texture(_propTexture, uv0);
     ALPHA_TEST(o);
     return o;
   }

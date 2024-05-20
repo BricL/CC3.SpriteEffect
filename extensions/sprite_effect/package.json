@@ -31,7 +31,8 @@
         "inspector": {
             "section" : {
                 "node": {
-                    "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js"
+                    "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js",
+                    "SpriteEffectDistort": "./dist/contributions/inspector/comp-SpriteEffectDistort.js"
                 }
             }
         }

@@ -1,4 +1,4 @@
-import { _decorator, Color, EffectAsset, log, Material, Sprite, Texture2D } from "cc";
+import { _decorator, Color, EffectAsset, log, Material, Sprite, Texture2D, Vec4 } from "cc";
 const { ccclass, property } = _decorator;
 
 export type EffectPropsType = {
@@ -91,6 +91,19 @@ export abstract class SpriteEffectBase extends Sprite {
 
         this.color = new Color(this._effectIndex, 0, 0, 255);
         this.customMaterial = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.mat;
+    }
+
+    protected getUV(uv: number[]): Vec4 {
+        let minU = Math.min(uv[0], uv[2], uv[4], uv[6]);
+        let minV = Math.min(uv[1], uv[3], uv[5], uv[7]);
+
+        let maxU = Math.max(uv[0], uv[2], uv[4], uv[6]);
+        let maxV = Math.max(uv[1], uv[3], uv[5], uv[7]);
+
+        let width = maxU - minU;
+        let height = maxV - minV;
+
+        return new Vec4(minU, minV, width, height);
     }
 
     onLoad(): void {
