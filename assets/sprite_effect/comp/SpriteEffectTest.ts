@@ -1,12 +1,12 @@
-import { _decorator, CCBoolean, Color, Component, EffectAsset, Input, input, KeyCode, log, Material, Node, Sprite, Texture2D } from 'cc';
+import { _decorator, Color, Material } from 'cc';
 import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
-import { EffectBase, EffectPropsType } from './EffectBase';
+import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
 
 const sizeOfPropTexture = 512;
 
-@ccclass('EffectTest')
-export class EffectTest extends EffectBase {
+@ccclass('SpriteEffectTest')
+export class SpriteEffectTest extends SpriteEffectBase {
     //##region myColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
     public get effectColor(): Color {
@@ -53,14 +53,14 @@ export class EffectTest extends EffectBase {
     
 
     /**
-     * @override EffectBase
+     * @override SpriteEffectBase
      */
     protected getPropsUnionKey(): string {
         return `${this.constructor.name}_${this._is2Din3D}`;
     }
 
     /**
-     * @override EffectBase
+     * @override SpriteEffectBase
      */
     protected updateParams(): void {
         // TestEffect only use one effect prop, index 0.
@@ -68,16 +68,16 @@ export class EffectTest extends EffectBase {
         let x = 0;
         const index = (y * sizeOfPropTexture + x) * 4;
 
-        let propBuffer = EffectBase._s_effectProps.get(this.getPropsUnionKey())!.propBuffer;
+        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propBuffer;
         propBuffer[index] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
-        EffectBase._s_effectProps.get(this.getPropsUnionKey())!.propTexture.uploadData(propBuffer);
+        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propTexture.uploadData(propBuffer);
     }
 
     /**
-     * @override EffectBase
+     * @override SpriteEffectBase
      */
     protected initMaterial(): Material {
         let mat = new Material();
