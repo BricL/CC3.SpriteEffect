@@ -37,6 +37,12 @@ export abstract class SpriteEffectBase extends Sprite {
     */
     protected abstract initMaterial(): Material;
 
+    /**
+     * @abstract
+     * Size of the prop texture.
+     */
+    protected abstract get sizeOfPropTexture(): number;
+
     protected init(sizeOfPropTexture: number): void {
         if (!SpriteEffectBase._s_effectMap.has(this.getPropsUnionKey())) {
             SpriteEffectBase._s_effectMap.set(this.getPropsUnionKey(), []);
@@ -85,6 +91,14 @@ export abstract class SpriteEffectBase extends Sprite {
 
         this.color = new Color(this._effectIndex, 0, 0, 255);
         this.customMaterial = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.mat;
+    }
+
+    onLoad(): void {
+        this.init(this.sizeOfPropTexture);
+    }
+
+    start() {
+        this.updateParams();
     }
 
     onDestroy(): void {

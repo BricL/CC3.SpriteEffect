@@ -3,7 +3,6 @@ import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
 
-const sizeOfPropTexture = 512;
 
 @ccclass('SpriteEffectTest')
 export class SpriteEffectTest extends SpriteEffectBase {
@@ -39,7 +38,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
         this._is2Din3D = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(sizeOfPropTexture);
+            this.init(this.sizeOfPropTexture);
             this.updateParams();
         }
         else {
@@ -66,7 +65,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
         // TestEffect only use one effect prop, index 0.
         let y = this._effectIndex;
         let x = 0;
-        const index = (y * sizeOfPropTexture + x) * 4;
+        const index = (y * this.sizeOfPropTexture + x) * 4;
 
         let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propBuffer;
         propBuffer[index] = this._effectColor.r / 255;
@@ -91,12 +90,11 @@ export class SpriteEffectTest extends SpriteEffectBase {
         return mat;
     }
 
-    onLoad(): void {
-        this.init(sizeOfPropTexture);
-    }
-
-    start() {
-        this.updateParams();
+    /**
+     * @override SpriteEffectBase
+     */
+    protected get sizeOfPropTexture(): number {
+        return 512;
     }
 }
 
