@@ -19,6 +19,12 @@ export abstract class SpriteEffectBase extends Sprite {
     protected _isPropDirty: boolean = false;
 
     /**
+     * @abstract
+     * Size of the prop texture.
+     */
+    protected abstract get sizeOfPropTexture(): number;
+
+    /**
      * @abstract 
      * Generate a Union key for the effect.
      */
@@ -36,12 +42,6 @@ export abstract class SpriteEffectBase extends Sprite {
      * @returns Material
     */
     protected abstract initMaterial(): Material;
-
-    /**
-     * @abstract
-     * Size of the prop texture.
-     */
-    protected abstract get sizeOfPropTexture(): number;
 
     protected init(sizeOfPropTexture: number): void {
         if (!SpriteEffectBase._s_effectMap.has(this.getPropsUnionKey())) {
