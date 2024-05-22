@@ -1,4 +1,4 @@
-import { _decorator, Color, EffectAsset, log, Material, Sprite, Texture2D, Vec4 } from "cc";
+import { _decorator, Color, EffectAsset, error, log, Material, Sprite, Texture2D, Vec4 } from "cc";
 const { ccclass, property } = _decorator;
 
 export type EffectPropsType = {
@@ -44,15 +44,30 @@ export abstract class SpriteEffectBase extends Sprite {
     protected abstract initMaterial(): Material;
 
     protected init(sizeOfPropTexture: number): void {
-        if (!SpriteEffectBase._s_effectMap.has(this.getPropsUnionKey())) {
-            SpriteEffectBase._s_effectMap.set(this.getPropsUnionKey(), []);
+        const unionKey = this.getPropsUnionKey();
+
+        if (!SpriteEffectBase._s_effectMap.has(unionKey)) {
+            const temp = new Array(1024).fill("");
+            SpriteEffectBase._s_effectMap.set(unionKey, temp);
         }
 
-        if (SpriteEffectBase._s_effectMap.get(this.getPropsUnionKey())!.findIndex((v) => v === this.node.uuid) === -1) {
-            SpriteEffectBase._s_effectMap.get(this.getPropsUnionKey())!.push(this.node.uuid);
+        let idx = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
+        if (idx === -1) {
+            idx = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
+            if (idx === -1) {
+                error("Effect map is full!");
+                return;
+            }
         }
 
-        if (!SpriteEffectBase._s_effectProps.has(this.getPropsUnionKey())) {
+        // Get the effect index
+        this._effectIndex = idx;
+
+        SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
+        this.color = new Color(this._effectIndex, 0, 0, 255);
+        console.log("Effect index in the map is:", this._effectIndex);
+
+        if (!SpriteEffectBase._s_effectProps.has(unionKey)) {
             let propBuffer = new Float32Array(sizeOfPropTexture * sizeOfPropTexture * 4);
             for (let y = 0; y < sizeOfPropTexture; y++) {
                 for (let x = 0; x < sizeOfPropTexture; x++) {
@@ -78,19 +93,14 @@ export abstract class SpriteEffectBase extends Sprite {
             let mat = this.initMaterial();
             mat.setProperty('_propTexture', propTexture);
 
-            SpriteEffectBase._s_effectProps.set(this.getPropsUnionKey(), {
+            SpriteEffectBase._s_effectProps.set(unionKey, {
                 mat: mat,
                 propBuffer: propBuffer,
                 propTexture: propTexture
             });
         }
 
-        // Get the effect index in the map and map this index to color.
-        this._effectIndex = SpriteEffectBase._s_effectMap.get(this.getPropsUnionKey())!.findIndex((v) => v === this.node.uuid);
-        console.log("Effect index in the map is:", this._effectIndex);
-
-        this.color = new Color(this._effectIndex, 0, 0, 255);
-        this.customMaterial = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.mat;
+        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)!.mat;
     }
 
     protected getUV(uv: number[]): Vec4 {
@@ -119,7 +129,12 @@ export abstract class SpriteEffectBase extends Sprite {
 
         if (SpriteEffectBase._s_effectMap.has(unionKey)) {
             const index = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
-            SpriteEffectBase._s_effectMap.get(unionKey)!.splice(index, 1);
+            if (index === this._effectIndex) {
+                SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = "";
+            } else {
+                error("Effect index is not correct!");
+                SpriteEffectBase._s_effectMap.get(unionKey)![index] = "";
+            }
         }
     }
 
