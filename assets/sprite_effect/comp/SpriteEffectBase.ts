@@ -10,7 +10,7 @@ export type EffectPropsType = {
 @ccclass('SpriteEffectBase')
 export abstract class SpriteEffectBase extends Sprite {
     protected static _s_effectMap = new Map<string, string[]>();
-    protected static _s_effectProps = new Map<string, EffectPropsType>();
+    protected static _s_effectProps = new Map<string, EffectPropsType[]>();
 
     @property({ type: EffectAsset, tooltip: '指定效果EffectAsset' })
     public effectAsset: EffectAsset | null = null;
@@ -35,6 +35,10 @@ export abstract class SpriteEffectBase extends Sprite {
      * Update the effect parameters.
      */
     protected abstract updateParams(): void;
+
+    protected get propsIdx(): number {
+        return Math.floor(this._effectIndex / 256);
+    }
 
     /**
      * @abstract
@@ -68,6 +72,13 @@ export abstract class SpriteEffectBase extends Sprite {
         console.log("Effect index in the map is:", this._effectIndex);
 
         if (!SpriteEffectBase._s_effectProps.has(unionKey)) {
+            const temp = new Array(4).fill(null);
+            SpriteEffectBase._s_effectProps.set(unionKey, temp);
+        }
+
+        const propsIdx = this.propsIdx;
+
+        if (SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx] === null) {
             let propBuffer = new Float32Array(sizeOfPropTexture * sizeOfPropTexture * 4);
             for (let y = 0; y < sizeOfPropTexture; y++) {
                 for (let x = 0; x < sizeOfPropTexture; x++) {
@@ -93,14 +104,14 @@ export abstract class SpriteEffectBase extends Sprite {
             let mat = this.initMaterial();
             mat.setProperty('_propTexture', propTexture);
 
-            SpriteEffectBase._s_effectProps.set(unionKey, {
+            SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx] = {
                 mat: mat,
                 propBuffer: propBuffer,
                 propTexture: propTexture
-            });
+            };
         }
 
-        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)!.mat;
+        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx].mat;
     }
 
     protected getUV(uv: number[]): Vec4 {

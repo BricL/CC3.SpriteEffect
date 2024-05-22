@@ -94,10 +94,11 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
+        const propsIdx = this.propsIdx;
         let y = this._effectIndex;
 
         // Init prop texture
-        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propBuffer;
+        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propBuffer;
 
         let baseUV = this.getUV(this.spriteFrame!.uv);
         let x = 0;
@@ -115,7 +116,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         propBuffer[index + 3] = 0;
 
         // Upload prop texture
-        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propTexture.uploadData(propBuffer);
+        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propTexture.uploadData(propBuffer);
     }
 
     /**

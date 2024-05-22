@@ -69,17 +69,19 @@ export class SpriteEffectTest extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
+        const propsIdx = this.propsIdx;
+
         // TestEffect only use one effect prop, index 0.
         let y = this._effectIndex;
         let x = 0;
         const index = (y * this.sizeOfPropTexture + x) * 4;
 
-        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propBuffer;
+        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propBuffer;
         propBuffer[index] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
-        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())!.propTexture.uploadData(propBuffer);
+        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propTexture.uploadData(propBuffer);
     }
 
     /**
