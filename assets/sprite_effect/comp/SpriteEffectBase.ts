@@ -1,7 +1,7 @@
 import { _decorator, Color, EffectAsset, error, log, Material, Sprite, Texture2D, Vec4 } from "cc";
 const { ccclass, property } = _decorator;
 
-export type EffectPropsType = {
+export type EffectProps = {
     mat: Material | null;
     propBuffer: Float32Array | null;
     propTexture: Texture2D | null;
@@ -10,7 +10,7 @@ export type EffectPropsType = {
 @ccclass('SpriteEffectBase')
 export abstract class SpriteEffectBase extends Sprite {
     protected static _s_effectMap = new Map<string, string[]>();
-    protected static _s_effectProps = new Map<string, EffectPropsType[]>();
+    protected static _s_effectProps = new Map<string, EffectProps[]>();
 
     @property({ type: EffectAsset, tooltip: '指定效果EffectAsset' })
     public effectAsset: EffectAsset | null = null;
