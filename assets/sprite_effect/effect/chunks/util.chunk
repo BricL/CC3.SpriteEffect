@@ -39,3 +39,20 @@ vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxMap, int num) {
     vec4 val = texture(propTexture, prop_uv);
     return val;
 }
+
+vec4 getPropFromPropTexture2(sampler2D propTexture, vec4 groupIdx, int idx) {
+  float tempIdx = 0.0;
+
+  if (groupIdx.b > 0.0) {
+    tempIdx = groupIdx.b;
+  }
+  else if(groupIdx.g > 0.0) {
+    tempIdx = groupIdx.g;
+  }
+  else {
+    tempIdx = groupIdx.r;
+  }
+
+  vec2 prop_uv = vec2(((tempIdx * 255.0) + float(idx)) / 256.0, 0.0);
+  return texture(propTexture, prop_uv);
+}

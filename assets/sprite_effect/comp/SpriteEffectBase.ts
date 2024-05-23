@@ -22,7 +22,7 @@ export abstract class SpriteEffectBase extends Sprite {
      * @abstract
      * Size of the prop texture.
      */
-    protected abstract get sizeOfPropTexture(): number;
+    protected abstract get countOfProps(): number;
 
     /**
      * @abstract 
@@ -36,10 +36,6 @@ export abstract class SpriteEffectBase extends Sprite {
      */
     protected abstract updateParams(): void;
 
-    protected get propsIdx(): number {
-        return Math.floor(this._effectIndex / 256);
-    }
-
     /**
      * @abstract
      * Initialize the material.
@@ -47,42 +43,50 @@ export abstract class SpriteEffectBase extends Sprite {
     */
     protected abstract initMaterial(): Material;
 
-    protected init(sizeOfPropTexture: number): void {
+    protected init(countOfProps: number): void {
         const unionKey = this.getPropsUnionKey();
 
+        // Step1: 取的當前的effectIndex
         if (!SpriteEffectBase._s_effectMap.has(unionKey)) {
-            const temp = new Array(1024).fill("");
+            const temp = new Array(768).fill("");  // R/G/B (0~255) => 256 * 3 = 768
             SpriteEffectBase._s_effectMap.set(unionKey, temp);
         }
 
-        let idx = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
-        if (idx === -1) {
-            idx = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
-            if (idx === -1) {
+        this._effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
+        if (this._effectIndex === -1) {
+            this._effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
+            if (this._effectIndex === -1) {
                 error("Effect map is full!");
                 return;
             }
         }
-
-        // Get the effect index
-        this._effectIndex = idx;
+        log(`Effect index is:${this._effectIndex}`);
 
         SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
-        this.color = new Color(this._effectIndex, 0, 0, 255);
-        console.log("Effect index in the map is:", this._effectIndex);
 
+        if (this.propGroupIdx === 0) {
+            this.color = new Color(this._effectIndex, 0, 0, 255);
+        } else if (this.propGroupIdx === 1) {
+            this.color = new Color(0, this._effectIndex - 256, 0, 255);
+        } else if (this.propGroupIdx === 2) {
+            this.color = new Color(0, 0, this._effectIndex - 256 - 256, 255);
+        } else {
+            error(`The prop group index, ${this.propGroupIdx}, is out of range!`);
+            return;
+        }
+
+        // Step2: 初始化Effect props
         if (!SpriteEffectBase._s_effectProps.has(unionKey)) {
-            const temp = new Array(4).fill(null);
+            const temp = new Array(3).fill(null);
             SpriteEffectBase._s_effectProps.set(unionKey, temp);
         }
 
-        const propsIdx = this.propsIdx;
+        if (SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] === null) {
+            let propBuffer = new Float32Array((256 * countOfProps) * 1 * 4);
 
-        if (SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx] === null) {
-            let propBuffer = new Float32Array(sizeOfPropTexture * sizeOfPropTexture * 4);
-            for (let y = 0; y < sizeOfPropTexture; y++) {
-                for (let x = 0; x < sizeOfPropTexture; x++) {
-                    const index = (y * sizeOfPropTexture + x) * 4;
+            for (let y = 0; y < 1; y++) {
+                for (let x = 0; x < (256 * countOfProps); x++) {
+                    const index = (y * (256 * countOfProps) + x) * 4;
                     propBuffer[index] = 0;
                     propBuffer[index + 1] = 0;
                     propBuffer[index + 2] = 0;
@@ -93,25 +97,28 @@ export abstract class SpriteEffectBase extends Sprite {
             let propTexture = new Texture2D();
             propTexture.setFilters(Texture2D.Filter.NEAREST, Texture2D.Filter.NEAREST);
             propTexture.reset({
-                width: sizeOfPropTexture,
-                height: sizeOfPropTexture,
+                width: (256 * countOfProps),
+                height: 1,
                 format: Texture2D.PixelFormat.RGBA32F,
                 mipmapLevel: 0
             });
-
             propTexture!.uploadData(propBuffer);
 
             let mat = this.initMaterial();
             mat.setProperty('_propTexture', propTexture);
 
-            SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx] = {
+            SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] = {
                 mat: mat,
                 propBuffer: propBuffer,
                 propTexture: propTexture
             };
         }
 
-        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![propsIdx].mat;
+        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx].mat;
+    }
+
+    protected get propGroupIdx(): number {
+        return Math.floor(this._effectIndex / 256);
     }
 
     protected getUV(uv: number[]): Vec4 {
@@ -128,7 +135,7 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     onLoad(): void {
-        this.init(this.sizeOfPropTexture);
+        this.init(this.countOfProps);
     }
 
     start() {
@@ -140,18 +147,20 @@ export abstract class SpriteEffectBase extends Sprite {
 
         if (SpriteEffectBase._s_effectMap.has(unionKey)) {
             const index = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
-            if (index === this._effectIndex) {
-                SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = "";
-            } else {
-                error("Effect index is not correct!");
-                SpriteEffectBase._s_effectMap.get(unionKey)![index] = "";
+            if (index === -1) {
+                error("Effect index is not found!");
+                return;
             }
+
+            SpriteEffectBase._s_effectMap.get(unionKey)![index] = "";
+        } else {
+            error(`The effect map of ${unionKey} is not found!`);
         }
     }
 
     lateUpdate(dt: number): void {
         if (this._isPropDirty) {
-            log(`${this.constructor.name} is DIRTY`);
+            log(`${this.constructor.name}'s effect props is DIRTY!`);
             this.updateParams();
             this._isPropDirty = false;
         }

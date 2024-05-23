@@ -91,10 +91,11 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 o = vec4(1, 1, 1, 1);
-    vec4 myColor = getPropFromPropTexture(_propTexture, color, 0);
+    vec4 propGroup = color;
+    vec4 effectColor = getPropFromPropTexture2(_propTexture, propGroup, 0);
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-    o = vec4(o.rgb + myColor.rgb, o.a * myColor.a);
+    o = vec4(o.rgb + effectColor.rgb, o.a * effectColor.a);
 
     ALPHA_TEST(o);
     return o;

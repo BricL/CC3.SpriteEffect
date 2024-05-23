@@ -38,7 +38,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
         this._is2Din3D = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.sizeOfPropTexture);
+            this.init(this.countOfProps);
             this.updateParams();
         }
         else {
@@ -54,8 +54,8 @@ export class SpriteEffectTest extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get sizeOfPropTexture(): number {
-        return 512;
+    protected get countOfProps(): number {
+        return 1;
     }
 
     /**
@@ -69,19 +69,20 @@ export class SpriteEffectTest extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
-        const propsIdx = this.propsIdx;
-
         // TestEffect only use one effect prop, index 0.
-        let y = this._effectIndex;
-        let x = 0;
-        const index = (y * this.sizeOfPropTexture + x) * 4;
+        let quotient = this._effectIndex / 256;
+        let decimalPart = quotient - Math.floor(quotient);
+        let x = Math.floor(decimalPart * 256);
+        let y = 0;
 
-        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propBuffer;
+        const index = (y * 256 + x * 1) * 4;
+
+        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx].propBuffer;
         propBuffer[index] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
-        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propTexture.uploadData(propBuffer);
+        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx].propTexture.uploadData(propBuffer);
     }
 
     /**

@@ -63,7 +63,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         this._is2Din3D = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.sizeOfPropTexture);
+            this.init(this.countOfProps);
             this.updateParams();
         }
         else {
@@ -79,8 +79,8 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get sizeOfPropTexture(): number {
-        return 512;
+    protected get countOfProps(): number {
+        return 2;
     }
 
     /**
@@ -94,7 +94,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
-        const propsIdx = this.propsIdx;
+        const propsIdx = this.propGroupIdx;
         let y = this._effectIndex;
 
         // Init prop texture
@@ -102,14 +102,14 @@ export class SpriteEffectDistort extends SpriteEffectBase {
 
         let baseUV = this.getUV(this.spriteFrame!.uv);
         let x = 0;
-        let index = (y * this.sizeOfPropTexture + x) * 4;
+        let index = (y * this.countOfProps + x) * 4;
         propBuffer[index] = baseUV.x;
         propBuffer[index + 1] = baseUV.y;
         propBuffer[index + 2] = baseUV.z;
         propBuffer[index + 3] = baseUV.w;
 
         x = 1;
-        index = (y * this.sizeOfPropTexture + x) * 4;
+        index = (y * this.countOfProps + x) * 4;
         propBuffer[index] = this._speed;
         propBuffer[index + 1] = this._strength;
         propBuffer[index + 2] = 0;
