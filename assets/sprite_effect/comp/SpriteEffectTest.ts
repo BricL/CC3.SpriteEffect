@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectTest')
 export class SpriteEffectTest extends SpriteEffectBase {
-    //##region myColor
+    //#region myColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
     public get effectColor(): Color {
         return this._effectColor;
@@ -25,7 +25,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
 
     @property({ group: { name: "Private Props", id: "1" }, visible: true })
     private _effectColor: Color = new Color(255, 255, 255, 255);
-    //##endregion
+    //#endregion
 
 
     //#region is2Din3D
@@ -50,7 +50,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
     protected _is2Din3D: boolean = false;
     //#endregion
 
-
+     //#region override
     /**
      * @override SpriteEffectBase
      */
