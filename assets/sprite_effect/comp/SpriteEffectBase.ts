@@ -87,10 +87,10 @@ export abstract class SpriteEffectBase extends Sprite {
             for (let y = 0; y < 1; y++) {
                 for (let x = 0; x < (256 * countOfProps); x++) {
                     const index = (y * (256 * countOfProps) + x) * 4;
-                    propBuffer[index] = 0;
-                    propBuffer[index + 1] = 0;
-                    propBuffer[index + 2] = 0;
-                    propBuffer[index + 3] = 0;
+                    propBuffer[index] = 1;
+                    propBuffer[index + 1] = 1;
+                    propBuffer[index + 2] = 1;
+                    propBuffer[index + 3] = 1;
                 }
             }
 
@@ -132,6 +132,14 @@ export abstract class SpriteEffectBase extends Sprite {
         let height = maxV - minV;
 
         return new Vec4(minU, minV, width, height);
+    }
+
+    protected getBufferIndex(): number {
+        let quotient = this._effectIndex / 256;
+        let fractional = quotient - Math.floor(quotient);
+        let x = Math.floor(fractional * (256 * this.countOfProps));
+        const index = x * 4;
+        return index;
     }
 
     onLoad(): void {

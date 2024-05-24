@@ -69,14 +69,10 @@ export class SpriteEffectTest extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
-        // TestEffect only use one effect prop, index 0.
-        let quotient = this._effectIndex / 256;
-        let fractional = quotient - Math.floor(quotient);
-        let x = Math.floor(fractional * (256 * this.countOfProps));
-        const index = x * 4;
-
+        const index = this.getBufferIndex();
         const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
-        effectProps.propBuffer[index] = this._effectColor.r / 255;
+
+        effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
         effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
         effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
         effectProps.propBuffer[index + 3] = this._effectColor.a / 255;

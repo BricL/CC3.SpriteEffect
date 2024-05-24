@@ -34,13 +34,7 @@ float invLerp(float a, float b, float value) {
   return clamp((value - a) / (b - a), 0.0, 1.0);
 }
 
-vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxMap, int num) {
-    vec2 prop_uv = vec2(float(num)/512.0, (idxMap.r*255.0)/512.0);
-    vec4 val = texture(propTexture, prop_uv);
-    return val;
-}
-
-vec4 getPropFromPropTexture2(sampler2D propTexture, vec4 groupIdx, int idx) {
+vec4 getPropFromPropTexture(sampler2D propTexture, vec4 groupIdx, int widthOfPropTexture, int offset, int idx) {
   float tempIdx = 0.0;
 
   if (groupIdx.b > 0.0) {
@@ -52,7 +46,7 @@ vec4 getPropFromPropTexture2(sampler2D propTexture, vec4 groupIdx, int idx) {
   else {
     tempIdx = groupIdx.r;
   }
-
-  vec2 prop_uv = vec2(((tempIdx * 255.0) + float(idx)) / 256.0, 0.0);
+  
+  vec2 prop_uv = vec2(((tempIdx * 255.0) * float(offset) + float(idx)) / float(widthOfPropTexture), 0.0);
   return texture(propTexture, prop_uv);
 }

@@ -95,13 +95,14 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     // 从属性纹理中获取属性
-    vec4 _baseUV = getPropFromPropTexture(_propTexture, color, 0);
-    vec4 _props = getPropFromPropTexture(_propTexture, color, 1);
+    vec4 propGroup = color;
+    vec4 _baseUV = getPropFromPropTexture(_propTexture, propGroup, 512, 2, 0);
+    vec4 _props = getPropFromPropTexture(_propTexture, propGroup, 512, 2, 1);
     float _speed = _props.r;
     float _strength = _props.g;
 
     // 初始化输出颜色
-    vec4 o = vec4(1, 1, 1, 1);
+    vec4 o = vec4(1.0);
     vec2 base_uv = normalizeUV(uv0, _baseUV);
 
     // 采样噪声纹理，根据时间计算偏移

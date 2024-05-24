@@ -1,4 +1,4 @@
-import { _decorator, Material, Texture2D } from 'cc';
+import { _decorator, log, Material, Texture2D } from 'cc';
 import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
@@ -94,29 +94,22 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected updateParams(): void {
-        const propsIdx = this.propGroupIdx;
-        let y = this._effectIndex;
+        const index = this.getBufferIndex();
 
-        // Init prop texture
-        let propBuffer = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propBuffer;
+        log(`index: ${index}`)
 
+        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
         let baseUV = this.getUV(this.spriteFrame!.uv);
-        let x = 0;
-        let index = (y * this.countOfProps + x) * 4;
-        propBuffer[index] = baseUV.x;
-        propBuffer[index + 1] = baseUV.y;
-        propBuffer[index + 2] = baseUV.z;
-        propBuffer[index + 3] = baseUV.w;
 
-        x = 1;
-        index = (y * this.countOfProps + x) * 4;
-        propBuffer[index] = this._speed;
-        propBuffer[index + 1] = this._strength;
-        propBuffer[index + 2] = 0;
-        propBuffer[index + 3] = 0;
-
-        // Upload prop texture
-        SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![propsIdx].propTexture.uploadData(propBuffer);
+        effectProps.propBuffer[index + 0] = baseUV.x;
+        effectProps.propBuffer[index + 1] = baseUV.y;
+        effectProps.propBuffer[index + 2] = baseUV.z;
+        effectProps.propBuffer[index + 3] = baseUV.w;
+        effectProps.propBuffer[index + 4] = this._speed;
+        effectProps.propBuffer[index + 5] = this._strength;
+        // effectProps.propBuffer[index + 6] = 0;
+        // effectProps.propBuffer[index + 7] = 0;
+        effectProps.propTexture.uploadData(effectProps.propBuffer)
     }
 
     /**
