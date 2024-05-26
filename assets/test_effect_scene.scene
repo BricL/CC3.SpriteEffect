@@ -521,13 +521,20 @@
       "__uuid__": "c4e39810-a7e5-491d-8012-7df3c5bde55c",
       "__expectedType__": "cc.EffectAsset"
     },
+    "_effectColor": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    "_is2Din3D": false,
     "noiseTexture": {
       "__uuid__": "36c5663b-6fd8-4a31-aded-01ada75d3b22@6c48a",
       "__expectedType__": "cc.Texture2D"
     },
     "_speed": 0.1,
     "_strength": 0.044,
-    "_is2Din3D": false,
     "_id": "c5wWMDBJZCfb6Fp2hpEB+v"
   },
   {
@@ -641,13 +648,20 @@
       "__uuid__": "c4e39810-a7e5-491d-8012-7df3c5bde55c",
       "__expectedType__": "cc.EffectAsset"
     },
+    "_effectColor": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_is2Din3D": false,
     "noiseTexture": {
       "__uuid__": "36c5663b-6fd8-4a31-aded-01ada75d3b22@6c48a",
       "__expectedType__": "cc.Texture2D"
     },
     "_speed": 0.1,
     "_strength": 0.095,
-    "_is2Din3D": false,
     "_id": "12YtIkcE5IxZI2Nqwuv5wu"
   },
   {

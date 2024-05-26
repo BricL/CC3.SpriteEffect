@@ -53,34 +53,11 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     //#endregion
 
 
-    //#region is2Din3D
-    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當使用RenderRoot2D時使用' })
-    public get is2Din3D(): boolean {
-        return this._is2Din3D;
-    }
-
-    public set is2Din3D(val: boolean) {
-        this._is2Din3D = val;
-
-        if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
-            this.updateParams();
-        }
-        else {
-            this._isPropDirty = true;
-        }
-    }
-
-    @property({ group: { name: "Private Props", id: "1" }, visible: true, tooltip: '當使用RenderRoot2D時使用' })
-    protected _is2Din3D: boolean = false;
-    //#endregion
-
-
     /**
      * @override SpriteEffectBase
      */
     protected get countOfProps(): number {
-        return 2;
+        return 3;
     }
 
     /**
@@ -101,14 +78,18 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
         let baseUV = this.getUV(this.spriteFrame!.uv);
 
-        effectProps.propBuffer[index + 0] = baseUV.x;
-        effectProps.propBuffer[index + 1] = baseUV.y;
-        effectProps.propBuffer[index + 2] = baseUV.z;
-        effectProps.propBuffer[index + 3] = baseUV.w;
-        effectProps.propBuffer[index + 4] = this._speed;
-        effectProps.propBuffer[index + 5] = this._strength;
-        // effectProps.propBuffer[index + 6] = 0;
-        // effectProps.propBuffer[index + 7] = 0;
+        effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
+        effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
+        effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
+        effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
+        effectProps.propBuffer[index + 4] = baseUV.x;
+        effectProps.propBuffer[index + 5] = baseUV.y;
+        effectProps.propBuffer[index + 6] = baseUV.z;
+        effectProps.propBuffer[index + 7] = baseUV.w;
+        effectProps.propBuffer[index + 8] = this._speed;
+        effectProps.propBuffer[index + 9] = this._strength;
+        // effectProps.propBuffer[index + 10] = 0;
+        // effectProps.propBuffer[index + 11] = 0;
         effectProps.propTexture.uploadData(effectProps.propBuffer)
     }
 

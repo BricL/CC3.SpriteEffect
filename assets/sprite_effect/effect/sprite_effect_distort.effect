@@ -96,17 +96,18 @@ CCProgram sprite-fs %{
   vec4 frag () {
     // 从属性纹理中获取属性
     vec4 idxEffectGroup = color;
-    vec4 _baseUV = getPropFromPropTexture(_propTexture, idxEffectGroup, 512, 2, 0);
-    vec4 _props = getPropFromPropTexture(_propTexture, idxEffectGroup, 512, 2, 1);
-    float _speed = _props.r;
-    float _strength = _props.g;
+    vec4 effectColor = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 0);
+    vec4 baseUV = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 1);
+    vec4 props = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 2);
+    float speed = props.r;
+    float strength = props.g;
 
     // 初始化输出颜色
     vec4 o = vec4(1.0);
-    vec2 base_uv = normalizeUV(uv0, _baseUV);
+    vec2 base_uv = normalizeUV(uv0, baseUV);
 
     // 采样噪声纹理，根据时间计算偏移
-    float px = mod(cc_time.x * _speed, 1.0);
+    float px = mod(cc_time.x * speed, 1.0);
     vec2 uv_offset_by_time = base_uv + px;
     uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
     uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
@@ -115,11 +116,11 @@ CCProgram sprite-fs %{
     vec4 noise_uv = CCSampleWithAlphaSeparated(_noiseTexture, uv_offset_by_time);
 
     // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
-    base_uv.xy += (noise_uv.xy) * _strength;
-    base_uv = denormalizeUV(base_uv, _baseUV);
+    base_uv.xy += (noise_uv.xy) * strength;
+    base_uv = denormalizeUV(base_uv, baseUV);
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, base_uv);
-    // o *= color;
+    o *= effectColor;
 
     ALPHA_TEST(o);
     return o;

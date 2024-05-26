@@ -12,6 +12,7 @@ export const template = `
 <ui-prop type="dump" class="trim"></ui-prop>
 
 <ui-section class="config" header="Effect Props" expand>
+    <ui-prop type="dump" class="effectColor"></ui-prop>
     <ui-prop type="dump" class="noiseTexture"></ui-prop>
     <ui-prop type="dump" class="speed"></ui-prop>
     <ui-prop type="dump" class="strength"></ui-prop>
@@ -27,6 +28,7 @@ export const $ = {
     type:'.type',
     trim:'.trim',
 
+    effectColor: '.effectColor',
     noiseTexture: '.noiseTexture',
     speed: '.speed',
     strength: '.strength',
@@ -45,6 +47,7 @@ export function update(this: Selector<typeof $>, dump: any) {
     this.$.trim.render(dump.value.trim);
 
 
+    this.$.effectColor.render(dump.value.effectColor);
     this.$.noiseTexture.render(dump.value.noiseTexture);
     this.$.speed.render(dump.value.speed);
     this.$.strength.render(dump.value.strength);

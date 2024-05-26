@@ -6,51 +6,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectTest')
 export class SpriteEffectTest extends SpriteEffectBase {
-    //#region myColor
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
-    public get effectColor(): Color {
-        return this._effectColor;
-    }
-
-    public set effectColor(val: Color) {
-        this._effectColor = val;
-
-        if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
-        }
-        else {
-            this._isPropDirty = true;
-        }
-    }
-
-    @property({ group: { name: "Private Props", id: "1" }, visible: true })
-    private _effectColor: Color = new Color(255, 255, 255, 255);
-    //#endregion
-
-
-    //#region is2Din3D
-    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當使用RenderRoot2D時使用' })
-    public get is2Din3D(): boolean {
-        return this._is2Din3D;
-    }
-
-    public set is2Din3D(val: boolean) {
-        this._is2Din3D = val;
-
-        if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
-            this.updateParams();
-        }
-        else {
-            this._isPropDirty = true;
-        }
-    }
-
-    @property({ group: { name: "Private Props", id: "1" }, visible: true, tooltip: '當使用RenderRoot2D時使用' })
-    protected _is2Din3D: boolean = false;
-    //#endregion
-
-     //#region override
+    //#region override
     /**
      * @override SpriteEffectBase
      */
