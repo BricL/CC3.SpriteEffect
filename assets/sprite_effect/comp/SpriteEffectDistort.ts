@@ -52,7 +52,8 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     private _strength: number = 0.05;
     //#endregion
 
-
+    
+    //#region override
     /**
      * @override SpriteEffectBase
      */

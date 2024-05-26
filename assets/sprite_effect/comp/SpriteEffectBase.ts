@@ -40,6 +40,7 @@ export abstract class SpriteEffectBase extends Sprite {
     protected _effectColor: Color = new Color(255, 255, 255, 255);
     //#endregion
 
+    
     //#region is2Din3D
     @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當使用RenderRoot2D時使用' })
     public get is2Din3D(): boolean {
@@ -189,7 +190,9 @@ export abstract class SpriteEffectBase extends Sprite {
         const index = x * 4;
         return index;
     }
+    //#endregion
 
+    //#region life cycle
     onLoad(): void {
         this.init(this.countOfProps);
     }
