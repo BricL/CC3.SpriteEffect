@@ -34,19 +34,26 @@ float invLerp(float a, float b, float value) {
   return clamp((value - a) / (b - a), 0.0, 1.0);
 }
 
-vec4 getPropFromPropTexture(sampler2D propTexture, vec4 groupIdx, int widthOfPropTexture, int offset, int idx) {
-  float tempIdx = 0.0;
+// 从道具贴图中获取參數：
+// propTexture: 參數贴图
+// idxGroup: 效果索引
+// widthOfPropTexture: 參數贴图宽度
+// offset: 一個效果的總共使用了多少參數數量
+// idxOfProps: 效果中的參數索引
+vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxGroup, int widthOfPropTexture, int offset, int idxOfProps) {
+  float temp = 0.0;
 
-  if (groupIdx.b > 0.0) {
-    tempIdx = groupIdx.b;
+  if (idxGroup.b > 0.0) {
+    temp = idxGroup.b;
   }
-  else if(groupIdx.g > 0.0) {
-    tempIdx = groupIdx.g;
+  else if(idxGroup.g > 0.0) {
+    temp = idxGroup.g;
   }
   else {
-    tempIdx = groupIdx.r;
+    temp = idxGroup.r;
   }
-  
-  vec2 prop_uv = vec2(((tempIdx * 255.0) * float(offset) + float(idx)) / float(widthOfPropTexture), 0.0);
+
+  int idx = int(temp * 255.0) * offset + idxOfProps;
+  vec2 prop_uv = vec2(float(idx) / float(widthOfPropTexture), 0.0);
   return texture(propTexture, prop_uv);
 }
