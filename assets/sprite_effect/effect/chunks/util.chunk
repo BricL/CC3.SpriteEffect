@@ -40,17 +40,17 @@ float invLerp(float a, float b, float value) {
 // widthOfPropTexture: 參數贴图宽度
 // offset: 一個效果的總共使用了多少參數數量
 // idxOfProps: 效果中的參數索引
-vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxGroup, int widthOfPropTexture, int offset, int idxOfProps) {
+vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxEffectGroup, int widthOfPropTexture, int offset, int idxOfProps) {
   float temp = 0.0;
 
-  if (idxGroup.b > 0.0) {
-    temp = idxGroup.b;
+  if (idxEffectGroup.b > 0.0) {
+    temp = idxEffectGroup.b;
   }
-  else if(idxGroup.g > 0.0) {
-    temp = idxGroup.g;
+  else if(idxEffectGroup.g > 0.0) {
+    temp = idxEffectGroup.g;
   }
   else {
-    temp = idxGroup.r;
+    temp = idxEffectGroup.r;
   }
 
   int idx = int(temp * 255.0) * offset + idxOfProps;

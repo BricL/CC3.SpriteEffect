@@ -91,8 +91,8 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 o = vec4(1, 1, 1, 1);
-    vec4 propGroup = color;
-    vec4 effectColor = getPropFromPropTexture(_propTexture, propGroup, 256, 1, 0);
+    vec4 idxEffectGroup = color;
+    vec4 effectColor = getPropFromPropTexture(_propTexture, idxEffectGroup, 256, 1, 0);
 
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
     o = vec4(o.rgb + effectColor.rgb, o.a * effectColor.a);
