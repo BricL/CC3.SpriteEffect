@@ -13,10 +13,10 @@ export const template = `
 
 <ui-section class="config" header="Effect Props" expand>
     <ui-prop type="dump" class="effectColor"></ui-prop>
+    <ui-prop type="dump" class="is2Din3D"></ui-prop>
     <ui-prop type="dump" class="noiseTexture"></ui-prop>
     <ui-prop type="dump" class="speed"></ui-prop>
     <ui-prop type="dump" class="strength"></ui-prop>
-    <ui-prop type="dump" class="is2Din3D"></ui-prop>
     <ui-button class="reload" style="height:24px;margin:16px 0;">Reload Asset</ui-button>
 </ui-section>
 `;
@@ -29,10 +29,10 @@ export const $ = {
     trim:'.trim',
 
     effectColor: '.effectColor',
+    is2Din3D: '.is2Din3D',
     noiseTexture: '.noiseTexture',
     speed: '.speed',
     strength: '.strength',
-    is2Din3D: '.is2Din3D',
     reload: '.reload',
 };
 
@@ -48,10 +48,10 @@ export function update(this: Selector<typeof $>, dump: any) {
 
 
     this.$.effectColor.render(dump.value.effectColor);
+    this.$.is2Din3D.render(dump.value.is2Din3D);
     this.$.noiseTexture.render(dump.value.noiseTexture);
     this.$.speed.render(dump.value.speed);
     this.$.strength.render(dump.value.strength);
-    this.$.is2Din3D.render(dump.value.is2Din3D);
     if (typeof this.$.reload.render === "function") {
         this.$.reload.render(dump.value.label);
     }
