@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset } from "../../util";
+import { autoAssignEffectAsset, autoAssignTextureAsset } from "../../util";
 
 type Selector<$> = { $: Record<keyof $, any | null> }
 
@@ -63,4 +63,5 @@ export async function ready(this: Selector<typeof $>) {
     });
 
     await autoAssignEffectAsset('SpriteEffectDistort');
+    await autoAssignTextureAsset('SpriteEffectDistort', 'noiseTexture', 'perlin_noise.png');
 }

@@ -1,6 +1,6 @@
 export async function autoAssignEffectAsset(effectCompName: string) {
     try {
-        console.log('Effect自動掛載啟動')
+        console.log('Effect自動掛載啟動');
 
         const uuids = Editor.Selection.getSelected('node');
         const node = await Editor.Message.request('scene', 'query-node', uuids[0]);
@@ -17,19 +17,16 @@ export async function autoAssignEffectAsset(effectCompName: string) {
 
         const effectFileName = effectCompName.replace(/([A-Z])/g, '_$1').toLowerCase().slice(1);
         const url = `db://assets/sprite_effect/effect/${effectFileName}.effect`;
-
         console.log(`url: ${url}`);
-        
-        const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
 
-        const uuid = res!.uuid;
+        const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
         const success = await Editor.Message.request('scene', 'set-property', {
             uuid: node.uuid.value as string,
             path: `__comps__.${index}.effectAsset`,
             dump: {
-                type: 'cc.EffectAsset',
+                type: res!.type,
                 value: {
-                    uuid,
+                    uuid: res!.uuid,
                 },
             },
         });
@@ -42,5 +39,48 @@ export async function autoAssignEffectAsset(effectCompName: string) {
         }
     } catch (ex) {
         console.error(`autoAssignEffectAsset: ${ex}`);
+    }
+}
+
+export async function autoAssignTextureAsset(effectCompName: string, propOfName: string, nameOfAsset: string) {
+    try {
+        console.log('Asset自動掛載啟動');
+
+        const uuids = Editor.Selection.getSelected('node');
+        const node = await Editor.Message.request('scene', 'query-node', uuids[0]);
+        if (!node) {
+            console.warn(`未選中節點`);
+            return;
+        }
+
+        const index = node.__comps__.findIndex((v: any) => v.type === effectCompName);
+        if (index === -1) {
+            console.warn(`節點未掛載${effectCompName}組件`);
+            return;
+        }
+
+        const url = `db://assets/sprite_effect/texture/${nameOfAsset}`;
+        console.log(`url: ${url}`);
+
+        const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
+        const success = await Editor.Message.request('scene', 'set-property', {
+            uuid: node.uuid.value as string,
+            path: `__comps__.${index}.${propOfName}`,
+            dump: {
+                type: res!.type,
+                value: {
+                    uuid: res!.uuid,
+                },
+            },
+        });
+
+        if (success) {
+            console.log(`Texture自動掛載成功`);
+        }
+        else {
+            console.log(`Texture自動掛載失敗`);
+        }
+    } catch (ex) {
+        console.error(`autoAssignTextureAsset: ${ex}`);
     }
 }
