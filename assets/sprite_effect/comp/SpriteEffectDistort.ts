@@ -73,20 +73,19 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      */
     protected updateParams(): void {
         const index = this.getBufferIndex();
-
-        log(`index: ${index}`)
-
         const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
-        let baseUV = this.getUV(this.spriteFrame!.uv);
+        const baseUV = this.getUV(this.spriteFrame!.uv);
 
         effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
         effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
         effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
         effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
+        
         effectProps.propBuffer[index + 4] = baseUV.x;
         effectProps.propBuffer[index + 5] = baseUV.y;
         effectProps.propBuffer[index + 6] = baseUV.z;
         effectProps.propBuffer[index + 7] = baseUV.w;
+
         effectProps.propBuffer[index + 8] = this._speed;
         effectProps.propBuffer[index + 9] = this._strength;
         // effectProps.propBuffer[index + 10] = 0;

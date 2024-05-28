@@ -94,6 +94,7 @@ export abstract class SpriteEffectBase extends Sprite {
     //#region methods
     protected init(countOfProps: number): void {
         const unionKey = this.getPropsUnionKey();
+        log(`init: ${unionKey}`);
 
         // Step1: 取的當前的effectIndex
         if (!SpriteEffectBase._s_effectMap.has(unionKey)) {
@@ -109,8 +110,8 @@ export abstract class SpriteEffectBase extends Sprite {
                 return;
             }
         }
-        log(`Effect index is:${this._effectIndex}`);
 
+        log(`Effect index is:${this._effectIndex}`);
         SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
 
         if (this.propGroupIdx === 0) {
@@ -137,7 +138,7 @@ export abstract class SpriteEffectBase extends Sprite {
                 for (let x = 0; x < (256 * countOfProps); x++) {
                     const index = (y * (256 * countOfProps) + x) * 4;
                     propBuffer[index] = 1;
-                    propBuffer[index + 1] = 1;
+                    propBuffer[index + 1] = 0;
                     propBuffer[index + 2] = 1;
                     propBuffer[index + 3] = 1;
                 }
@@ -151,7 +152,7 @@ export abstract class SpriteEffectBase extends Sprite {
                 format: Texture2D.PixelFormat.RGBA32F,
                 mipmapLevel: 0
             });
-            propTexture!.uploadData(propBuffer);
+            propTexture.uploadData(propBuffer);
 
             let mat = this.initMaterial();
             mat.setProperty('_propTexture', propTexture);

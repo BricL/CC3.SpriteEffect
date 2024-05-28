@@ -657,8 +657,8 @@
     },
     "_is2Din3D": false,
     "noiseTexture": {
-      "__uuid__": "36c5663b-6fd8-4a31-aded-01ada75d3b22@6c48a",
-      "__expectedType__": "cc.Texture2D"
+      "__uuid__": "2287552e-e591-406b-af08-a8258f39f643",
+      "__expectedType__": "cc.ImageAsset"
     },
     "_speed": 0.1,
     "_strength": 0.095,
