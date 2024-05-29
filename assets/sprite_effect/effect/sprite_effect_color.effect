@@ -17,7 +17,7 @@ CCEffect %{
         cullMode: none
       properties: &props
         alphaThreshold: { value: 0.5 }
-        _propTexture: { value: white, editor: { type:  sampler2D }}
+        propsTexture: { value: white, editor: { type:  sampler2D }}
         # baseUV: { value: [0,0,1,1] }
         # toneFactor: { value: 1.0, editor: { slide: true, type: float, range: [0.0,1.0], step: 0.01 }}
         # colorFactor: { value: 1.0, editor: { slide: true, type: float, range: [0.0,1.0], step: 0.01 }}
@@ -91,8 +91,8 @@ CCProgram sprite-fs %{
 
   in vec4 color;
   in vec2 uv0;
-  
-  uniform sampler2D _propTexture;
+
+  uniform sampler2D propsTexture;
 
   vec4 transformColorTone (float toneFactor, vec4 color, float colorFactor, vec4 o) {
       #if IS_GRAY
@@ -112,14 +112,11 @@ CCProgram sprite-fs %{
 
       #if IS_ADD
         o = mix(o, vec4(color.rgb + o.rgb, color.a * o.a), colorFactor);
-      #endif
-      #if IS_SUB
+      #elif IS_SUB
         o = mix(o, vec4(color.rgb - o.rgb, color.a * o.a), colorFactor);
-      #endif
-      #if IS_FILL
+      #elif IS_FILL
         o = mix(o, vec4(color.rgb, color.a * o.a), colorFactor);
-      #endif
-      #if IS_MULT
+      #elif IS_MULT
         o = mix(o, o * color, colorFactor);
       #endif
 
@@ -128,7 +125,7 @@ CCProgram sprite-fs %{
 
   float BLUR_KERNEL_[5];
 
-  vec4 Tex2DBlurring(sampler2D tex, vec2 texcood, vec2 blur, vec4 baseUV) {
+  vec4 Tex2DBlurring(sampler2D tex, vec2 uv0, vec2 blur, vec4 baseUV) {
     const int BLUR_KERNEL_SIZE = 5;
     BLUR_KERNEL_[0] = 0.2486;
     BLUR_KERNEL_[1] = 0.7046;
@@ -139,6 +136,7 @@ CCProgram sprite-fs %{
     vec4 o = vec4(0.0);
     float sum = 0.0;
     vec2 shift = vec2(0.0);
+    vec2 texcood = normalizeUV(uv0, baseUV);
 
     for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
       shift.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
@@ -158,10 +156,10 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(_propTexture, idxEffectGroup, 1024, 4, 0);
-    vec4 baseUV = getPropFromPropTexture(_propTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 props1 = getPropFromPropTexture(_propTexture, idxEffectGroup, 1024, 4, 2);
-    vec4 props2 = getPropFromPropTexture(_propTexture, idxEffectGroup, 1024, 4, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 3);
 
     vec2 blurTextureSize = vec2(props1.x, props1.y);
     float toneFactor = props2.x;
@@ -169,14 +167,14 @@ CCProgram sprite-fs %{
     float blurFactor = props2.z;
 
     vec4 o = vec4(1, 1, 1, 1);
-    vec2 uv = normalizeUV(uv0, baseUV);
-
+    
   #if USE_BLUR
-    o = Tex2DBlurring(cc_spriteTexture, uv, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0, baseUV);
+    o = Tex2DBlurring(cc_spriteTexture, uv0, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0, baseUV);
   #else
-    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv);
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
   #endif
     o = transformColorTone(toneFactor, effectColor, colorFactor, o);
+    
     ALPHA_TEST(o);
     return o;
   }

@@ -17,8 +17,9 @@ CCEffect %{
       rasterizerState:
         cullMode: none
       properties: &props
-        _propTexture: { value: white, editor: { type:  sampler2D }}
-        _noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
+        alphaThreshold: { value: 0.5 }
+        propsTexture: { value: white, editor: { type:  sampler2D }}
+        noiseTexture: { value: white, editor: { type:  sampler2D }}
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert 
@@ -90,30 +91,31 @@ CCProgram sprite-fs %{
   in vec4 color;
   in vec2 uv0;
   
-  uniform sampler2D _propTexture;
-  uniform sampler2D _noiseTexture;
+  uniform sampler2D propsTexture;
+  uniform sampler2D noiseTexture;
 
   vec4 frag () {
     // 从属性纹理中获取属性
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 0);
-    vec4 baseUV = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 1);
-    vec4 props = getPropFromPropTexture(_propTexture, idxEffectGroup, 768, 3, 2);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 0);
+    vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 1);
+    vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 2);
     float speed = props.r;
     float strength = props.g;
 
     // 初始化输出颜色
     vec4 o = vec4(1.0);
-    vec2 uv = normalizeUV(uv0, baseUV);
-
+  
     // 采样噪声纹理，根据时间计算偏移
+    vec2 uv = normalizeUV(uv0, baseUV);
     float px = mod(cc_time.x * speed, 1.0);
     vec2 uv_offset_by_time = uv + px;
+    
     uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
     uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
 
     // 利用Offset後的uv采样噪声纹理
-    vec4 noise_uv = CCSampleWithAlphaSeparated(_noiseTexture, uv_offset_by_time);
+    vec4 noise_uv = CCSampleWithAlphaSeparated(noiseTexture, uv_offset_by_time);
 
     // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
     uv.xy += (noise_uv.xy) * strength;

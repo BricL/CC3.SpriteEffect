@@ -106,7 +106,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
             }
         );
 
-        mat.setProperty('_noiseTexture', this.noiseTexture);
+        mat.setProperty('noiseTexture', this.noiseTexture);
         return mat;
     }
 }

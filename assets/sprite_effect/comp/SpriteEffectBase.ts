@@ -144,23 +144,23 @@ export abstract class SpriteEffectBase extends Sprite {
                 }
             }
 
-            let propTexture = new Texture2D();
-            propTexture.setFilters(Texture2D.Filter.NEAREST, Texture2D.Filter.NEAREST);
-            propTexture.reset({
+            let propsTexture = new Texture2D();
+            propsTexture.setFilters(Texture2D.Filter.NEAREST, Texture2D.Filter.NEAREST);
+            propsTexture.reset({
                 width: (256 * countOfProps),
                 height: 1,
                 format: Texture2D.PixelFormat.RGBA32F,
                 mipmapLevel: 0
             });
-            propTexture.uploadData(propBuffer);
+            propsTexture.uploadData(propBuffer);
 
             let mat = this.initMaterial();
-            mat.setProperty('_propTexture', propTexture);
+            mat.setProperty('propsTexture', propsTexture);
 
             SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] = {
                 mat: mat,
                 propBuffer: propBuffer,
-                propTexture: propTexture
+                propTexture: propsTexture
             };
         }
 

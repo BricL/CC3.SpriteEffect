@@ -63,5 +63,5 @@ export async function ready(this: Selector<typeof $>) {
     });
 
     await autoAssignEffectAsset('SpriteEffectDistort');
-    await autoAssignTextureAsset('SpriteEffectDistort', 'noiseTexture', 'perlin_noise.png');
+    // await autoAssignTextureAsset('SpriteEffectDistort', 'noiseTexture', 'perlin_noise.png');
 }
