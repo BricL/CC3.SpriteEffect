@@ -21,10 +21,6 @@ export abstract class SpriteEffectBase extends Sprite {
 
     //#region effectColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
-    public get effectColor(): Color {
-        return this._effectColor;
-    }
-
     public set effectColor(val: Color) {
         this._effectColor = val;
 
@@ -35,6 +31,10 @@ export abstract class SpriteEffectBase extends Sprite {
             this._isPropDirty = true;
         }
     }
+    
+    public get effectColor(): Color {
+        return this._effectColor;
+    }
 
     @property
     protected _effectColor: Color = new Color(255, 255, 255, 255);
@@ -43,10 +43,6 @@ export abstract class SpriteEffectBase extends Sprite {
     
     //#region is2Din3D
     @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當使用RenderRoot2D時使用' })
-    public get is2Din3D(): boolean {
-        return this._is2Din3D;
-    }
-
     public set is2Din3D(val: boolean) {
         this._is2Din3D = val;
 
@@ -57,6 +53,10 @@ export abstract class SpriteEffectBase extends Sprite {
         else {
             this._isPropDirty = true;
         }
+    }
+
+    public get is2Din3D(): boolean {
+        return this._is2Din3D;
     }
 
     @property

@@ -27,10 +27,6 @@ export enum BlurMode {
 export class SpriteEffectColor extends SpriteEffectBase {
     //#region toneMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ToneMode), tooltip: "色調模式" })
-    public get toneMode(): ToneMode {
-        return this._toneMode;
-    }
-
     public set toneMode(val: ToneMode) {
         this._toneMode = val;
 
@@ -42,16 +38,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
+    public get toneMode(): ToneMode {
+        return this._toneMode;
+    }
+
     @property({ type: Enum(ToneMode) })
     private _toneMode: ToneMode = ToneMode.NORMAL;
     //#endregion
 
     //#region toneFactor
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "色調程度" })
-    public get toneFactor(): number {
-        return this._toneFactor;
-    }
-
     public set toneFactor(val: number) {
         this._toneFactor = val;
 
@@ -62,16 +58,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
+    public get toneFactor(): number {
+        return this._toneFactor;
+    }
+
     @property
     private _toneFactor: number = 1.0;
     //#endregion
 
     //#region colorMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ColorMode), tooltip: "顏色模式" })
-    public get colorMode(): ColorMode {
-        return this._colorMode;
-    }
-
     public set colorMode(val: ColorMode) {
         this._colorMode = val;
 
@@ -83,16 +79,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
+    public get colorMode(): ColorMode {
+        return this._colorMode;
+    }
+
     @property({ type: Enum(ColorMode) })
     private _colorMode: ColorMode = ColorMode.MULT;
     //#endregion
 
     //#region colorFactor
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "顏色程度" })
-    public get colorFactor(): number {
-        return this._colorFactor;
-    }
-
     public set colorFactor(val: number) {
         this._colorFactor = val;
 
@@ -103,16 +99,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
+    public get colorFactor(): number {
+        return this._colorFactor;
+    }
+
     @property
     private _colorFactor: number = 1.0;
     //#endregion
 
     //#region blurMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(BlurMode), tooltip: "模糊模式" })
-    public get blurMode(): BlurMode {
-        return this._blurMode;
-    }
-
     public set blurMode(val: BlurMode) {
         this._blurMode = val;
 
@@ -124,16 +120,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
+    public get blurMode(): BlurMode {
+        return this._blurMode;
+    }
+
     @property({ type: Enum(BlurMode) })
     private _blurMode: BlurMode = BlurMode.NONE;
     //#endregion
 
     //#region blurFactor
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: "模糊程度" })
-    public get blurFactor(): number {
-        return this._blurFactor;
-    }
-
     public set blurFactor(val: number) {
         this._blurFactor = val;
 
@@ -142,6 +138,10 @@ export class SpriteEffectColor extends SpriteEffectBase {
         } else {
             this._isPropDirty = true;
         }
+    }
+
+    public get blurFactor(): number {
+        return this._blurFactor;
     }
 
     @property
