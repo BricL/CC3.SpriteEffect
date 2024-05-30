@@ -98,11 +98,9 @@ CCProgram sprite-fs %{
       #if IS_GRAY
         float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
         o = mix(o, vec4(gray, gray, gray, o.a), toneFactor);
-      #endif
-      #if IS_NEGA
+      #elif IS_NEGA
         o = mix(o, vec4(1.0 - o.rgb, o.a), toneFactor);
-      #endif
-      #if IS_SEPIA
+      #elif IS_SEPIA
         o = mix(o, vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)), 
                         dot(o.rgb, vec3(0.349, 0.686, 0.168)), 
                         dot(o.rgb, vec3(0.272, 0.534, 0.131)), 
