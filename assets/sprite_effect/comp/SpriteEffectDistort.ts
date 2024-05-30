@@ -26,7 +26,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0.01, 0.1, 0.001], tooltip: '扭曲速度', visible: true })
+    @property
     private _speed: number = 0.05;
     //#endregion
 
@@ -48,11 +48,11 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0.01, 0.1, 0.001], tooltip: '扭曲强度', visible: true })
+    @property
     private _strength: number = 0.05;
     //#endregion
 
-    
+
     //#region override
     /**
      * @override SpriteEffectBase
@@ -80,7 +80,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
         effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
         effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
-        
+
         effectProps.propBuffer[index + 4] = baseUV.x;
         effectProps.propBuffer[index + 5] = baseUV.y;
         effectProps.propBuffer[index + 6] = baseUV.z;

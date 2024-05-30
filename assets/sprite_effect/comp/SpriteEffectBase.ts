@@ -36,7 +36,7 @@ export abstract class SpriteEffectBase extends Sprite {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, visible: true })
+    @property
     protected _effectColor: Color = new Color(255, 255, 255, 255);
     //#endregion
 
@@ -59,7 +59,7 @@ export abstract class SpriteEffectBase extends Sprite {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, visible: true, tooltip: '當使用RenderRoot2D時使用' })
+    @property
     protected _is2Din3D: boolean = false;
     //#endregion
 

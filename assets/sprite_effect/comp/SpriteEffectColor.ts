@@ -42,7 +42,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ToneMode), tooltip: "色調模式", visible: true })
+    @property({ type: Enum(ToneMode) })
     private _toneMode: ToneMode = ToneMode.NORMAL;
     //#endregion
 
@@ -62,7 +62,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "色調程度", visible: true })
+    @property
     private _toneFactor: number = 1.0;
     //#endregion
 
@@ -83,7 +83,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(ColorMode), tooltip: "顏色模式", visible: true })
+    @property({ type: Enum(ColorMode) })
     private _colorMode: ColorMode = ColorMode.MULT;
     //#endregion
 
@@ -103,7 +103,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: "顏色程度", visible: true })
+    @property
     private _colorFactor: number = 1.0;
     //#endregion
 
@@ -124,7 +124,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, type: Enum(BlurMode), tooltip: "模糊模式", visible: true })
+    @property({ type: Enum(BlurMode) })
     private _blurMode: BlurMode = BlurMode.NONE;
     //#endregion
 
@@ -144,7 +144,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         }
     }
 
-    @property({ group: { name: "Private Props", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: "模糊程度", visible: true })
+    @property
     private _blurFactor: number = 1.0;
     //#endregion
 
