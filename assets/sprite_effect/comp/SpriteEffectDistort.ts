@@ -1,4 +1,4 @@
-import { _decorator, log, Material, Texture2D } from 'cc';
+import { _decorator, lerp, log, Material, Texture2D } from 'cc';
 import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
@@ -10,11 +10,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     public noiseTexture: Texture2D | null = null;
 
     //#region speed
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.01, 0.1, 0.001], tooltip: '扭曲速度' })
-    public get speed(): number {
-        return this._speed;
-    }
-
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '扭曲速度' })
     public set speed(val: number) {
         this._speed = val;
 
@@ -26,17 +22,17 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         }
     }
 
+    public get speed(): number {
+        return this._speed;
+    }
+
     @property
     private _speed: number = 0.05;
     //#endregion
 
 
     //#region strength
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.01, 0.1, 0.001], tooltip: '扭曲强度' })
-    public get strength(): number {
-        return this._strength;
-    }
-
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '扭曲强度' })
     public set strength(val: number) {
         this._strength = val;
 
@@ -46,6 +42,10 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         else {
             this._isPropDirty = true;
         }
+    }
+
+    public get strength(): number {
+        return this._strength;
     }
 
     @property
@@ -86,8 +86,8 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         effectProps.propBuffer[index + 6] = baseUV.z;
         effectProps.propBuffer[index + 7] = baseUV.w;
 
-        effectProps.propBuffer[index + 8] = this._speed;
-        effectProps.propBuffer[index + 9] = this._strength;
+        effectProps.propBuffer[index + 8] = lerp(0.0, 0.2, this._speed);
+        effectProps.propBuffer[index + 9] = lerp(0.0, 0.2, this._strength);
         // effectProps.propBuffer[index + 10] = 0;
         // effectProps.propBuffer[index + 11] = 0;
         effectProps.propTexture.uploadData(effectProps.propBuffer)

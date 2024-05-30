@@ -536,8 +536,8 @@
       "__uuid__": "2287552e-e591-406b-af08-a8258f39f643@6c48a",
       "__expectedType__": "cc.Texture2D"
     },
-    "_speed": 0.1,
-    "_strength": 0.1,
+    "_speed": 0.2,
+    "_strength": 0.13,
     "_id": "fenkfCtSlFAKLV32+vDs25"
   },
   {
