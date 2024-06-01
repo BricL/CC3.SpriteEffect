@@ -112,8 +112,8 @@ CCProgram sprite-fs %{
              invLerp(bChannel.x, bChannel.y, gray), 
              invLerp(gChannel.x, gChannel.y, gray), 
              o.a);
+             
     o *= effectColor;
-
     ALPHA_TEST(o);
     return o;
   }
