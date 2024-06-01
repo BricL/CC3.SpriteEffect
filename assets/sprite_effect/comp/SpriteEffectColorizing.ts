@@ -12,7 +12,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._rChannelMin = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -28,7 +28,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._rChannelMax = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -52,7 +52,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._gChannelMin = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -68,7 +68,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._gChannelMax = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -92,7 +92,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._bChannelMin = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -108,7 +108,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         this._bChannelMax = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -144,28 +144,23 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(): void {
-        const index = this.getBufferIndex();
-        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
+    protected updateParams(index: number, propBuffer: Float32Array): void {
+        propBuffer[index + 0] = this._effectColor.r / 255;
+        propBuffer[index + 1] = this._effectColor.g / 255;
+        propBuffer[index + 2] = this._effectColor.b / 255;
+        propBuffer[index + 3] = this._effectColor.a / 255;
 
-        effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
-        effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
-        effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
-        effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
+        propBuffer[index + 4] = this._rChannelMin;
+        propBuffer[index + 5] = this._rChannelMax;
+        propBuffer[index + 6] = this._gChannelMin;
+        propBuffer[index + 7] = this._gChannelMax;
 
-        effectProps.propBuffer[index + 4] = this._rChannelMin;
-        effectProps.propBuffer[index + 5] = this._rChannelMax;
-        effectProps.propBuffer[index + 6] = this._gChannelMin;
-        effectProps.propBuffer[index + 7] = this._gChannelMax;
-
-        effectProps.propBuffer[index + 8] = this._bChannelMin;
-        effectProps.propBuffer[index + 9] = this._bChannelMax;
-
-        effectProps.propTexture.uploadData(effectProps.propBuffer);
+        propBuffer[index + 8] = this._bChannelMin;
+        propBuffer[index + 9] = this._bChannelMax;
     }
 
     /**
-     * @override SpriteEffectBase
+     * @override SpriteEffectgftf55rfrrftfgt6gyredtBase
      */
     protected initMaterial(): Material {
         let mat = new Material();

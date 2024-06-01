@@ -25,7 +25,7 @@ export abstract class SpriteEffectBase extends Sprite {
         this._effectColor = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -48,7 +48,7 @@ export abstract class SpriteEffectBase extends Sprite {
 
         if (EDITOR_NOT_IN_PREVIEW) {
             this.init(this.countOfProps);
-            this.updateParams();
+            this.reflashParams();
         }
         else {
             this._isPropDirty = true;
@@ -81,7 +81,7 @@ export abstract class SpriteEffectBase extends Sprite {
      * @abstract
      * Update the effect parameters.
      */
-    protected abstract updateParams(): void;
+    protected abstract updateParams(index: number, propBuffer: Float32Array): void;
 
     /**
      * @abstract
@@ -172,6 +172,13 @@ export abstract class SpriteEffectBase extends Sprite {
         this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx].mat;
     }
 
+    protected reflashParams(): void {
+        const index = this.getBufferIndex();
+        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
+        this.updateParams(index, effectProps.propBuffer);
+        effectProps.propTexture.uploadData(effectProps.propBuffer);
+    }
+
     protected get propGroupIdx(): number {
         return Math.floor(this._effectIndex / 256);
     }
@@ -204,7 +211,7 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     start() {
-        this.updateParams();
+        this.reflashParams();
     }
 
     onDestroy(): void {
@@ -226,7 +233,7 @@ export abstract class SpriteEffectBase extends Sprite {
     lateUpdate(dt: number): void {
         if (this._isPropDirty) {
             log(`${this.constructor.name}'s effect props is DIRTY!`);
-            this.updateParams();
+            this.reflashParams();
             this._isPropDirty = false;
         }
     }

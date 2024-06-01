@@ -32,7 +32,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
 
         if (EDITOR_NOT_IN_PREVIEW) {
             this.init(this.countOfProps);
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -52,7 +52,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._toneFactor = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -73,7 +73,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
 
         if (EDITOR_NOT_IN_PREVIEW) {
             this.init(this.countOfProps);
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -93,7 +93,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._colorFactor = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -114,7 +114,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
 
         if (EDITOR_NOT_IN_PREVIEW) {
             this.init(this.countOfProps);
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -134,7 +134,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._blurFactor = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.updateParams();
+            this.reflashParams();
         } else {
             this._isPropDirty = true;
         }
@@ -158,15 +158,16 @@ export class SpriteEffectColor extends SpriteEffectBase {
         return unionKey;
     }
 
-    protected updateParams(): void {
-        const index = this.getBufferIndex();
-        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
-        const baseUV = this.getUV(this.spriteFrame!.uv);
+    /**
+     * @override SpriteEffectBase
+     */
+    protected updateParams(index: number, propBuffer: Float32Array): void {
+       const baseUV = this.getUV(this.spriteFrame!.uv);
 
-        effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
-        effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
-        effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
-        effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
+        propBuffer[index + 0] = this._effectColor.r / 255;
+        propBuffer[index + 1] = this._effectColor.g / 255;
+        propBuffer[index + 2] = this._effectColor.b / 255;
+        propBuffer[index + 3] = this._effectColor.a / 255;
 
         let blurTextureSize = new Vec2(100, 100);
         if (this.spriteFrame) {
@@ -178,23 +179,25 @@ export class SpriteEffectColor extends SpriteEffectBase {
             blurTextureSize.y = this.node.getComponent(UITransform)!.contentSize.height;
         }
 
-        effectProps.propBuffer[index + 4] = baseUV.x;
-        effectProps.propBuffer[index + 5] = baseUV.y;
-        effectProps.propBuffer[index + 6] = baseUV.z;
-        effectProps.propBuffer[index + 7] = baseUV.w;
+        propBuffer[index + 4] = baseUV.x;
+        propBuffer[index + 5] = baseUV.y;
+        propBuffer[index + 6] = baseUV.z;
+        propBuffer[index + 7] = baseUV.w;
 
-        effectProps.propBuffer[index + 8] = blurTextureSize.x;
-        effectProps.propBuffer[index + 9] = blurTextureSize.y;
-        // effectProps.propBuffer[index + 10] = 0.0;
-        // effectProps.propBuffer[index + 11] = 1.0;
+        propBuffer[index + 8] = blurTextureSize.x;
+        propBuffer[index + 9] = blurTextureSize.y;
+        // propBuffer[index + 10] = 0.0;
+        // propBuffer[index + 11] = 1.0;
 
-        effectProps.propBuffer[index + 12] = this.toneFactor;
-        effectProps.propBuffer[index + 13] = this.colorFactor;
-        effectProps.propBuffer[index + 14] = this.blurFactor;
-        // effectProps.propBuffer[index + 15] = 1.0;
-        effectProps.propTexture.uploadData(effectProps.propBuffer);
+        propBuffer[index + 12] = this.toneFactor;
+        propBuffer[index + 13] = this.colorFactor;
+        propBuffer[index + 14] = this.blurFactor;
+        // propBuffer[index + 15] = 1.0;
     }
 
+    /**
+     * @override SpriteEffectBase
+     */
     protected initMaterial(): Material {
         let mat = new Material();
         let define_macro = {

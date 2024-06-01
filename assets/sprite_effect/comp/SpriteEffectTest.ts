@@ -24,15 +24,11 @@ export class SpriteEffectTest extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(): void {
-        const index = this.getBufferIndex();
-        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
-
-        effectProps.propBuffer[index + 0] = this._effectColor.r / 255;
-        effectProps.propBuffer[index + 1] = this._effectColor.g / 255;
-        effectProps.propBuffer[index + 2] = this._effectColor.b / 255;
-        effectProps.propBuffer[index + 3] = this._effectColor.a / 255;
-        effectProps.propTexture.uploadData(effectProps.propBuffer);
+    protected updateParams(index: number, propBuffer: Float32Array): void {
+        propBuffer[index + 0] = this._effectColor.r / 255;
+        propBuffer[index + 1] = this._effectColor.g / 255;
+        propBuffer[index + 2] = this._effectColor.b / 255;
+        propBuffer[index + 3] = this._effectColor.a / 255;
     }
 
     /**
