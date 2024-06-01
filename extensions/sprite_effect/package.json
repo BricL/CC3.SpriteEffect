@@ -40,7 +40,8 @@
                     "SpriteEffectWaterWave": "./dist/contributions/inspector/comp-SpriteEffectWaterWave.js",
                     "SpriteEffectWaterFlow": "./dist/contributions/inspector/comp-SpriteEffectWaterFlow.js",
                     "SpriteEffectGaussianBlur": "./dist/contributions/inspector/comp-SpriteEffectGaussianBlur.js",
-                    "SpriteEffectDissolve": "./dist/contributions/inspector/comp-SpriteEffectDissolve.js"
+                    "SpriteEffectDissolve": "./dist/contributions/inspector/comp-SpriteEffectDissolve.js",
+                    "SpriteEffectDisappear": "./dist/contributions/inspector/comp-SpriteEffectDisappear.js"
                 }
             }
         }
