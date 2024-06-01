@@ -17,7 +17,12 @@ CCEffect %{
         cullMode: none
       properties: &props
         alphaThreshold: { value: 0.5 }
-        propsTexture: { value: white, editor: { type:  sampler2D }}
+        propsTexture: { value: white, editor: { type: sampler2D }}
+        noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
+        # _dissolveColor: { value: [0, 0, 0, 1.0], editor: { type: color } }
+        # _factor: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
+        # _softness: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
+        # _width: { value: 0.5, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert
@@ -87,17 +92,41 @@ CCProgram sprite-fs %{
   in vec4 color;
   in vec2 uv0;
 
+  uniform sampler2D noiseTexture;
   uniform sampler2D propsTexture;
+  // uniform constant {
+  //   vec4 _dissolveColor;
+  //   float _factor;
+  //   float _softness;
+  //   float _width;
+  // };
 
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 256, 1, 0);
+      vec4 idxEffectGroup = color;
+      vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+      vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+      vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
 
-    vec4 o = vec4(1, 1, 1, 1);
-    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-    o = vec4(o.rgb + effectColor.rgb, o.a * effectColor.a);
+      vec4 _dissolveColor = prop1;
+      float _factor = prop2.x;
+      float _softness = prop2.y;
+      float _width = prop2.z;
 
-    ALPHA_TEST(o);
-    return o;
+      vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+      float alpha = CCSampleWithAlphaSeparated(noiseTexture, uv0).r;
+
+      // Constants
+      float width = _width * 0.25;
+      float endgeBlend = smoothstep(0.0, _softness, (_factor + width) - alpha);
+      float alphaBlend = smoothstep(0.0, _softness, alpha - _factor);
+
+      // Edge blending & Adjust alpha
+      o.rgb += _dissolveColor.rgb * endgeBlend;
+      o.a *= alphaBlend;
+      o *= effectColor;
+
+      ALPHA_TEST(o);
+      return o;
   }
+
 }%
