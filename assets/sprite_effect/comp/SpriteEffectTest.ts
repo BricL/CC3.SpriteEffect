@@ -10,8 +10,8 @@ export class SpriteEffectTest extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get countOfProps(): number {
-        return 1;
+    protected get countOfUsedFloats(): number {
+        return 4;
     }
 
     /**

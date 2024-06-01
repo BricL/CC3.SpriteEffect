@@ -67,9 +67,9 @@ export abstract class SpriteEffectBase extends Sprite {
     //#region abstract methods
     /**
      * @abstract
-     * Size of the prop texture.
+     * Return the count of used floats of the effect.
      */
-    protected abstract get countOfProps(): number;
+    protected abstract get countOfUsedFloats(): number;
 
     /**
      * @abstract 
@@ -92,6 +92,11 @@ export abstract class SpriteEffectBase extends Sprite {
     //#endregion
 
     //#region methods
+    protected get countOfProps(): number {
+        const num = Math.ceil(this.countOfUsedFloats / 4.0);
+        return num;
+    }
+
     protected init(countOfProps: number): void {
         const unionKey = this.getPropsUnionKey();
         log(`init: ${unionKey}`);

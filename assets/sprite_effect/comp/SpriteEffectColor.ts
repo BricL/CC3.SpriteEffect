@@ -148,8 +148,9 @@ export class SpriteEffectColor extends SpriteEffectBase {
     private _blurFactor: number = 1.0;
     //#endregion
 
-    protected get countOfProps(): number {
-        return 4;
+    //#region override
+    protected get countOfUsedFloats(): number {
+        return 13;
     }
 
     protected getPropsUnionKey(): string {
@@ -184,13 +185,13 @@ export class SpriteEffectColor extends SpriteEffectBase {
 
         effectProps.propBuffer[index + 8] = blurTextureSize.x;
         effectProps.propBuffer[index + 9] = blurTextureSize.y;
-        effectProps.propBuffer[index + 10] = 0.0;
-        effectProps.propBuffer[index + 11] = 1.0;
+        // effectProps.propBuffer[index + 10] = 0.0;
+        // effectProps.propBuffer[index + 11] = 1.0;
 
         effectProps.propBuffer[index + 12] = this.toneFactor;
         effectProps.propBuffer[index + 13] = this.colorFactor;
         effectProps.propBuffer[index + 14] = this.blurFactor;
-        effectProps.propBuffer[index + 15] = 1.0;
+        // effectProps.propBuffer[index + 15] = 1.0;
         effectProps.propTexture.uploadData(effectProps.propBuffer);
     }
 

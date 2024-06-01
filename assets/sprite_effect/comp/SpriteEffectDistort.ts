@@ -57,8 +57,8 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get countOfProps(): number {
-        return 3;
+    protected get countOfUsedFloats(): number {
+        return 10;
     }
 
     /**
