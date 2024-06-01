@@ -1,18 +1,15 @@
-import { _decorator, lerp, log, Material, Texture2D } from 'cc';
-import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
+import { _decorator, Color, Material, UITransform, Vec2 } from 'cc';
+import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
 
 
-@ccclass('SpriteEffectDistort')
-export class SpriteEffectDistort extends SpriteEffectBase {
-    @property({ group: { name: "Setter/Getter", id: "1" }, type: Texture2D, tooltip: '指定噪声貼圖' })
-    public noiseTexture: Texture2D | null = null;
-
-    //#region speed
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '扭曲速度' })
-    public set speed(val: number) {
-        this._speed = val;
+@ccclass('SpriteEffectGaussianBlur')
+export class SpriteEffectGaussianBlur extends SpriteEffectBase {
+    //#region blur
+    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '模糊程度' })
+    public set blurFactor(val: number) {
+        this._blurFactor = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
@@ -21,35 +18,13 @@ export class SpriteEffectDistort extends SpriteEffectBase {
             this._isPropDirty = true;
         }
     }
-
-    public get speed(): number {
-        return this._speed;
+    
+    public get blurFactor(): number {
+        return this._blurFactor;
     }
 
     @property
-    private _speed: number = 0.05;
-    //#endregion
-
-
-    //#region strength
-    @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '扭曲强度' })
-    public set strength(val: number) {
-        this._strength = val;
-
-        if (EDITOR_NOT_IN_PREVIEW) {
-            this.reflashParams();
-        }
-        else {
-            this._isPropDirty = true;
-        }
-    }
-
-    public get strength(): number {
-        return this._strength;
-    }
-
-    @property
-    private _strength: number = 0.05;
+    private _blurFactor: number = 0.5;
     //#endregion
 
 
@@ -58,7 +33,6 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected get countOfUsedFloats(): number {
-        // return 10; // 手機上非2次幂的紋理會報錯
         return 16;
     }
 
@@ -75,6 +49,16 @@ export class SpriteEffectDistort extends SpriteEffectBase {
     protected updateParams(index: number, propBuffer: Float32Array): void {
         const baseUV = this.getUV(this.spriteFrame!.uv);
 
+        let blurTextureSize = new Vec2(100, 100);
+        if (this.spriteFrame) {
+            blurTextureSize.x = Math.floor(this.spriteFrame.width * baseUV.z);
+            blurTextureSize.y = Math.floor(this.spriteFrame.height * baseUV.w);
+        }
+        else {
+            blurTextureSize.x = this.node.getComponent(UITransform)!.contentSize.width;
+            blurTextureSize.y = this.node.getComponent(UITransform)!.contentSize.height;
+        }
+
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
@@ -85,8 +69,9 @@ export class SpriteEffectDistort extends SpriteEffectBase {
         propBuffer[index + 6] = baseUV.z;
         propBuffer[index + 7] = baseUV.w;
 
-        propBuffer[index + 8] = lerp(0.0, 0.2, this._speed);
-        propBuffer[index + 9] = lerp(0.0, 0.2, this._strength);
+        propBuffer[index + 8] = blurTextureSize.x;
+        propBuffer[index + 9] = blurTextureSize.y;
+        propBuffer[index + 10] = this._blurFactor;
     }
 
     /**
@@ -101,8 +86,6 @@ export class SpriteEffectDistort extends SpriteEffectBase {
                 technique: this._is2Din3D ? 1 : 0
             }
         );
-
-        mat.setProperty('noiseTexture', this.noiseTexture);
         return mat;
     }
 }

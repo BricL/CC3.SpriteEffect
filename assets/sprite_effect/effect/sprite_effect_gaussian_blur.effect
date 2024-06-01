@@ -1,0 +1,155 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+         depthTest: false
+         depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+         cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        propsTexture: { value: white, editor: { type: sampler2D } }
+        # _baseUV: { value: [0,0,1,1] }
+        # textureSize: { value: [100, 100], editor: { type: vector } }   
+        # blurFactor: { value: 0.5, editor: { type: int, slide: true , range : [0.0, 1.0], step: 0.01 } }
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+         depthTest: true
+         depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+         cullMode: none
+      properties: *props
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <cc-global>
+  #if USE_LOCAL
+    #include <cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <cc-global>
+  #include <sprite-texture>
+  #include "./chunks/util.chunk"
+
+  in vec4 color;
+  in vec2 uv0;
+
+  uniform sampler2D propsTexture;
+  // uniform Constant {
+  //   vec4 baseUV;
+  //   vec2 textureSize;
+  //   float blurFactor;
+  // };
+
+  float BLUR_KERNEL_[5];
+
+  vec4 Tex2DBlurring(sampler2D tex, vec2 texcood, vec4 baseUV, vec2 blur) {
+    // 設定 5個 Kernel 權重值 (x、y方向都用同一組)
+    const int BLUR_KERNEL_SIZE = 5;
+    BLUR_KERNEL_[0] = 0.2486;
+    BLUR_KERNEL_[1] = 0.7046;
+    BLUR_KERNEL_[2] = 1.0;
+    BLUR_KERNEL_[3] = 0.7046;
+    BLUR_KERNEL_[4] = 0.2486;
+
+    vec4 o = vec4(0.0);
+    float sum = 0.0;
+    vec2 offset = vec2(0.0);
+
+    // 迴圈計算 5x5 個像素篇偏移
+    for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
+      offset.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
+
+      for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
+        offset.y = blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0);
+        
+        // 對 x、y 方向權重相乘後，數值進行加總。
+        float weight = BLUR_KERNEL_[x] * BLUR_KERNEL_[y];
+        sum += weight;
+
+        // 依據 uv offset 取出對應的像素顏色，並乘上對 x、y 方向權重的乘積
+        vec2 uv = denormalizeUV(texcood + offset, baseUV);
+        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
+      }
+    }
+    // 將加總的權重值進行歸一化
+    return o / sum;
+  }
+
+  vec4 frag () {
+    vec4 idxEffectGroup = color;
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec2 textureSize = props.xy;
+    float blurFactor = props.z;
+
+    vec4 o = vec4(1.0);
+    vec2 uv = normalizeUV(uv0, baseUV);
+    o = Tex2DBlurring(cc_spriteTexture, uv, baseUV, blurFactor * vec2(1.0/textureSize.x, 1.0/textureSize.y) * 2.0 );
+    o *= effectColor;
+
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

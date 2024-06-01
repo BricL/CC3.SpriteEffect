@@ -164,11 +164,6 @@ export class SpriteEffectColor extends SpriteEffectBase {
     protected updateParams(index: number, propBuffer: Float32Array): void {
         const baseUV = this.getUV(this.spriteFrame!.uv);
 
-        propBuffer[index + 0] = this._effectColor.r / 255;
-        propBuffer[index + 1] = this._effectColor.g / 255;
-        propBuffer[index + 2] = this._effectColor.b / 255;
-        propBuffer[index + 3] = this._effectColor.a / 255;
-
         let blurTextureSize = new Vec2(100, 100);
         if (this.spriteFrame) {
             blurTextureSize.x = Math.floor(this.spriteFrame.width * baseUV.z);
@@ -178,6 +173,11 @@ export class SpriteEffectColor extends SpriteEffectBase {
             blurTextureSize.x = this.node.getComponent(UITransform)!.contentSize.width;
             blurTextureSize.y = this.node.getComponent(UITransform)!.contentSize.height;
         }
+
+        propBuffer[index + 0] = this._effectColor.r / 255;
+        propBuffer[index + 1] = this._effectColor.g / 255;
+        propBuffer[index + 2] = this._effectColor.b / 255;
+        propBuffer[index + 3] = this._effectColor.a / 255;
 
         propBuffer[index + 4] = baseUV.x;
         propBuffer[index + 5] = baseUV.y;
