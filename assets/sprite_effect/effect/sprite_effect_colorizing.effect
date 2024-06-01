@@ -94,9 +94,9 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 0);
-    vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 1);
-    vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 768, 3, 2);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
 
     vec2 rChannel = props1.xy;
     vec2 bChannel = props1.zw;

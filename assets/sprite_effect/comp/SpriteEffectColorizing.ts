@@ -131,7 +131,8 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected get countOfUsedFloats(): number {
-        return 10;
+        //return 10; // 手機上非2次幂的紋理會報錯
+        return 16;
     }
 
     /**
@@ -154,7 +155,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
         propBuffer[index + 5] = this._rChannelMax;
         propBuffer[index + 6] = this._gChannelMin;
         propBuffer[index + 7] = this._gChannelMax;
-
+        
         propBuffer[index + 8] = this._bChannelMin;
         propBuffer[index + 9] = this._bChannelMax;
     }
