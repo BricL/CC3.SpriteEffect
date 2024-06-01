@@ -1,0 +1,131 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        propsTexture: { value: white, editor: { type:  sampler2D }}
+        noiseTexture: {value : white, editor: {displayName: "噪声图" ,type: textrue }}
+        # _frequency: {value : 0.1, editor: {slide: true, displayName: "扰动频率" ,type: float,range: [0,10], step: 0.01 } }
+        # _amplitude: {value : 0.02, editor: {slide: true, displayName: "扰动强度" ,type: float,range: [0,1], step: 0.01 } }
+        # _speed: {value : 0.1, editor: {slide: true, displayName: "水流速度" ,type: float,range: [0,1], step: 0.01 } }
+        # _flowDir: {value : [1,0], editor: { displayName: "水流方向",type: vector2 } }
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: *props
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+
+  #include <cc-global>
+#if USE_LOCAL
+  #include <cc-local>
+#endif
+#if SAMPLE_FROM_RT
+  #include <common/common-define>
+#endif
+
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <cc-global>
+  #include <sprite-texture>
+  #include "./chunks/util.chunk"
+
+  in vec4 color;
+  in vec2 uv0;
+
+  uniform sampler2D  propsTexture;
+  uniform sampler2D  noiseTexture;
+  // uniform Constant {
+  //   vec2 _flowDir;
+  //   float _frequency;
+  //   float _amplitude;
+  //   float _speed;
+  // };
+
+  vec4 frag () {
+    vec4 idxEffectGroup = color;
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec2 _flowDir = props1.xy;
+    float _frequency = props1.z;
+    float _amplitude = props1.w;
+    float _speed = props2.x;
+
+    vec4 o = vec4(1.0);
+    vec4 offset = CCSampleWithAlphaSeparated(noiseTexture, uv0 + cc_time.w * _frequency);
+    vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed, 
+                     uv0.y + cc_time.w * _flowDir.y * _speed);
+                       
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv1 + offset.xy * _amplitude);
+    o *= effectColor;
+    
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

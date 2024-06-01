@@ -37,7 +37,8 @@
                     "SpriteEffectColorizing": "./dist/contributions/inspector/comp-SpriteEffectColorizing.js",
                     "SpriteEffectWaterRipple": "./dist/contributions/inspector/comp-SpriteEffectWaterRipple.js",
                     "SpriteEffectFlowLight": "./dist/contributions/inspector/comp-SpriteEffectFlowLight.js",
-                    "SpriteEffectWaterWave": "./dist/contributions/inspector/comp-SpriteEffectWaterWave.js"
+                    "SpriteEffectWaterWave": "./dist/contributions/inspector/comp-SpriteEffectWaterWave.js",
+                    "SpriteEffectWaterFlow": "./dist/contributions/inspector/comp-SpriteEffectWaterFlow.js"
                 }
             }
         }
