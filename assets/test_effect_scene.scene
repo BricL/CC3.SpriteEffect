@@ -631,7 +631,7 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 2,
+      "r": 0,
       "g": 0,
       "b": 0,
       "a": 255
@@ -899,7 +899,7 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
+      "r": 2,
       "g": 0,
       "b": 0,
       "a": 255
