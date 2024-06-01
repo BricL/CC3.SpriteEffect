@@ -1,8 +1,8 @@
 'use strict';
 
-import { autoAssignEffectAsset, autoAssignTextureAsset } from "../../util";
+import { autoAssignEffectAsset } from "../../util";
 
-type Selector<$> = { $: Record<keyof $, any | null> }
+type Selector<T> = { $: Record<keyof T, any | null> }
 
 export const template = `
 <ui-prop type="dump" class="spriteAtlas"></ui-prop>
@@ -20,9 +20,12 @@ export const template = `
     <ui-prop type="dump" class="is2Din3D"></ui-prop>
     <ui-button class="reload" style="height:24px;margin:16px 0;">Reload Asset</ui-button>
 
-    <ui-prop type="dump" class="noiseTexture"></ui-prop>
-    <ui-prop type="dump" class="speed"></ui-prop>
-    <ui-prop type="dump" class="strength"></ui-prop>
+    <ui-prop type="dump" class="rChannelMin"></ui-prop>
+    <ui-prop type="dump" class="rChannelMax"></ui-prop>
+    <ui-prop type="dump" class="gChannelMin"></ui-prop>
+    <ui-prop type="dump" class="gChannelMax"></ui-prop>
+    <ui-prop type="dump" class="bChannelMin"></ui-prop>
+    <ui-prop type="dump" class="bChannelMax"></ui-prop>
 </ui-section>
 `;
 
@@ -42,9 +45,12 @@ const effectConst = {
     effectColor: '.effectColor',
     is2Din3D: '.is2Din3D',
     reload: '.reload',
-    noiseTexture: '.noiseTexture',
-    speed: '.speed',
-    strength: '.strength',
+    rChannelMin: '.rChannelMin',
+    rChannelMax: '.rChannelMax',
+    gChannelMin: '.gChannelMin',
+    gChannelMax: '.gChannelMax',
+    bChannelMin: '.bChannelMin',
+    bChannelMax: '.bChannelMax',
 }
 
 export const $ = { ...spriteConst, ...effectConst };
@@ -97,10 +103,12 @@ export function update(this: Selector<typeof $>, dump: any) {
     if (typeof this.$.reload.render === "function") {
         this.$.reload.render(dump.value.label);
     }
-
-    this.$.noiseTexture.render(dump.value.noiseTexture);
-    this.$.speed.render(dump.value.speed);
-    this.$.strength.render(dump.value.strength);
+    this.$.rChannelMin.render(dump.value.rChannelMin);
+    this.$.rChannelMax.render(dump.value.rChannelMax);
+    this.$.gChannelMin.render(dump.value.gChannelMin);
+    this.$.gChannelMax.render(dump.value.gChannelMax);
+    this.$.bChannelMin.render(dump.value.bChannelMin);
+    this.$.bChannelMax.render(dump.value.bChannelMax);
 }
 
 export async function ready(this: Selector<typeof $>) {
@@ -108,6 +116,5 @@ export async function ready(this: Selector<typeof $>) {
         const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "853e8fbf-9769-49a8-b2d2-0016390b6953");
     });
 
-    await autoAssignEffectAsset('SpriteEffectDistort');
-    // await autoAssignTextureAsset('SpriteEffectDistort', 'noiseTexture', 'perlin_noise.png');
+    await autoAssignEffectAsset('SpriteEffectColorizing');
 }

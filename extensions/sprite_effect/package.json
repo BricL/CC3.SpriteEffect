@@ -33,7 +33,8 @@
                 "node": {
                     "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js",
                     "SpriteEffectColor": "./dist/contributions/inspector/comp-SpriteEffectColor.js",
-                    "SpriteEffectDistort": "./dist/contributions/inspector/comp-SpriteEffectDistort.js"
+                    "SpriteEffectDistort": "./dist/contributions/inspector/comp-SpriteEffectDistort.js",
+                    "SpriteEffectColorizing": "./dist/contributions/inspector/comp-SpriteEffectColorizing.js"
                 }
             }
         }
