@@ -41,7 +41,8 @@
                     "SpriteEffectWaterFlow": "./dist/contributions/inspector/comp-SpriteEffectWaterFlow.js",
                     "SpriteEffectGaussianBlur": "./dist/contributions/inspector/comp-SpriteEffectGaussianBlur.js",
                     "SpriteEffectDissolve": "./dist/contributions/inspector/comp-SpriteEffectDissolve.js",
-                    "SpriteEffectDisappear": "./dist/contributions/inspector/comp-SpriteEffectDisappear.js"
+                    "SpriteEffectDisappear": "./dist/contributions/inspector/comp-SpriteEffectDisappear.js",
+                    "SpriteEffectShadow": "./dist/contributions/inspector/comp-SpriteEffectShadow.js"
                 }
             }
         }
