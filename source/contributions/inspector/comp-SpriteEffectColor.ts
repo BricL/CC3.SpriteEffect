@@ -114,7 +114,7 @@ export function update(this: Selector<typeof $>, dump: any) {
 
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "853e8fbf-9769-49a8-b2d2-0016390b6953");
+        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
 
         // const effectCompName = 'SpriteEffectColor';
         // const uuids = Editor.Selection.getSelected('node');
