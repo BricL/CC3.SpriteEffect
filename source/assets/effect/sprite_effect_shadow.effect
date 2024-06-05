@@ -83,7 +83,7 @@ CCProgram shadow-vs %{
 
   vec4 vert () {
     vec4 idxEffectGroup = a_color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); 
     vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
     vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
     vec4 _shadowColor = prop1;
@@ -138,7 +138,7 @@ CCProgram shadow-fs %{
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
     vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
     vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
     vec4 _shadowColor = prop1;
@@ -211,7 +211,7 @@ CCProgram sprite-fs %{
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
     vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
     vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
     vec4 _shadowColor = prop1;
@@ -250,7 +250,7 @@ CCProgram sprite-1pass-fs %{
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
     vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
     vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
     vec4 _shadowColor = prop1;

@@ -97,7 +97,7 @@ CCProgram sprite-fs %{
   vec4 frag () {
     // 从属性纹理中获取属性
     vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
     vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
     vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
     float speed = props.r;
