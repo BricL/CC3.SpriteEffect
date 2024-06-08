@@ -1,0 +1,130 @@
+CCEffect %{
+  techniques:
+  - name: default
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: &props
+        alphaThreshold: { value: 0.5 }
+        propsTexture: { value: white, editor: { type:  sampler2D }}
+        noiseTexture: { value: white, editor: { type:  sampler2D }}
+  - name: 2d-in-3d
+    passes:
+    - vert: sprite-vs:vert 
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties: *props
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <cc-global>
+  #if USE_LOCAL
+    #include <cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <cc-global>
+  #include <sprite-texture>
+  #include "./chunks/util.chunk"
+
+  in vec4 color;
+  in vec2 uv0;
+  
+  uniform sampler2D propsTexture;
+  uniform sampler2D noiseTexture;
+
+  vec4 frag () {
+    // 从属性纹理中获取属性
+    vec4 idxEffectGroup = color;
+    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+    float speed = props.r;
+    float strength = props.g;
+
+    // 初始化输出颜色
+    vec4 o = vec4(1.0);
+  
+    // 采样噪声纹理，根据时间计算偏移
+    vec2 uv = normalizeUV(uv0, baseUV);
+    float px = mod(cc_time.x * speed, 1.0);
+    vec2 uv_offset_by_time = uv + px;
+    
+    uv_offset_by_time.x = mod(uv_offset_by_time.x, 1.0);
+    uv_offset_by_time.y = mod(uv_offset_by_time.y, 1.0);
+
+    // 利用Offset後的uv采样噪声纹理
+    vec4 noise_uv = CCSampleWithAlphaSeparated(noiseTexture, uv_offset_by_time);
+
+    // 將噪声纹理的值加到原始uv上，近似实现uv的扰动
+    uv.xy += (noise_uv.xy) * strength;
+    uv = denormalizeUV(uv, baseUV);
+
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv);
+    o *= effectColor;
+
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

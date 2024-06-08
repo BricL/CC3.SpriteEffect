@@ -1,7 +1,50 @@
 {
-  "name": "NewProject_1",
-  "uuid": "be3de611-662e-4de1-9131-7ac7b463bb79",
-  "creator": {
-    "version": "3.8.2"
-  }
+    "$schema": "./@types/schema/package/index.json",
+    "package_version": 2,
+    "name": "sprite_effect",
+    "version": "0.1.0",
+    "author": "ericlin09",
+    "editor": ">=3.8.2",
+    "scripts": {
+        "preinstall": "node ./scripts/preinstall.js",
+        "build": "tsc"
+    },
+    "description": "i18n:sprite_effect.description",
+    "main": "./dist/main.js",
+    "dependencies": {
+        "fs-extra": "^10.0.0",
+        "typescript": "^4.3.4",
+        "vue": "^3.1.4"
+    },
+    "devDependencies": {
+        "@cocos/creator-types": "^3.8.2",
+        "@types/fs-extra": "^9.0.5",
+        "@types/node": "^18.17.1"
+    },
+    "contributions": {
+        "asset-db": {
+            "mount": {
+                "path": "./source/assets",
+                "readonly": true
+            }
+        },
+        "inspector": {
+            "section" : {
+                "node": {
+                    "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js",
+                    "SpriteEffectColor": "./dist/contributions/inspector/comp-SpriteEffectColor.js",
+                    "SpriteEffectDistort": "./dist/contributions/inspector/comp-SpriteEffectDistort.js",
+                    "SpriteEffectColorizing": "./dist/contributions/inspector/comp-SpriteEffectColorizing.js",
+                    "SpriteEffectWaterRipple": "./dist/contributions/inspector/comp-SpriteEffectWaterRipple.js",
+                    "SpriteEffectFlowLight": "./dist/contributions/inspector/comp-SpriteEffectFlowLight.js",
+                    "SpriteEffectWaterWave": "./dist/contributions/inspector/comp-SpriteEffectWaterWave.js",
+                    "SpriteEffectWaterFlow": "./dist/contributions/inspector/comp-SpriteEffectWaterFlow.js",
+                    "SpriteEffectGaussianBlur": "./dist/contributions/inspector/comp-SpriteEffectGaussianBlur.js",
+                    "SpriteEffectDissolve": "./dist/contributions/inspector/comp-SpriteEffectDissolve.js",
+                    "SpriteEffectDisappear": "./dist/contributions/inspector/comp-SpriteEffectDisappear.js",
+                    "SpriteEffectShadow": "./dist/contributions/inspector/comp-SpriteEffectShadow.js"
+                }
+            }
+        }
+    }
 }
