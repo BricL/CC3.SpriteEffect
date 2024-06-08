@@ -6,6 +6,16 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectDistort')
 export class SpriteEffectDistort extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectDistort._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectDistort._isPropDirty[idx] = val;
+    }
+
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Texture2D, tooltip: '指定噪声貼圖' })
     public noiseTexture: Texture2D | null = null;
 
@@ -18,7 +28,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -40,7 +50,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 

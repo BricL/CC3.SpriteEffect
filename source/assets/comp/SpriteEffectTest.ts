@@ -6,6 +6,17 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectTest')
 export class SpriteEffectTest extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectTest._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectTest._isPropDirty[idx] = val;
+    }
+
+
     //#region override
     /**
      * @override SpriteEffectBase

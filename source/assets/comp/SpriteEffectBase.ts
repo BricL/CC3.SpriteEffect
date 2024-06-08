@@ -17,7 +17,6 @@ export abstract class SpriteEffectBase extends Sprite {
     public effectAsset: EffectAsset | null = null;
 
     protected _effectIndex: number = -1;
-    protected _isPropDirty: boolean = false;
 
     //#region effectColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
@@ -28,10 +27,10 @@ export abstract class SpriteEffectBase extends Sprite {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
-    
+
     public get effectColor(): Color {
         return this._effectColor;
     }
@@ -40,7 +39,7 @@ export abstract class SpriteEffectBase extends Sprite {
     protected _effectColor: Color = new Color(255, 255, 255, 255);
     //#endregion
 
-    
+
     //#region is2Din3D
     @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當使用RenderRoot2D時使用' })
     public set is2Din3D(val: boolean) {
@@ -51,7 +50,7 @@ export abstract class SpriteEffectBase extends Sprite {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -89,7 +88,11 @@ export abstract class SpriteEffectBase extends Sprite {
      * @returns Material
     */
     protected abstract initMaterial(): Material;
+
+    protected abstract isDirty(idx: number): boolean;
+    protected abstract setDirty(idx: number, val: boolean): void;
     //#endregion
+
 
     //#region methods
     protected get countOfProps(): number {
@@ -116,15 +119,14 @@ export abstract class SpriteEffectBase extends Sprite {
             }
         }
 
-        log(`Effect index is:${this._effectIndex}`);
         SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
 
         if (this.propGroupIdx === 0) {
             this.color = new Color(this._effectIndex, 0, 0, 255);
         } else if (this.propGroupIdx === 1) {
-            this.color = new Color(0, this._effectIndex - 256, 0, 255);
+            this.color = new Color(255, (this._effectIndex - 256 + 1), 0, 255);
         } else if (this.propGroupIdx === 2) {
-            this.color = new Color(0, 0, this._effectIndex - 256 - 256, 255);
+            this.color = new Color(255, 255, (this._effectIndex - 256 - 256 + 1), 255);
         } else {
             error(`The prop group index, ${this.propGroupIdx}, is out of range!`);
             return;
@@ -132,16 +134,18 @@ export abstract class SpriteEffectBase extends Sprite {
 
         // Step2: 初始化Effect props
         if (!SpriteEffectBase._s_effectProps.has(unionKey)) {
-            const temp = new Array(3).fill(null);
+            const temp = new Array(3).fill(null); // Only use R/G/B 3 channels
             SpriteEffectBase._s_effectProps.set(unionKey, temp);
         }
 
         if (SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] === null) {
-            let propBuffer = new Float32Array((256 * countOfProps) * 1 * 4);
+            const w = 256 * countOfProps;
+            const h = 1;
 
-            for (let y = 0; y < 1; y++) {
-                for (let x = 0; x < (256 * countOfProps); x++) {
-                    const index = (y * (256 * countOfProps) + x) * 4;
+            let propBuffer = new Float32Array(w * h * 4);
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const index = (y * w + x) * 4;
                     propBuffer[index] = 1;
                     propBuffer[index + 1] = 0;
                     propBuffer[index + 2] = 1;
@@ -152,8 +156,8 @@ export abstract class SpriteEffectBase extends Sprite {
             let propsTexture = new Texture2D();
             propsTexture.setFilters(Texture2D.Filter.NEAREST, Texture2D.Filter.NEAREST);
             propsTexture.reset({
-                width: (256 * countOfProps),
-                height: 1,
+                width: w,
+                height: h,
                 format: Texture2D.PixelFormat.RGBA32F,
                 mipmapLevel: 0
             });
@@ -176,7 +180,13 @@ export abstract class SpriteEffectBase extends Sprite {
         const index = this.getBufferIndex();
         const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
         this.updateParams(index, effectProps.propBuffer!);
-        effectProps.propTexture!.uploadData(effectProps.propBuffer!);
+
+        if (EDITOR_NOT_IN_PREVIEW) {
+            effectProps.propTexture!.uploadData(effectProps.propBuffer!);
+        }
+        else {
+            this.setDirty(this.propGroupIdx, true);
+        }
     }
 
     protected get propGroupIdx(): number {
@@ -205,6 +215,7 @@ export abstract class SpriteEffectBase extends Sprite {
     }
     //#endregion
 
+
     //#region life cycle
     onLoad(): void {
         this.init(this.countOfProps);
@@ -231,10 +242,13 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     lateUpdate(dt: number): void {
-        if (this._isPropDirty) {
+        if (this.isDirty(this.propGroupIdx)) {
             log(`${this.constructor.name}'s effect props is DIRTY!`);
-            this.reflashParams();
-            this._isPropDirty = false;
+            const unionKey = this.getPropsUnionKey();
+            const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx];
+            
+            effectProps.propTexture!.uploadData(effectProps.propBuffer!);
+            this.setDirty(this.propGroupIdx, false);
         }
     }
 }

@@ -6,6 +6,17 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectDissolve')
 export class SpriteEffectDissolve extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectDissolve._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectDissolve._isPropDirty[idx] = val;
+    }
+
+
     @property({ type: Texture2D, tooltip: "指定噪聲貼圖" })
     public noiseTexture: Texture2D | null = null;
 
@@ -18,7 +29,7 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -40,7 +51,7 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -62,7 +73,7 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -84,7 +95,7 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 

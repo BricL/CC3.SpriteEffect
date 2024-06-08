@@ -11,6 +11,18 @@ export enum Direction {
 
 @ccclass('SpriteEffectDisappear')
 export class SpriteEffectDisappear extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectDisappear._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectDisappear._isPropDirty[idx] = val;
+    }
+
+
+
     @property({ type: Texture2D, tooltip: '指定貼圖' })
     public secondSprite: Texture2D | null = null;
 
@@ -23,7 +35,7 @@ export class SpriteEffectDisappear extends SpriteEffectBase {
             this.init(this.countOfProps);
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -43,7 +55,7 @@ export class SpriteEffectDisappear extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -64,7 +76,7 @@ export class SpriteEffectDisappear extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 

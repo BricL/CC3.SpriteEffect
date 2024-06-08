@@ -10,6 +10,17 @@ export enum ShadowType {
 
 @ccclass('SpriteEffectShadow')
 export class SpriteEffectShadow extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectShadow._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectShadow._isPropDirty[idx] = val;
+    }
+
+
     //#region ShadowType
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ShadowType), tooltip: "陰影模式" })
     public set shadowType(val: ShadowType) {
@@ -19,7 +30,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
             this.init(this.countOfProps);
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -41,7 +52,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -63,7 +74,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 

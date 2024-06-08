@@ -25,6 +25,16 @@ export enum BlurMode {
 
 @ccclass('SpriteEffectColor')
 export class SpriteEffectColor extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectColor._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectColor._isPropDirty[idx] = val;
+    }
+
     //#region toneMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(ToneMode), tooltip: "色調模式" })
     public set toneMode(val: ToneMode) {
@@ -34,7 +44,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.countOfProps);
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -54,7 +64,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -75,7 +85,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.countOfProps);
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -95,7 +105,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -116,7 +126,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.countOfProps);
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -136,7 +146,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -147,6 +157,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     @property
     private _blurFactor: number = 1.0;
     //#endregion
+
 
     //#region override
     protected get countOfUsedFloats(): number {

@@ -6,6 +6,16 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectWaterWave')
 export class SpriteEffectWaterWave extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectWaterWave._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectWaterWave._isPropDirty[idx] = val;
+    }
+
     //#region offset
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '偏移量' })
     public set offset(val: number) {
@@ -14,7 +24,7 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -35,7 +45,7 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -56,7 +66,7 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 
@@ -77,7 +87,7 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
         if (EDITOR_NOT_IN_PREVIEW) {
             this.reflashParams();
         } else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
 

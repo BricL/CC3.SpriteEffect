@@ -6,6 +6,17 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectGaussianBlur')
 export class SpriteEffectGaussianBlur extends SpriteEffectBase {
+    private static _isPropDirty: boolean[] = [false, false, false];
+
+    protected isDirty(idx: number): boolean {
+        return SpriteEffectGaussianBlur._isPropDirty[idx];
+    }
+    
+    protected setDirty(idx: number, val: boolean): void {
+        SpriteEffectGaussianBlur._isPropDirty[idx] = val;
+    }
+
+
     //#region blur
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0.0, 1.0, 0.01], tooltip: '模糊程度' })
     public set blurFactor(val: number) {
@@ -15,7 +26,7 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
             this.reflashParams();
         }
         else {
-            this._isPropDirty = true;
+            this.reflashParams();
         }
     }
     
