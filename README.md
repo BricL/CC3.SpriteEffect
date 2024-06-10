@@ -18,6 +18,8 @@ Sprite Effect 採 CocosCreator 3.8.x 後 extension 套件開發，故需安裝�
 >7. 至 Extension 頁籤，啟動 Extension Manager
 >8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (如果沒有，可以按下旁邊的 Reflash Extensions List)
 
+ps:若想直接以專案的形式用 Cocos Creator Editor 開啟，請參考專案 [CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+
 
 ## 使用方式
 
