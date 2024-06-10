@@ -12,6 +12,19 @@
 
 > :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
 
+
+## 安裝方法
+Sprite Effect 採用 CC3.8 後的 extension 開發，故專案要安裝在擴展的資料夾下，安裝步驟如下：
+
+>1. 下載 git 包
+>2. 解壓縮至項目資料夾([project_folder]/assets，同層)下的 extenstions/sprite_effect
+>3. cd [project_folder]/extensions/sprite_effect
+>4. npm install
+>5. 啟動 Cocos Creator
+>6. 至 Extension 頁籤，啟動 Extension Manager
+>7. 選擇 installed，就會看件 sprite_effect 的功能 (如果沒有，可以按下旁邊的 Reflash Extensions List)
+
+
 ## 注意事項
 
 ### RenderRoot2D Component
