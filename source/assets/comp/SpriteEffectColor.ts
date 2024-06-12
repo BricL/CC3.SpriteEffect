@@ -172,7 +172,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(index: number, propBuffer: Float32Array): void {
         const baseUV = this.getUV(this.spriteFrame!.uv);
 
         let blurTextureSize = new Vec2(100, 100);
@@ -209,7 +209,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected initMaterial(): Material {
+    protected override initMaterial(): Material {
         let mat = new Material();
         let define_macro = {
             USE_BLUR: false,

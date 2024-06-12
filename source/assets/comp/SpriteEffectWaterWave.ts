@@ -104,21 +104,21 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get countOfUsedFloats(): number {
+    protected override get countOfUsedFloats(): number {
         return 8;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected getPropsUnionKey(): string {
+    protected override getPropsUnionKey(): string {
         return `${this.constructor.name}_${this._is2Din3D}`;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(index: number, propBuffer: Float32Array): void {
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
@@ -133,7 +133,7 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected initMaterial(): Material {
+    protected override initMaterial(): Material {
         let mat = new Material();
         mat.initialize(
             {

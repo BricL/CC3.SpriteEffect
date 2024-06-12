@@ -127,21 +127,21 @@ export class SpriteEffectFlowLight extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get countOfUsedFloats(): number {
+    protected override get countOfUsedFloats(): number {
         return 16;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected getPropsUnionKey(): string {
+    protected override getPropsUnionKey(): string {
         return `${this.constructor.name}_${this._is2Din3D}`;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(index: number, propBuffer: Float32Array): void {
         const baseUV = this.getUV(this.spriteFrame!.uv);
 
         propBuffer[index + 0] = this._effectColor.r / 255;
@@ -168,7 +168,7 @@ export class SpriteEffectFlowLight extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected initMaterial(): Material {
+    protected override initMaterial(): Material {
         let mat = new Material();
         mat.initialize(
             {

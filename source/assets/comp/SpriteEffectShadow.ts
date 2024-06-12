@@ -91,21 +91,21 @@ export class SpriteEffectShadow extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected get countOfUsedFloats(): number {
+    protected override get countOfUsedFloats(): number {
         return 16;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected getPropsUnionKey(): string {
+    protected override getPropsUnionKey(): string {
         return `${this.constructor.name}_${this._shadowType}`;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(index: number, propBuffer: Float32Array): void {
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
@@ -123,7 +123,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected initMaterial(): Material {
+    protected override initMaterial(): Material {
         let technique = 0;
         switch (this._shadowType) {
             case ShadowType.LIMITED_BOUND:
