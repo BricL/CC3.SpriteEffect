@@ -107,26 +107,28 @@ export abstract class SpriteEffectBase extends Sprite {
         // Step1: 取的當前的effectIndex
         if (!SpriteEffectBase._s_effectMap.has(unionKey)) {
             const temp = new Array(768).fill("");  // R/G/B (0~255) => 256 * 3 = 768
+            // temp[256] = temp[512] = "skip";
             SpriteEffectBase._s_effectMap.set(unionKey, temp);
         }
 
-        this._effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
-        if (this._effectIndex === -1) {
-            this._effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
-            if (this._effectIndex === -1) {
+        let effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
+        if (effectIndex === -1) {
+            effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
+            if (effectIndex === -1) {
                 error("Effect map is full!");
                 return;
             }
         }
+        this._effectIndex = effectIndex;
 
         SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
 
         if (this.propGroupIdx === 0) {
             this.color = new Color(this._effectIndex, 0, 0, 255);
         } else if (this.propGroupIdx === 1) {
-            this.color = new Color(255, (this._effectIndex - 256 + 1), 0, 255);
+            this.color = new Color(255, (this._effectIndex - 255), 0, 255);
         } else if (this.propGroupIdx === 2) {
-            this.color = new Color(255, 255, (this._effectIndex - 256 - 256 + 1), 255);
+            this.color = new Color(255, 255, (this._effectIndex - 510), 255);
         } else {
             error(`The prop group index, ${this.propGroupIdx}, is out of range!`);
             return;
@@ -207,10 +209,8 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     protected getBufferIndex(): number {
-        let quotient = this._effectIndex / 256;
-        let fractional = quotient - Math.floor(quotient);
-        let x = Math.floor(fractional * (256 * this.countOfProps));
-        const index = x * 4;
+        let effectIndex = this._effectIndex - (this.propGroupIdx * 256);
+        const index = (effectIndex * this.countOfProps) * 4;
         return index;
     }
     //#endregion
@@ -246,7 +246,7 @@ export abstract class SpriteEffectBase extends Sprite {
             log(`${this.constructor.name}'s effect props is DIRTY!`);
             const unionKey = this.getPropsUnionKey();
             const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx];
-            
+
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
             this.setDirty(this.propGroupIdx, false);
         }
