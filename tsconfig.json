@@ -5,7 +5,9 @@
         "rootDir": "./source",
         "types": [
             "node",
-            "@cocos/creator-types/editor"
-        ]
-    }
+            "@cocos/creator-types/editor",
+            "@cocos/creator-types/engine",
+        ],
+    },
+    "exclude": ["./static"]  // specify the files or folders to exclude from compilation
 }

@@ -24,7 +24,7 @@
     "contributions": {
         "asset-db": {
             "mount": {
-                "path": "./source/assets",
+                "path": "./static/assets",
                 "readonly": true
             }
         },
