@@ -41,7 +41,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._toneMode = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
             this.reflashParams();
@@ -82,7 +82,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._colorMode = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
             this.reflashParams();
@@ -123,7 +123,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         this._blurMode = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
             this.reflashParams();
@@ -160,7 +160,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
 
 
     //#region override
-    protected get countOfUsedFloats(): number {
+    protected get floatUsage(): number {
         return 13;
     }
 

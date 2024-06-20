@@ -32,7 +32,7 @@ export class SpriteEffectDisappear extends SpriteEffectBase {
         this._dirMode = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
             this.reflashParams();
@@ -93,7 +93,7 @@ export class SpriteEffectDisappear extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override get countOfUsedFloats(): number {
+    protected override get floatUsage(): number {
         return 8;
     }
 
