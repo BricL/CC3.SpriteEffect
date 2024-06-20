@@ -22,6 +22,12 @@
         "@types/node": "^18.17.1"
     },
     "contributions": {
+        "hierarchy": {
+            "menu": {
+                "methods": "./dist/hierarchy-menus.js",
+                "createMenu": "onCreateMenu"
+            }
+        },
         "asset-db": {
             "mount": {
                 "path": "./static/assets",
@@ -29,7 +35,7 @@
             }
         },
         "inspector": {
-            "section" : {
+            "section": {
                 "node": {
                     "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js",
                     "SpriteEffectColor": "./dist/contributions/inspector/comp-SpriteEffectColor.js",
