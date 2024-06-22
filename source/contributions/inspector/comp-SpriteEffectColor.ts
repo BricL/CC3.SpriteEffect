@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset, autoAssignTextureAsset } from "../../util";
+import { autoAssignEffectAsset, autoAssignTextureAsset, reimportAsset } from "../../util";
 
 type Selector<$> = { $: Record<keyof $, any | null> }
 
@@ -112,31 +112,17 @@ export function update(this: Selector<typeof $>, dump: any) {
     this.$.blurFactor.render(dump.value.blurFactor);
 }
 
+let isInit = false;
+
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
-
-        // const effectCompName = 'SpriteEffectColor';
-        // const uuids = Editor.Selection.getSelected('node');
-        // const node = await Editor.Message.request('scene', 'query-node', uuids[0]);
-        // if (!node) {
-        //     console.warn(`未選中節點`);
-        //     return;
-        // }
-
-        // const index = node.__comps__.findIndex((v: any) => v.type === effectCompName);
-        // if (index === -1) {
-        //     console.warn(`節點未掛載${effectCompName}組件`);
-        //     return;
-        // }
-
-        // const effectFileName = effectCompName.replace(/([A-Z])/g, '_$1').toLowerCase().slice(1);
-        // const url = `db://assets/sprite_effect/effect/${effectFileName}.effect`;
-        // console.log(`url: ${url}`);
-
-        // const res = await Editor.Message.request('asset-db', 'query-asset-info', url);
-        // await Editor.Message.request("asset-db", "reimport-asset", res!.uuid);
+        await autoAssignEffectAsset('SpriteEffectColor');
+        await reimportAsset();
     });
 
-    await autoAssignEffectAsset('SpriteEffectColor');
+    if (!isInit) {
+        await autoAssignEffectAsset('SpriteEffectColor');
+        await reimportAsset();
+        isInit = true;
+    }
 }

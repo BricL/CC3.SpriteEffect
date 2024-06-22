@@ -84,3 +84,7 @@ export async function autoAssignTextureAsset(effectCompName: string, propOfName:
         console.error(`autoAssignTextureAsset: ${ex}`);
     }
 }
+
+export async function reimportAsset() {
+    Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
+}

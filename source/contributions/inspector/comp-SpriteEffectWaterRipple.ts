@@ -1,7 +1,7 @@
 'use strict';
 
 import { sp } from "cc";
-import { autoAssignEffectAsset } from "../../util";
+import { autoAssignEffectAsset, reimportAsset } from "../../util";
 
 type Selector<T> = { $: Record<keyof T, any | null> }
 
@@ -99,10 +99,17 @@ export function update(this: Selector<typeof $>, dump: any) {
     this.$.density.render(dump.value.density);
 }
 
+let isInit = false;
+
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
+        await autoAssignEffectAsset('SpriteEffectWaterRipple');
+        await reimportAsset();
     });
 
-    await autoAssignEffectAsset('SpriteEffectWaterRipple');
+    if (!isInit) {
+        await autoAssignEffectAsset('SpriteEffectWaterRipple');
+        await reimportAsset();
+        isInit = true;
+    }
 }

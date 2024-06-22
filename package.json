@@ -22,15 +22,18 @@
         "@types/node": "^18.17.1"
     },
     "contributions": {
+        "scene": {
+            "script": "./dist/contributions/scene.js"
+        },
         "hierarchy": {
             "menu": {
-                "methods": "./dist/hierarchy-menus.js",
+                "methods": "./dist/contributions/hierarchy-menus.js",
                 "createMenu": "onCreateMenu"
             }
         },
         "asset-db": {
             "mount": {
-                "path": "./static/assets",
+                "path": "./static",
                 "readonly": true
             }
         },

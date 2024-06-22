@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset } from "../../util";
+import { autoAssignEffectAsset, reimportAsset } from "../../util";
 
 type Selector<T> = { $: Record<keyof T, any | null> }
 
@@ -109,10 +109,17 @@ export function update(this: Selector<typeof $>, dump: any) {
     this.$.width.render(dump.value.width);
 }
 
+let isInit = false;
+
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
+        await autoAssignEffectAsset('SpriteEffectDissolve');
+        await reimportAsset();
     });
 
-    await autoAssignEffectAsset('SpriteEffectDissolve');
+    if (!isInit) {
+        await autoAssignEffectAsset('SpriteEffectDissolve');
+        await reimportAsset();
+        isInit = true;
+    }
 }

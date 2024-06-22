@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset, autoAssignTextureAsset } from "../../util";
+import { autoAssignEffectAsset, autoAssignTextureAsset, reimportAsset } from "../../util";
 
 type Selector<$> = { $: Record<keyof $, any | null> }
 
@@ -103,11 +103,17 @@ export function update(this: Selector<typeof $>, dump: any) {
     this.$.strength.render(dump.value.strength);
 }
 
+let isInit = false;
+
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        const reloadTsFile_000 = await Editor.Message.request("asset-db", "reimport-asset", "db29d15f-52ac-4502-bf5f-9ffb600ef784");
+        await autoAssignEffectAsset('SpriteEffectDistort');
+        await reimportAsset();
     });
 
-    await autoAssignEffectAsset('SpriteEffectDistort');
-    // await autoAssignTextureAsset('SpriteEffectDistort', 'noiseTexture', 'perlin_noise.png');
+    if (!isInit) {
+        await autoAssignEffectAsset('SpriteEffectDistort');
+        await reimportAsset();
+        isInit = true;
+    }
 }
