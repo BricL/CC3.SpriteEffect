@@ -7,6 +7,7 @@ export const template = `
 ${sprite_template}
 
 <ui-section class="config" header="Effect Props" expand>
+    <ui-prop type="dump" class="effectAsset"></ui-prop>
     <ui-prop type="dump" class="effectColor"></ui-prop>
     <ui-prop type="dump" class="is2Din3D"></ui-prop>
     <ui-button class="reload" style="height:24px;margin:16px 0;">Reload Asset</ui-button>
@@ -18,6 +19,7 @@ ${sprite_template}
 `;
 
 const effectConst = {
+    effectAsset: '.effectAsset',
     effectColor: '.effectColor',
     is2Din3D: '.is2Din3D',
     reload: '.reload',
@@ -32,6 +34,7 @@ export function update(this: Selector<typeof $>, dump: any) {
     base_sprite_update.call(this, dump);
 
     // effect props
+    this.$.effectAsset.render(dump.value.effectAsset);
     this.$.effectColor.render(dump.value.effectColor);
     this.$.is2Din3D.render(dump.value.is2Din3D);
     if (typeof this.$.reload.render === "function") {
@@ -51,8 +54,8 @@ export async function ready(this: Selector<typeof $>) {
     });
 
     if (!isInit) {
-        await assignEffectAsset('SpriteEffectShadow');
-        await reimportAsset();
+        // await assignEffectAsset('SpriteEffectShadow');
+        // await reimportAsset();
         isInit = true;
     }
 }
