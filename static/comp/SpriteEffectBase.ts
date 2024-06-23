@@ -6,6 +6,7 @@ export type EffectProps = {
     mat: Material | null;
     propBuffer: Float32Array | null;
     propTexture: Texture2D | null;
+    isDirty: boolean;
 }
 
 @ccclass('SpriteEffectBase')
@@ -88,14 +89,10 @@ export abstract class SpriteEffectBase extends Sprite {
      * @returns Material
     */
     protected abstract initMaterial(): Material;
-
-    protected abstract isDirty(idx: number): boolean;
-    protected abstract setDirty(idx: number, val: boolean): void;
     //#endregion
 
 
     //#region methods
-
     /**
      * 4個float為一個pixel，需使用幾個pixel數量
      */
@@ -175,7 +172,8 @@ export abstract class SpriteEffectBase extends Sprite {
             SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx] = {
                 mat: mat,
                 propBuffer: propBuffer,
-                propTexture: propsTexture
+                propTexture: propsTexture,
+                isDirty: false
             };
         }
 
@@ -183,15 +181,18 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     protected reflashParams(): void {
+        const unionKey = this.getPropsUnionKey();
         const index = this.getBufferIndex();
-        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.instanceGroupIdx];
+        const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx];
+
+        // Update the effect parameters from the derived class.
         this.updateParams(index, effectProps.propBuffer!);
 
         if (EDITOR_NOT_IN_PREVIEW) {
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
         }
         else {
-            this.setDirty(this.instanceGroupIdx, true);
+            effectProps.isDirty = true;
         }
     }
 
@@ -216,8 +217,8 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     protected getBufferIndex(): number {
-        const effectIndex = this._instanceID - (this.instanceGroupIdx * 256);
-        return effectIndex * (this.pixelsUsage * 4);
+        const offset = this._instanceID - (this.instanceGroupIdx * 256);
+        return offset * (this.pixelsUsage * 4);
     }
     //#endregion
 
@@ -248,13 +249,12 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     lateUpdate(dt: number): void {
-        if (this.isDirty(this.instanceGroupIdx)) {
+        const unionKey = this.getPropsUnionKey();
+        const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx];
+        if (effectProps.isDirty) {
             log(`${this.constructor.name}'s effect props is DIRTY!`);
-            const unionKey = this.getPropsUnionKey();
-            const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx];
-
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
-            this.setDirty(this.instanceGroupIdx, false);
+            effectProps.isDirty = false;
         }
     }
 }

@@ -11,18 +11,6 @@ export enum Direction {
 
 @ccclass('SpriteEffectDisappear')
 export class SpriteEffectDisappear extends SpriteEffectBase {
-    private static _isPropDirty: boolean[] = [false, false, false];
-
-    protected isDirty(idx: number): boolean {
-        return SpriteEffectDisappear._isPropDirty[idx];
-    }
-    
-    protected setDirty(idx: number, val: boolean): void {
-        SpriteEffectDisappear._isPropDirty[idx] = val;
-    }
-
-
-
     @property({ type: Texture2D, tooltip: '指定貼圖' })
     public secondSprite: Texture2D | null = null;
 
