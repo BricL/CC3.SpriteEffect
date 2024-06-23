@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset, reimportAsset } from "../../util";
+import { assignEffectAsset, reimportAsset } from "../../util";
 import { base_sprite_update, spriteConst, sprite_template } from "./comp-Sprite";
 
 type Selector<T> = { $: Record<keyof T, any | null> }
@@ -55,12 +55,12 @@ let isInit = false;
 
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        await autoAssignEffectAsset('SpriteEffectDissolve');
+        await assignEffectAsset('SpriteEffectDissolve');
         await reimportAsset();
     });
 
     if (!isInit) {
-        await autoAssignEffectAsset('SpriteEffectDissolve');
+        await assignEffectAsset('SpriteEffectDissolve');
         await reimportAsset();
         isInit = true;
     }

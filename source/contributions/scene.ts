@@ -1,4 +1,20 @@
 import { Camera, Canvas, director, find, Layers, Node } from "cc";
+import { assignEffectAsset, reimportAsset } from "../util";
+
+const classIdMap: { [key: string]: string } = {
+    ["SpriteEffectColor"]: 'c6496Bv0dxAApSoUg42h5Lz',
+    ["SpriteEffectColorizing"]: '20603zBoKFLN4Q5V6kEd9S7',
+    ["SpriteEffectDisappear"]: '4c31erKjO1IOorl9cBmHuBS',
+    ["SpriteEffectDissolve"]: '18a89aWE/xKVqkaiGTOi3+S',
+    ["SpriteEffectDistort"]: 'c3398hqo91I14qg5Yx9QMZ0',
+    ["SpriteEffectFlowLight"]: 'fad028dNo1AO7/Ha84/lbRO',
+    ["SpriteEffectGaussianBlur"]: 'b4cd9DMOSZDZJNBTtka9K8l',
+    ["SpriteEffectShadow"]: '6acadLrR85GG5gtfeWP+eMN',
+    ["SpriteEffectTest"]: '0c212nm0DhIKqodQ9hpgPQf',
+    ["SpriteEffectWaterFlow"]: '76000uzo1VDjKouHxxGxirw',
+    ["SpriteEffectWaterRipple"]: '4cb70X8jgtA6YJR2wD9bTyI',
+    ["SpriteEffectWaterWave"]: 'e7c2fH4W0BPXKTIAIKn2ff5',
+}
 
 export function load() {
 
@@ -9,7 +25,7 @@ export function unload() {
 }
 
 export const methods = {
-    addEffect(nameOfEffect: string) {
+    async addEffect(nameOfEffect: string) {
         console.log(`Adding effect: ${nameOfEffect}`);
 
         let canvasNode: Node | null = null;
@@ -53,16 +69,21 @@ export const methods = {
         node.name = nameOfCount === 0 ? nameOfEffect : `${nameOfEffect}-${nameOfCount.toString().padStart(3, '0')}`;
         node.layer = Layers.Enum.UI_2D;
 
-        let classID = '';
-        if (nameOfEffect === 'SpriteEffectColor') {
-            classID = 'c6496Bv0dxAApSoUg42h5Lz';
-        }
-
+        let classID = classIdMap[nameOfEffect] || '';
         if (classID !== '') {
-            Editor.Message.request('scene', 'create-component', {
+            await Editor.Message.request('scene', 'create-component', {
                 uuid: node.uuid,
                 component: classID
-            })
+            });
+
+            const res = await assignEffectAsset(nameOfEffect, node.uuid);
+            if (res) {
+                reimportAsset();
+                console.log(`Effect自動掛載成功`);
+            }
+            else {
+                console.log(`Effect自動掛載失敗`);
+            }
         }
         else {
             console.error('No class ID found for effect: ' + nameOfEffect);

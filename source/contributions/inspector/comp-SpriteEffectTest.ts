@@ -1,6 +1,6 @@
 'use strict';
 
-import { autoAssignEffectAsset, reimportAsset } from "../../util";
+import { assignEffectAsset, reimportAsset } from "../../util";
 import { Selector, base_sprite_update, spriteConst, sprite_template } from "./comp-Sprite";
 
 export const template = `
@@ -36,12 +36,12 @@ let isInit = false;
 
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        await autoAssignEffectAsset('SpriteEffectTest');
+        await assignEffectAsset('SpriteEffectTest');
         await reimportAsset();
     });
 
     if (!isInit) {
-        await autoAssignEffectAsset('SpriteEffectTest');
+        await assignEffectAsset('SpriteEffectTest');
         await reimportAsset();
         isInit = true;
     }
