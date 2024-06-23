@@ -127,7 +127,7 @@ export class SpriteEffectFlowLight extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override get countOfUsedFloats(): number {
+    protected override get floatUsage(): number {
         return 16;
     }
 

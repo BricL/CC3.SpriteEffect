@@ -27,7 +27,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
         this._shadowType = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
             this.reflashParams();
@@ -91,7 +91,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override get countOfUsedFloats(): number {
+    protected override get floatUsage(): number {
         return 16;
     }
 

@@ -141,7 +141,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override get countOfUsedFloats(): number {
+    protected override get floatUsage(): number {
         //return 10; // 手機上非2次幂的紋理會報錯
         return 16;
     }

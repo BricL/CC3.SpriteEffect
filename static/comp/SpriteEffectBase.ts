@@ -16,7 +16,7 @@ export abstract class SpriteEffectBase extends Sprite {
     @property({ type: EffectAsset, tooltip: '指定效果EffectAsset' })
     public effectAsset: EffectAsset | null = null;
 
-    protected _effectIndex: number = -1;
+    protected _instanceID: number = -1;
 
     //#region effectColor
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Color, tooltip: "My Color" })
@@ -46,7 +46,7 @@ export abstract class SpriteEffectBase extends Sprite {
         this._is2Din3D = val;
 
         if (EDITOR_NOT_IN_PREVIEW) {
-            this.init(this.countOfProps);
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
         else {
@@ -68,7 +68,7 @@ export abstract class SpriteEffectBase extends Sprite {
      * @abstract
      * Return the count of used floats of the effect.
      */
-    protected abstract get countOfUsedFloats(): number;
+    protected abstract get floatUsage(): number;
 
     /**
      * @abstract 
@@ -95,8 +95,12 @@ export abstract class SpriteEffectBase extends Sprite {
 
 
     //#region methods
-    protected get countOfProps(): number {
-        const num = Math.ceil(this.countOfUsedFloats / 4.0);
+
+    /**
+     * 4個float為一個pixel，需使用幾個pixel數量
+     */
+    protected get pixelsUsage(): number {
+        const num = Math.ceil(this.floatUsage / 4.0);
         return num;
     }
 
@@ -111,26 +115,26 @@ export abstract class SpriteEffectBase extends Sprite {
             SpriteEffectBase._s_effectMap.set(unionKey, temp);
         }
 
-        let effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
-        if (effectIndex === -1) {
-            effectIndex = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
-            if (effectIndex === -1) {
+        let instanceID = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === this.node.uuid);
+        if (instanceID === -1) {
+            instanceID = SpriteEffectBase._s_effectMap.get(unionKey)!.findIndex((v) => v === "");
+            if (instanceID === -1) {
                 error("Effect map is full!");
                 return;
             }
         }
-        this._effectIndex = effectIndex;
+        this._instanceID = instanceID;
 
-        SpriteEffectBase._s_effectMap.get(unionKey)![this._effectIndex] = this.node.uuid;
+        SpriteEffectBase._s_effectMap.get(unionKey)![this._instanceID] = this.node.uuid;
 
-        if (this.propGroupIdx === 0) {
-            this.color = new Color(this._effectIndex, 0, 0, 255);
-        } else if (this.propGroupIdx === 1) {
-            this.color = new Color(255, (this._effectIndex - 255), 0, 255);
-        } else if (this.propGroupIdx === 2) {
-            this.color = new Color(255, 255, (this._effectIndex - 510), 255);
+        if (this.instanceGroupIdx === 0) {
+            this.color = new Color(this._instanceID, 0, 0, 255);
+        } else if (this.instanceGroupIdx === 1) {
+            this.color = new Color(255, (this._instanceID - 255), 0, 255);
+        } else if (this.instanceGroupIdx === 2) {
+            this.color = new Color(255, 255, (this._instanceID - 510), 255);
         } else {
-            error(`The prop group index, ${this.propGroupIdx}, is out of range!`);
+            error(`The prop group index, ${this.instanceGroupIdx}, is out of range!`);
             return;
         }
 
@@ -140,7 +144,7 @@ export abstract class SpriteEffectBase extends Sprite {
             SpriteEffectBase._s_effectProps.set(unionKey, temp);
         }
 
-        if (SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] === null) {
+        if (SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx] === null) {
             const w = 256 * countOfProps;
             const h = 1;
 
@@ -168,31 +172,34 @@ export abstract class SpriteEffectBase extends Sprite {
             let mat = this.initMaterial();
             mat.setProperty('propsTexture', propsTexture);
 
-            SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx] = {
+            SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx] = {
                 mat: mat,
                 propBuffer: propBuffer,
                 propTexture: propsTexture
             };
         }
 
-        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx].mat;
+        this.customMaterial = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx].mat;
     }
 
     protected reflashParams(): void {
         const index = this.getBufferIndex();
-        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.propGroupIdx];
+        const effectProps = SpriteEffectBase._s_effectProps.get(this.getPropsUnionKey())![this.instanceGroupIdx];
         this.updateParams(index, effectProps.propBuffer!);
 
         if (EDITOR_NOT_IN_PREVIEW) {
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
         }
         else {
-            this.setDirty(this.propGroupIdx, true);
+            this.setDirty(this.instanceGroupIdx, true);
         }
     }
 
-    protected get propGroupIdx(): number {
-        return Math.floor(this._effectIndex / 256);
+    /**
+     * 每256個為一組
+     */
+    protected get instanceGroupIdx(): number {
+        return Math.floor(this._instanceID / 256);
     }
 
     protected getUV(uv: number[]): Vec4 {
@@ -209,16 +216,15 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     protected getBufferIndex(): number {
-        let effectIndex = this._effectIndex - (this.propGroupIdx * 256);
-        const index = (effectIndex * this.countOfProps) * 4;
-        return index;
+        const effectIndex = this._instanceID - (this.instanceGroupIdx * 256);
+        return effectIndex * (this.pixelsUsage * 4);
     }
     //#endregion
 
 
     //#region life cycle
     onLoad(): void {
-        this.init(this.countOfProps);
+        this.init(this.pixelsUsage);
     }
 
     start() {
@@ -242,13 +248,13 @@ export abstract class SpriteEffectBase extends Sprite {
     }
 
     lateUpdate(dt: number): void {
-        if (this.isDirty(this.propGroupIdx)) {
+        if (this.isDirty(this.instanceGroupIdx)) {
             log(`${this.constructor.name}'s effect props is DIRTY!`);
             const unionKey = this.getPropsUnionKey();
-            const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.propGroupIdx];
+            const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx];
 
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
-            this.setDirty(this.propGroupIdx, false);
+            this.setDirty(this.instanceGroupIdx, false);
         }
     }
 }
