@@ -22,14 +22,23 @@
         "@types/node": "^18.17.1"
     },
     "contributions": {
+        "scene": {
+            "script": "./dist/contributions/scene.js"
+        },
+        "hierarchy": {
+            "menu": {
+                "methods": "./dist/contributions/hierarchy-menus.js",
+                "createMenu": "onCreateMenu"
+            }
+        },
         "asset-db": {
             "mount": {
-                "path": "./static/assets",
+                "path": "./static",
                 "readonly": true
             }
         },
         "inspector": {
-            "section" : {
+            "section": {
                 "node": {
                     "SpriteEffectTest": "./dist/contributions/inspector/comp-SpriteEffectTest.js",
                     "SpriteEffectColor": "./dist/contributions/inspector/comp-SpriteEffectColor.js",

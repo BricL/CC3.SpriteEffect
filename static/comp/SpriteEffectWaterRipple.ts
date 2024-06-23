@@ -6,17 +6,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectWaterRipple')
 export class SpriteEffectWaterRipple extends SpriteEffectBase {
-    private static _isPropDirty: boolean[] = [false, false, false];
-
-    protected isDirty(idx: number): boolean {
-        return SpriteEffectWaterRipple._isPropDirty[idx];
-    }
-    
-    protected setDirty(idx: number, val: boolean): void {
-        SpriteEffectWaterRipple._isPropDirty[idx] = val;
-    }
-
-
     //#region speed
     @property({ group: { name: "Setter/Getter", id: "1" }, slide: true, range: [0, 1, 0.01], tooltip: '扭曲速度' })
     public set speed(val: number) {

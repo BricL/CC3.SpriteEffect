@@ -6,17 +6,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SpriteEffectFlowLight')
 export class SpriteEffectFlowLight extends SpriteEffectBase {
-    private static _isPropDirty: boolean[] = [false, false, false];
-
-    protected isDirty(idx: number): boolean {
-        return SpriteEffectFlowLight._isPropDirty[idx];
-    }
-    
-    protected setDirty(idx: number, val: boolean): void {
-        SpriteEffectFlowLight._isPropDirty[idx] = val;
-    }
-
-
     //#region lightColor
     @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '流光颜色' })
     public set lightColor(val: Color) {
