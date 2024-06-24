@@ -423,6 +423,8 @@ $$
 
 * [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect)
 
+* [ccc3UIShaderBatch](https://github.com/bakabird/ccc3UIShaderBatch)
+
 * [Functional Shaders: A Colorful Intro-Part5 Tinting With Sepia Tone](https://medium.com/@rupertontheloose/functional-shaders-a-colorful-intro-part5-tinting-with-sepia-tone-cd6c2b49806)
 
 * [Desmos](https://www.desmos.com/calculator?lang=zh-TW)
