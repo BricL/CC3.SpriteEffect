@@ -51,7 +51,7 @@ Effect Component 提供了簡單的設定，開啟方式如下：
     
     啟用自動打包會在遊戲打包時，自動產生的圖集給予 sprite 新的 uv 位置，導致相關的 uv 計算錯誤。（除非官方可以提供相關的 shader function，否則很難解決這問題）
 
-# 各 Effect 實作思路：
+## 各 Effect 實作思路：
 
 0. [Effect Color](#effect-color)
 1. [Effect Flow Light](#effect-flow-light)
