@@ -11,7 +11,8 @@
 
 
 ## 安裝方法
-Sprite Effect 採 CocosCreator 3.8.x 後 extension 套件開發，故需安裝於CC指定的擴展資料夾下，步驟如下：
+Sprite Effect 為 CC 3.8.x 
+擴展套件開，需安裝至擴展資料夾中，步驟如下：
 
 >1. 下載 git 包
 >2. 解壓縮至項目資料夾([project_folder]/assets，同層)下的 extenstions/sprite_effect
