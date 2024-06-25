@@ -15,15 +15,15 @@ Sprite Effect 為 CC 3.8.x
 擴展套件開，需安裝至擴展資料夾中，步驟如下：
 
 >1. 下載 git 包
->2. 解壓縮至項目資料夾([project_folder]/assets，同層)下的 extenstions/sprite_effect
+>2. 解壓至[project_folder]/extenstions/sprite_effect
 >3. cd [project_folder]/extensions/sprite_effect
 >4. npm install
 >5. npm run build
->6. 啟動 Cocos Creator
->7. 至 Extension 頁籤，啟動 Extension Manager
->8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (如果沒有，可以按下旁邊的 Reflash Extensions List)
+>6. 啟動 CocosCreator
+>7. 至 Extension 頁籤下 Extension Manager
+>8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
 
-ps:若想直接以專案的形式用 Cocos Creator Editor 開啟，請參考專案 [CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+ps:想直接以專案顯示開啟，請參考[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
 
 
 ## 使用方式
