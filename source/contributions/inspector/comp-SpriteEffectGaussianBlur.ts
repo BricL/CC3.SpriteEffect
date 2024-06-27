@@ -12,6 +12,8 @@ ${sprite_template}
     <ui-prop type="dump" class="is2Din3D"></ui-prop>
     <ui-button class="reload" style="height:24px;margin:16px 0;">Reload Asset</ui-button>
 
+    <ui-prop type="dump" class="blurQualityMode"></ui-prop>
+    <ui-prop type="dump" class="blurDirectionMode"></ui-prop>
     <ui-prop type="dump" class="blurFactor"></ui-prop>
 </ui-section>
 `;
@@ -21,6 +23,8 @@ const effectConst = {
     effectColor: '.effectColor',
     is2Din3D: '.is2Din3D',
     reload: '.reload',
+    blurQualityMode: '.blurQualityMode',
+    blurDirectionMode: '.blurDirectionMode',
     blurFactor: '.blurFactor',
 }
 
@@ -36,6 +40,9 @@ export function update(this: Selector<typeof $>, dump: any) {
     if (typeof this.$.reload.render === "function") {
         this.$.reload.render(dump.value.label);
     }
+
+    this.$.blurQualityMode.render(dump.value.blurQualityMode);
+    this.$.blurDirectionMode.render(dump.value.blurDirectionMode);
     this.$.blurFactor.render(dump.value.blurFactor);
 }
 

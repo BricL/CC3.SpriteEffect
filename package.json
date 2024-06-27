@@ -33,7 +33,7 @@
         },
         "asset-db": {
             "mount": {
-                "path": "./static",
+                "path": "./source/static",
                 "readonly": true
             }
         },

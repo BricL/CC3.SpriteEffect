@@ -9,5 +9,5 @@
             "@cocos/creator-types/engine",
         ],
     },
-    "exclude": ["./static"]  // specify the files or folders to exclude from compilation
+    //"exclude": ["source/static"]  // specify the files or folders to exclude from compilation
 }
