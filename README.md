@@ -11,8 +11,7 @@
 
 
 ## 安裝方法
-Sprite Effect 為 CC 3.8.x 
-擴展套件開，需安裝至擴展資料夾中，步驟如下：
+Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步驟如下：
 
 >1. 下載 git 包
 >2. 解壓至[project_folder]/extenstions/sprite_effect
@@ -23,7 +22,7 @@ Sprite Effect 為 CC 3.8.x
 >7. 至 Extension 頁籤下 Extension Manager
 >8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
 
-ps:想直接以專案顯示開啟，請參考[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+安裝結果請參考：[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
 
 
 ## 使用方式
@@ -45,11 +44,10 @@ Effect Component 提供了簡單的設定，開啟方式如下：
 
 ### 取消圖集自動的包 (Packable)
 
-<p align="center"><img src="doc/img/packable.png" width="512"></p>
+啟用 Packable 在打包時，自動產生的圖集會給予 sprite 重新指定的 uv 位置，導致相關 uv 計算錯誤。（除非官方可以提供相關的 shader function，暫時不知如何排解問題）
 
-* 理由
+<p align="center"><img src="doc/img/packable.png" width="512"></p>
     
-    啟用自動打包會在遊戲打包時，自動產生的圖集給予 sprite 新的 uv 位置，導致相關的 uv 計算錯誤。（除非官方可以提供相關的 shader function，否則很難解決這問題）
 
 ## 各 Effect 實作思路：
 
