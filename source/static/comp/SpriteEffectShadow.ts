@@ -105,8 +105,13 @@ export class SpriteEffectShadow extends SpriteEffectBase {
         propBuffer[index + 6] = this._shadowColor.b / 255;
         propBuffer[index + 7] = this._shadowColor.a / 255;
 
-        propBuffer[index + 8] = this._offset.x;
-        propBuffer[index + 9] = this._offset.y;
+        if (this._shadowType == ShadowType.LIMITED_BOUND) {
+            propBuffer[index + 8] = this._offset.x;
+            propBuffer[index + 9] = this._offset.y;
+        } else {
+            propBuffer[index + 8] = this._offset.x * 100.0;
+            propBuffer[index + 9] = this._offset.y * 100.0;
+        }
     }
 
     /**

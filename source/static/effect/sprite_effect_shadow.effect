@@ -91,6 +91,10 @@ CCProgram shadow-vs %{
 
     vec4 pos = vec4(a_position, 1);
 
+    //Shadow 偏移 in Object Space
+    pos.x += _offset.x;
+    pos.y += _offset.y;
+
   #if USE_LOCAL
     pos = cc_matWorld * pos;
   #endif
@@ -110,12 +114,10 @@ CCProgram shadow-vs %{
   #endif
     color = a_color;
 
-    //Shadow 偏移
-    pos.x += _offset.x; 
-    pos.y += _offset.y;
+
 
     //將Shadow推離Camera一點距離，避免與下一個Pass的Sprite產生Z-fighting
-    pos.z += 0.01;
+    // pos.z += 0.001;
     return pos;
   }
 }%
@@ -145,11 +147,7 @@ CCProgram shadow-fs %{
     vec2 _offset = prop2.xy;
 
     vec4 o = vec4(1.0);
-
-    o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-    if (o.a >= 0.5) {
-      o = _shadowColor;
-    }
+    o *= (_shadowColor * CCSampleWithAlphaSeparated(cc_spriteTexture, uv0).a);
 
     ALPHA_TEST(o);
     return o;
@@ -259,11 +257,6 @@ CCProgram sprite-1pass-fs %{
     vec4 o = vec4(1, 1, 1, 1);
 
     o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-    #if IS_GRAY
-      float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
-      o.r = o.g = o.b = gray;
-    #endif
-
     vec4 shadow = vec4(_shadowColor.rgb, texture(cc_spriteTexture, uv0 - _offset).a * _shadowColor.a);
     o = mix(shadow, o, o.a) * effectColor;
 
