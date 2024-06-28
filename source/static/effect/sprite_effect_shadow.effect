@@ -19,8 +19,6 @@ CCEffect %{
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D } }
-        # _shadowColor: { value: [0, 0, 0, 0.5], editor: { type: color } } #阴影颜色
-        # _offset: { value: [0.1, 0.1], editor: { type: vetor } } #遮罩中心点
   - name: shadow-2-pass
     passes:
     - name: shadow #渲染阴影
@@ -73,10 +71,6 @@ CCProgram shadow-vs %{
   in vec4 a_color;
 
   uniform sampler2D propsTexture;
-  // uniform Constant {
-  //   vec4 _shadowColor;
-  //   vec2 _offset;
-  // };
 
   out vec4 color;
   out vec2 uv0;
@@ -114,8 +108,6 @@ CCProgram shadow-vs %{
   #endif
     color = a_color;
 
-
-
     //將Shadow推離Camera一點距離，避免與下一個Pass的Sprite產生Z-fighting
     // pos.z += 0.001;
     return pos;
@@ -133,10 +125,6 @@ CCProgram shadow-fs %{
   in vec2 uv0;
 
   uniform sampler2D propsTexture;
-  // uniform Constant {
-  //   vec4 _shadowColor;
-  //   vec2 _offset;
-  // };
 
   vec4 frag () {
     vec4 idxEffectGroup = color;
@@ -241,11 +229,7 @@ CCProgram sprite-1pass-fs %{
   in vec2 uv0;
 
   uniform sampler2D propsTexture;
-  // uniform Constant {
-  //   vec4 _shadowColor;
-  //   vec2 _offset;
-  // };
-
+  
   vec4 frag () {
     vec4 idxEffectGroup = color;
     vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
