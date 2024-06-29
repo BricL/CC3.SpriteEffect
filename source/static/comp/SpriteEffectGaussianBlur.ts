@@ -1,4 +1,4 @@
-import { _decorator, Enum, Material, UITransform, Vec2 } from 'cc';
+import { _decorator, Enum, lerp, Material, UITransform, Vec2 } from 'cc';
 import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
@@ -128,7 +128,7 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
 
         propBuffer[index + 8] = blurTextureSize.x;
         propBuffer[index + 9] = blurTextureSize.y;
-        propBuffer[index + 10] = this._blurFactor;
+        propBuffer[index + 10] = lerp(0.0, 3.0, this._blurFactor);
     }
 
     /**
