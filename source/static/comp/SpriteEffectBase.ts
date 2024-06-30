@@ -252,7 +252,7 @@ export abstract class SpriteEffectBase extends Sprite {
         const unionKey = this.getPropsUnionKey();
         const effectProps = SpriteEffectBase._s_effectProps.get(unionKey)![this.instanceGroupIdx];
         if (effectProps.isDirty) {
-            log(`${this.constructor.name}'s effect props is DIRTY!`);
+            // log(`${this.constructor.name}'s effect props is DIRTY!`);
             effectProps.propTexture!.uploadData(effectProps.propBuffer!);
             effectProps.isDirty = false;
         }
