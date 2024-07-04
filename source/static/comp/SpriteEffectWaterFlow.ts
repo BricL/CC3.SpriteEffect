@@ -102,7 +102,7 @@ export class SpriteEffectWaterFlow extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override get floatUsage(): number {
-        return 16;
+        return 12;
     }
 
     /**
@@ -115,18 +115,24 @@ export class SpriteEffectWaterFlow extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
+        let index = this.calBufferIndex(idx, 0, textureWidth);
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
 
+        index = this.calBufferIndex(idx, 1, textureWidth);
         propBuffer[index + 4] = this._flowDirection.x;
         propBuffer[index + 5] = this._flowDirection.y;
         propBuffer[index + 6] = this._frequency;
         propBuffer[index + 7] = this._amplitude;
 
+        index = this.calBufferIndex(idx, 2, textureWidth);
         propBuffer[index + 8] = this._speed;
+        propBuffer[index + 9] = 0.0;
+        propBuffer[index + 10] = 0.0;
+        propBuffer[index + 11] = 1.0;
     }
 
     /**

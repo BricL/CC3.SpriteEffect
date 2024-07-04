@@ -114,20 +114,24 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
+        let index = this.calBufferIndex(idx, 0, textureWidth);
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
 
+        index = this.calBufferIndex(idx, 1, textureWidth);
         propBuffer[index + 4] = this._dissolveColor.r / 255;
         propBuffer[index + 5] = this._dissolveColor.g / 255;
         propBuffer[index + 6] = this._dissolveColor.b / 255;
         propBuffer[index + 7] = this._dissolveColor.a / 255;
 
+        index = this.calBufferIndex(idx, 2, textureWidth);
         propBuffer[index + 8] = this._factor;
         propBuffer[index + 9] = this._softness;
         propBuffer[index + 10] = this._width;
+        propBuffer[index + 11] = 1.0;
     }
 
     /**

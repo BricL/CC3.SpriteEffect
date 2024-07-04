@@ -87,7 +87,7 @@ export abstract class SpriteEffectBase extends Sprite {
      * Update the effect parameters.
      */
     // protected abstract updateParams(index: number, propBuffer: Float32Array): void;
-    protected abstract updateParams(index: number, textureWidth: number, propBuffer: Float32Array): void;
+    protected abstract updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void;
 
     /**
      * @abstract

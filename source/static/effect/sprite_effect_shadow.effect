@@ -76,12 +76,17 @@ CCProgram shadow-vs %{
   out vec2 uv0;
 
   vec4 vert () {
-    vec4 idxEffectGroup = a_color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); 
-    vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-    vec4 _shadowColor = prop1;
-    vec2 _offset = prop2.xy;
+    // vec4 idxEffectGroup = a_color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); 
+    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    // vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    // vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    // vec4 _shadowColor = props1;
+    vec2 _offset = props2.zw;
 
     vec4 pos = vec4(a_position, 1);
 
@@ -127,12 +132,19 @@ CCProgram shadow-fs %{
   uniform sampler2D propsTexture;
 
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-    vec4 _shadowColor = prop1;
-    vec2 _offset = prop2.xy;
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+
+    vec4 _shadowColor = props1;
+    vec2 _offset = props2.xy;
 
     vec4 o = vec4(1.0);
     o *= (_shadowColor * CCSampleWithAlphaSeparated(cc_spriteTexture, uv0).a);
@@ -196,12 +208,19 @@ CCProgram sprite-fs %{
   uniform sampler2D propsTexture;
 
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-    vec4 _shadowColor = prop1;
-    vec2 _offset = prop2.xy;
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+
+    vec4 _shadowColor = props1;
+    vec2 _offset = props2.xy;
 
     vec4 o = vec4(1, 1, 1, 1);
 
@@ -231,12 +250,19 @@ CCProgram sprite-1pass-fs %{
   uniform sampler2D propsTexture;
   
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-    vec4 _shadowColor = prop1;
-    vec2 _offset = prop2.xy;
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+
+    vec4 _shadowColor = props1;
+    vec2 _offset = props2.xy;
 
     vec4 o = vec4(1, 1, 1, 1);
 

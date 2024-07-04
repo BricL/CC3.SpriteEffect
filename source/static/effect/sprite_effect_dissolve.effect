@@ -102,15 +102,21 @@ CCProgram sprite-fs %{
   // };
 
   vec4 frag () {
-      vec4 idxEffectGroup = color;
-      vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-      vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-      vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+      // vec4 idxEffectGroup = color;
+      // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+      // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+      // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
 
-      vec4 _dissolveColor = prop1;
-      float _factor = prop2.x;
-      float _softness = prop2.y;
-      float _width = prop2.z;
+      vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+      vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+      vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+      effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+
+      vec4 _dissolveColor = props1;
+      float _factor = props2.x;
+      float _softness = props2.y;
+      float _width = props2.z;
 
       vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
       float alpha = CCSampleWithAlphaSeparated(noiseTexture, uv0).r;

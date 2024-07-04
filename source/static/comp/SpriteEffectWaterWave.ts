@@ -108,12 +108,14 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
+        let index = this.calBufferIndex(idx, 0, textureWidth);
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
 
+        index = this.calBufferIndex(idx, 1, textureWidth);
         propBuffer[index + 4] = this._offset;
         propBuffer[index + 5] = this._waveWidth;
         propBuffer[index + 6] = this._waveHeight;

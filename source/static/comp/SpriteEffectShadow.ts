@@ -81,7 +81,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override get floatUsage(): number {
-        return 16;
+        return 12;
     }
 
     /**
@@ -94,24 +94,35 @@ export class SpriteEffectShadow extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
+        let index = this.calBufferIndex(idx, 0, textureWidth);
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
 
+        index = this.calBufferIndex(idx, 1, textureWidth);
         propBuffer[index + 4] = this._shadowColor.r / 255;
         propBuffer[index + 5] = this._shadowColor.g / 255;
         propBuffer[index + 6] = this._shadowColor.b / 255;
         propBuffer[index + 7] = this._shadowColor.a / 255;
 
-        if (this._shadowType == ShadowType.LIMITED_BOUND) {
-            propBuffer[index + 8] = this._offset.x;
-            propBuffer[index + 9] = this._offset.y;
-        } else {
-            propBuffer[index + 8] = this._offset.x * 100.0;
-            propBuffer[index + 9] = this._offset.y * 100.0;
-        }
+        index = this.calBufferIndex(idx, 2, textureWidth);
+        propBuffer[index + 8] = this._offset.x;
+        propBuffer[index + 9] = this._offset.y;
+        propBuffer[index + 10] = this._offset.x * 100.0;
+        propBuffer[index + 11] = this._offset.y * 100.0;
+        // if (this._shadowType === ShadowType.LIMITED_BOUND) {
+        //     propBuffer[index + 8] = this._offset.x;
+        //     propBuffer[index + 9] = this._offset.y;
+        //     propBuffer[index + 10] = this._offset.x * 100.0;
+        //     propBuffer[index + 11] = this._offset.y * 100.0;
+        // } else {
+        //     propBuffer[index + 8] = this._offset.x * 100.0;
+        //     propBuffer[index + 9] = this._offset.y * 100.0;
+        //     propBuffer[index + 10] = 0.0;
+        //     propBuffer[index + 11] = 1.0;
+        // }
     }
 
     /**

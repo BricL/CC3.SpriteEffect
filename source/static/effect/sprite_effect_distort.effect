@@ -95,11 +95,17 @@ CCProgram sprite-fs %{
   uniform sampler2D noiseTexture;
 
   vec4 frag () {
-    // 从属性纹理中获取属性
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 props = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+    
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 baseUV = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+
     float speed = props.r;
     float strength = props.g;
 

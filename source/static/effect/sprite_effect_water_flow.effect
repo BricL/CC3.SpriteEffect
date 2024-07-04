@@ -107,10 +107,16 @@ CCProgram sprite-fs %{
   // };
 
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
+    // vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
+
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
     vec2 _flowDir = props1.xy;
     float _frequency = props1.z;

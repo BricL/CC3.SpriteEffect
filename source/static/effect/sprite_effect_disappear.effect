@@ -100,12 +100,16 @@ CCProgram sprite-fs %{
   // };
 
   vec4 frag () {
-    vec4 idxEffectGroup = color;
-    vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 1);
+    // vec4 idxEffectGroup = color;
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 1);
+    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
 
-    float offset = prop1.x;
-    float soft = prop1.y;
+    effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
+    
+    float offset = props1.x;
+    float soft = props1.y;
 
     vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
     vec4 s = CCSampleWithAlphaSeparated(secondSprite, uv0);
