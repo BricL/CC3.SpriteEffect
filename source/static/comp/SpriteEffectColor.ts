@@ -154,7 +154,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
         return 13;
     }
 
-    protected getPropsUnionKey(): string {
+    protected getEffectUnionKey(): string {
         const unionKey = `${this.constructor.name}_${this._is2Din3D}_${this._toneMode}_${this._colorMode}_${this._blurMode}`;
         return unionKey;
     }
@@ -162,7 +162,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
         const baseUV = this.getUV(this.spriteFrame!.uv);
 
         let blurTextureSize = new Vec2(100, 100);
@@ -175,25 +175,29 @@ export class SpriteEffectColor extends SpriteEffectBase {
             blurTextureSize.y = this.node.getComponent(UITransform)!.contentSize.height;
         }
 
+        let index = this.calBufferIndex(idx, 0, textureWidth);
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
 
+        index = this.calBufferIndex(idx, 1, textureWidth);
         propBuffer[index + 4] = baseUV.x;
         propBuffer[index + 5] = baseUV.y;
         propBuffer[index + 6] = baseUV.z;
         propBuffer[index + 7] = baseUV.w;
 
+        index = this.calBufferIndex(idx, 2, textureWidth);
         propBuffer[index + 8] = blurTextureSize.x;
         propBuffer[index + 9] = blurTextureSize.y;
-        // propBuffer[index + 10] = 0.0;
-        // propBuffer[index + 11] = 1.0;
+        propBuffer[index + 10] = 0.0;
+        propBuffer[index + 11] = 1.0;
 
+        index = this.calBufferIndex(idx, 3, textureWidth);
         propBuffer[index + 12] = this.toneFactor;
         propBuffer[index + 13] = this.colorFactor;
         propBuffer[index + 14] = this.blurFactor;
-        // propBuffer[index + 15] = 1.0;
+        propBuffer[index + 15] = 1.0;
     }
 
     /**

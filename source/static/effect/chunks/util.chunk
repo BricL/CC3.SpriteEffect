@@ -57,3 +57,8 @@ vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxEffectGroup, int widt
   vec2 prop_uv = vec2(float(idx) / float(widthOfPropTexture), 0.0);
   return texture(propTexture, prop_uv);
 }
+
+vec4 getPropFromPropTextureEX(sampler2D propTexture, vec4 idxEffectGroup, int idxOfProps) {
+  vec2 prop_uv = vec2(idxEffectGroup.r, 1.0/(idxEffectGroup.g * 256.0) * float(idxOfProps));
+  return texture(propTexture, prop_uv);
+}

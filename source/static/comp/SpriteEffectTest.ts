@@ -17,18 +17,25 @@ export class SpriteEffectTest extends SpriteEffectBase {
     /**
      * @override SpriteEffectBase
      */
-    protected override getPropsUnionKey(): string {
+    protected override getEffectUnionKey(): string {
         return `${this.constructor.name}_${this._is2Din3D}`;
     }
 
     /**
      * @override SpriteEffectBase
      */
-    protected override updateParams(index: number, propBuffer: Float32Array): void {
+    protected override updateParams(idx: number, textureWidth: number, propBuffer: Float32Array): void {
+        let index = this.calBufferIndex(idx, 0, textureWidth);
+
         propBuffer[index + 0] = this._effectColor.r / 255;
         propBuffer[index + 1] = this._effectColor.g / 255;
         propBuffer[index + 2] = this._effectColor.b / 255;
         propBuffer[index + 3] = this._effectColor.a / 255;
+
+        // propBuffer[index + 0] = this._effectColor.r / 255;
+        // propBuffer[index + 1] = this._effectColor.g / 255;
+        // propBuffer[index + 2] = this._effectColor.b / 255;
+        // propBuffer[index + 3] = this._effectColor.a / 255;
     }
 
     /**
