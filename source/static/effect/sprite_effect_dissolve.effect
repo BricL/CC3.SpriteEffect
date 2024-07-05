@@ -19,10 +19,6 @@ CCEffect %{
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D }}
         noiseTexture: { value: white, editor: { type:  sampler2D }}   # 噪声纹理
-        # _dissolveColor: { value: [0, 0, 0, 1.0], editor: { type: color } }
-        # _factor: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
-        # _softness: { value: 0.0, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
-        # _width: { value: 0.5, editor: { slide: true, range: [0.0, 1.0], step: 0.01 } }
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert
@@ -94,22 +90,11 @@ CCProgram sprite-fs %{
 
   uniform sampler2D noiseTexture;
   uniform sampler2D propsTexture;
-  // uniform constant {
-  //   vec4 _dissolveColor;
-  //   float _factor;
-  //   float _softness;
-  //   float _width;
-  // };
 
   vec4 frag () {
-      // vec4 idxEffectGroup = color;
-      // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-      // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-      // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-      vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-      vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-      vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+      vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+      vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+      vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
       effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
@@ -134,5 +119,4 @@ CCProgram sprite-fs %{
       ALPHA_TEST(o);
       return o;
   }
-
 }%

@@ -19,9 +19,7 @@ CCEffect %{
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D }}
-        secondSprite: { value: white, editor: { type: sampler2D }} #第二张贴图
-        # offset: { value : 0, editor: { slide: true, range: [0, 1], step: 0.01 }} #消失偏移
-        # soft: { value : 0, editor: { slide: true, range: [0, 0.5], step: 0.01 }} #半透明偏移
+        secondSprite: { value: white, editor: { type: sampler2D }}
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert 
@@ -94,17 +92,10 @@ CCProgram sprite-fs %{
 
   uniform sampler2D propsTexture;
   uniform sampler2D secondSprite;
-  // uniform Constant {
-  //   float offset;
-  //   float soft;
-  // };
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 1);
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
     

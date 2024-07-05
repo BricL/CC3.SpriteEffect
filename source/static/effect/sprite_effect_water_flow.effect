@@ -20,10 +20,6 @@ CCEffect %{
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type:  sampler2D }}
         noiseTexture: {value : white, editor: {displayName: "噪声图" ,type: textrue }}
-        # _frequency: {value : 0.1, editor: {slide: true, displayName: "扰动频率" ,type: float,range: [0,10], step: 0.01 } }
-        # _amplitude: {value : 0.02, editor: {slide: true, displayName: "扰动强度" ,type: float,range: [0,1], step: 0.01 } }
-        # _speed: {value : 0.1, editor: {slide: true, displayName: "水流速度" ,type: float,range: [0,1], step: 0.01 } }
-        # _flowDir: {value : [1,0], editor: { displayName: "水流方向",type: vector2 } }
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert
@@ -99,29 +95,18 @@ CCProgram sprite-fs %{
 
   uniform sampler2D  propsTexture;
   uniform sampler2D  noiseTexture;
-  // uniform Constant {
-  //   vec2 _flowDir;
-  //   float _frequency;
-  //   float _amplitude;
-  //   float _speed;
-  // };
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
-    vec2 _flowDir = props1.xy;
-    float _frequency = props1.z;
-    float _amplitude = props1.w;
-    float _speed = props2.x;
+    vec2 _flowDir = props1.xy;    // 水流方向
+    float _frequency = props1.z;  // 扰动频率
+    float _amplitude = props1.w;  // 扰动强度
+    float _speed = props2.x;      // 水流速度
 
     vec4 o = vec4(1.0);
     vec4 offset = CCSampleWithAlphaSeparated(noiseTexture, uv0 + cc_time.w * _frequency);

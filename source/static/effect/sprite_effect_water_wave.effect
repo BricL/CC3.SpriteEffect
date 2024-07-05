@@ -19,10 +19,6 @@ CCEffect %{
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D } }
-        # _offset: { value : 0.5,  editor: {tooltip: "水平面高度"} }
-        # _waveWidth: { value: 20.0,  editor: {tooltip: "波浪宽度"}  }
-        # _waveHeight: {value: 0.01,  editor: {tooltip: "波浪高度"}}
-        # _waveSpeed: {value: 10.0,  editor: {tooltip: "波浪速度"}}
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert
@@ -94,29 +90,18 @@ CCProgram sprite-fs %{
   in vec4 color;
   in vec2 uv0;
 
-  // uniform sampler2D _WaveTex;
   uniform sampler2D propsTexture;
-  // uniform Constant {
-  //   float  _offset;
-  //   float  _waveWidth; 
-  //   float  _waveHeight; 
-  //   float  _waveSpeed;
-  // };
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 512, 2, 1);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);   
 
-    float _offset = props1.x;
-    float _waveWidth = props1.y;
-    float _waveHeight = props1.z;
-    float _waveSpeed = props1.w;
+    float _offset = props1.x;     // 水平面高
+    float _waveWidth = props1.y;  // 波宽
+    float _waveHeight = props1.z; // 波高
+    float _waveSpeed = props1.w;  // 波速
 
     vec4 o = vec4(1, 1, 1, 1);
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);

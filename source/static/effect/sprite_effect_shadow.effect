@@ -37,7 +37,7 @@ CCEffect %{
       rasterizerState:
         cullMode: none
       properties: *props
-    - name: normal #渲染正常图片
+    - name: normal #渲染图片
       vert: sprite-vs:vert
       frag: sprite-fs:frag
       depthStencilState:
@@ -76,14 +76,9 @@ CCProgram shadow-vs %{
   out vec2 uv0;
 
   vec4 vert () {
-    // vec4 idxEffectGroup = a_color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); 
-    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-    // vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    // vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+    // vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    // vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
     // vec4 _shadowColor = props1;
     vec2 _offset = props2.zw;
@@ -132,14 +127,9 @@ CCProgram shadow-fs %{
   uniform sampler2D propsTexture;
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
@@ -208,14 +198,9 @@ CCProgram sprite-fs %{
   uniform sampler2D propsTexture;
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
@@ -250,14 +235,9 @@ CCProgram sprite-1pass-fs %{
   uniform sampler2D propsTexture;
   
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 prop1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 prop2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 

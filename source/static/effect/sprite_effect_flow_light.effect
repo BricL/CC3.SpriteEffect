@@ -18,12 +18,6 @@ CCEffect %{
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type:  sampler2D }}
-        # _baseUV: { vlaue: [0,0,1,1], editor: { visible: false } }
-        # _lightColor: { value: [1, 1, 1, 1], editor: { type: color } } #流光颜色
-        # _lightWidth: { value: 0.1, target: _lightProp.x, editor: {slide: true, type: float, range: [0.1, 2.0], step: 0.01} } #流光宽度
-        # _soft:  { value: 0.1, target: _lightProp.y, editor: {slide: true, type: float, range: [0.0, 10.0], step: 0.01} } #流光软度
-        # _offset: { value: 0.1, target: _lightProp.z, editor: {slide: true, type: float, range: [-10.0, 10.0], step: 0.01} } #流光偏移
-        # _rotation: { value : 0, target: _lightProp.w, editor: {slide: true, type: float,  range: [0,6.28], step: 0.01 } } #流光旋转
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert
@@ -94,37 +88,25 @@ CCProgram sprite-fs %{
   in vec2 uv0;
 
   uniform sampler2D propsTexture;
-  // uniform Constant {
-  //   vec4 _baseUV;
-  //   vec4 _lightColor;
-  //   vec4 _lightProp; // x: width, y: soft, z: offset, w: rotation
-  // };
 
   vec4 frag () {
-    // vec4 idxEffectGroup = color;
-    // vec4 effectColor = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 0); effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
-    // vec4 baseUV = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 1);
-    // vec4 props1 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 2);
-    // vec4 props2 = getPropFromPropTexture(propsTexture, idxEffectGroup, 1024, 4, 3);
-
-    vec4 effectColor = getPropFromPropTextureEX(propsTexture, color, 1);
-    vec4 baseUV = getPropFromPropTextureEX(propsTexture, color, 2);
-    vec4 props1 = getPropFromPropTextureEX(propsTexture, color, 3);
-    vec4 props2 = getPropFromPropTextureEX(propsTexture, color, 4);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 baseUV = getPropFromPropTexture(propsTexture, color, 2);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 3);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 4);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 
     vec4 _baseUV = baseUV;
     vec4 _lightColor = props1;
-    vec4 _lightProp = props2;
+
+    // x: width, y: soft, z: offset, w: rotation
+    float _lightWidth = props2.x;
+    float _soft = props2.y + 0.01;
+    float _offset = props2.z;
+    float _rotation = props2.w;
 
     vec4 o = vec4(1, 1, 1, 1);
-
-    float _lightWidth = _lightProp.x;
-    float _soft = _lightProp.y + 0.01;
-    float _offset = _lightProp.z;
-    float _rotation = _lightProp.w;
-
     vec2 uv = normalizeUV(uv0, _baseUV);
   
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
