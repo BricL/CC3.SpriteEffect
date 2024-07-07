@@ -9,8 +9,8 @@ export enum Direction {
     VERTICAL
 }
 
-@ccclass('SpriteEffectDisappear')
-export class SpriteEffectDisappear extends SpriteEffectBase {
+@ccclass('SpriteEffectTransition')
+export class SpriteEffectTransition extends SpriteEffectBase {
     @property({ type: Texture2D, tooltip: '指定貼圖' })
     public secondSprite: Texture2D | null = null;
 
