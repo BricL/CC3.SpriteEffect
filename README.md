@@ -22,8 +22,10 @@ Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步�
 >7. 至 Extension 頁籤下 Extension Manager
 >8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
 
-安裝結果請參考：[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+## Demo Project
 
+所有 Effect 相關的 DEMO 都被放在
+[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
 
 ## 使用方式
 
