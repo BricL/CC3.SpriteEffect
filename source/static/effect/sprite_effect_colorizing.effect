@@ -90,9 +90,9 @@ CCProgram sprite-fs %{
   uniform sampler2D propsTexture;
 
   vec4 frag () {
-    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 1);
-    vec4 props1 = getPropFromPropTexture(propsTexture, color, 2);
-    vec4 props2 = getPropFromPropTexture(propsTexture, color, 3);
+    vec4 effectColor = getPropFromPropTexture(propsTexture, color, 0);
+    vec4 props1 = getPropFromPropTexture(propsTexture, color, 1);
+    vec4 props2 = getPropFromPropTexture(propsTexture, color, 2);
 
     effectColor = vec4(effectColor.rgb, effectColor.a * color.a);
 

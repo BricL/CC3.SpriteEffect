@@ -2,7 +2,7 @@
     "$schema": "./@types/schema/package/index.json",
     "package_version": 2,
     "name": "sprite_effect",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "author": "ericlin09",
     "editor": ">=3.8.2",
     "scripts": {
