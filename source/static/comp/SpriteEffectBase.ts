@@ -237,6 +237,7 @@ export abstract class SpriteEffectBase extends Sprite {
 
     //#region life cycle
     onLoad(): void {
+        super.onLoad();
         this.init(this.pixelsUsage);
     }
 
