@@ -52,7 +52,7 @@ let isInit = false;
 
 export async function ready(this: Selector<typeof $>) {
     this.$.reload.addEventListener("confirm", async () => {
-        await assignEffectAsset('SpriteEffectDisappear');
+        await assignEffectAsset('SpriteEffectTransition');
         await reimportAsset();
     });
 

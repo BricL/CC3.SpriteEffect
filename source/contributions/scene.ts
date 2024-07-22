@@ -4,7 +4,7 @@ import { assignEffectAsset, reimportAsset } from "../util";
 const classIdMap: { [key: string]: string } = {
     ["SpriteEffectColor"]: 'c6496Bv0dxAApSoUg42h5Lz',
     ["SpriteEffectColorizing"]: '20603zBoKFLN4Q5V6kEd9S7',
-    ["SpriteEffectDisappear"]: '4c31erKjO1IOorl9cBmHuBS',
+    ["SpriteEffectTransition"]: '6f463dQDhFIn5aLdZNtGpuS',
     ["SpriteEffectDissolve"]: '18a89aWE/xKVqkaiGTOi3+S',
     ["SpriteEffectDistort"]: 'c3398hqo91I14qg5Yx9QMZ0',
     ["SpriteEffectFlowLight"]: 'fad028dNo1AO7/Ha84/lbRO',

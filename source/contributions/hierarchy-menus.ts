@@ -27,12 +27,12 @@ export function onCreateMenu(assetInfo: AssetInfo) {
                     }
                 },
                 {
-                    label: 'SpriteEffectDisappear',
+                    label: 'SpriteEffectTransition',
                     async click() {
                         Editor.Message.request('scene', 'execute-scene-script', {
                             name: 'sprite_effect',
                             method: 'addEffect',
-                            args: ['SpriteEffectDisappear']
+                            args: ['SpriteEffectTransition']
                         });
                     }
                 },
