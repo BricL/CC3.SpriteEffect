@@ -12,7 +12,7 @@ export enum Direction {
 @ccclass('SpriteEffectTransition')
 export class SpriteEffectTransition extends SpriteEffectBase {
     @property({ type: Texture2D, tooltip: '指定貼圖' })
-    public secondSprite: Texture2D | null = null;
+    public spriteFrame2: Texture2D | null = null;
 
     //#region toneMode
     @property({ group: { name: "Setter/Getter", id: "1" }, type: Enum(Direction), tooltip: '指定方向' })
@@ -135,7 +135,7 @@ export class SpriteEffectTransition extends SpriteEffectBase {
             }
         );
 
-        mat.setProperty('secondSprite', this.secondSprite);
+        mat.setProperty('spriteFrame2', this.spriteFrame2);
         return mat;
     }
 }

@@ -19,7 +19,7 @@ CCEffect %{
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D }}
-        secondSprite: { value: white, editor: { type: sampler2D }}
+        spriteFrame2: { value: white, editor: { type: sampler2D }}
   - name: 2d-in-3d
     passes:
     - vert: sprite-vs:vert 
@@ -91,7 +91,7 @@ CCProgram sprite-fs %{
   in vec2 uv0;
 
   uniform sampler2D propsTexture;
-  uniform sampler2D secondSprite;
+  uniform sampler2D spriteFrame2;
 
   vec4 frag () {
     vec4 effectColor = getPropFromPropTexture(propsTexture, color, 0);
@@ -103,7 +103,7 @@ CCProgram sprite-fs %{
     float soft = props1.y;
 
     vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
-    vec4 s = CCSampleWithAlphaSeparated(secondSprite, uv0);
+    vec4 s = CCSampleWithAlphaSeparated(spriteFrame2, uv0);
 
     #if DIR_VERTICAL
       float val = smoothstep(offset, offset + soft, 1.0 - uv0.x);
