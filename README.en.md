@@ -7,7 +7,7 @@ This project was inspired by [Unity mob-sakai's UIEffect](https://github.com/mob
 
 
 ## Installation
-Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步驟如下：
+Sprite Effect is an extension package for CocosCreator 3.8+ and needs to be installed in the extensions folder. The steps are as follows:
 
 >1. Clone the Git repository
 >2. Unzip the package and place it in '${PROJECT_FOLDER}/extensions/sprite_effect'
