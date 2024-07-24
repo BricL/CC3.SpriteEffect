@@ -3,29 +3,28 @@
 ![Static Badge](https://img.shields.io/badge/Version-0.2.1a-blue) ![Static Badge](https://img.shields.io/badge/CocosCreator-3.8.x-green) ![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-android-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-ios-yellow)
 
 
-受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.8.x 開發的 Sprite Effect 組件。
+This project was inspired by [Unity mob-sakai's UIEffect](https://github.com/mob-sakai/UIEffect) and aims to develop custom sprite effect for Cocos Creator 3.8+.
 
 
-## 安裝方法
+## Installation
 Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步驟如下：
 
->1. 下載 git 包
->2. 解壓至[project_folder]/extenstions/sprite_effect
->3. cd [project_folder]/extensions/sprite_effect
+>1. Clone the Git repository
+>2. Unzip the package and place it in '${PROJECT_FOLDER}/extensions/sprite_effect'
+>3. cd '${PROJECT_FOLDER}/extensions/sprite_effect'
 >4. npm install
 >5. npm run build
->6. 啟動 CocosCreator
->7. 至 Extension 頁籤下 Extension Manager
->8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
+>6. Start the CocosCreator Editor
+>7. Click on 'Extension' in the menu bar and go to the Extension Manager.
+>8. Select the 'installed' tab, and see the 'sprite_effect' extension here.
 
-## 使用方式
+## How to Use
 
-1. 選取欲添加 Effect 的 Sprite Node。
-2. 點擊Add Component，選擇想要的 Effect。
+1. Select the node to which you want to add the effect component.
+2. Click the Add Component button and choose the effec component you want.
 
-> 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
+> ATTENTION! Sometimes the effect may not show correctly the first time the component is added. You can press the Reload button in the effect component's inspector to reload the effect and correct this issue.
 
 ## Demo Project
 
-所有 Effect 相關的 DEMO 都被放在
-[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+All the demo of effect sprite are hosted at [https://github.com/BricL/CC3.SpriteEffect.DemoProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
