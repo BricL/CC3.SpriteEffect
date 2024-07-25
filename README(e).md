@@ -4,7 +4,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-android-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-ios-yellow)
 
-語言(Language) CN | [EN](./README(e).md)
+語言(Language) [CN](./README.md) | EN
 
 ---
 
