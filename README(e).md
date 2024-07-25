@@ -39,7 +39,7 @@ All the demo of effect are hosted at [https://github.com/BricL/CC3.SpriteEffect.
 ## Notes
 ### 2D-Rendering-in-3D (RenderRoot2D Component)
 
-The RenderRoot2D component allows the 2D sprite to be rendered in 3D space to acrchive a 3D UI. The rendering order follows the same rules as the Canvas, and the depth order with other 3D object is determined by the z-bugger. Therefore, the Depth Test needs to be enabled.
+The RenderRoot2D component allows the 2D sprite to be rendered in 3D space to acrchive a 3D UI. The rendering order follows the same rules as the Canvas, and the depth order with other 3D object is determined by the z-buffer. Therefore, the Depth Test needs to be enabled.
 
 The Sprite Effect supports an easy way to enable the Depth Test by following the steps bellow:
 
