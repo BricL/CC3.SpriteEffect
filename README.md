@@ -25,11 +25,6 @@ Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步�
 >7. 至 Extension 頁籤下 Extension Manager
 >8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
 
-## Demo Project
-
-所有 Effect 相關的 DEMO 都被放在
-[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
-
 ## 使用方式
 
 1. 選取欲添加 Effect 的 Sprite Node。
@@ -37,9 +32,13 @@ Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步�
 
 > :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
 
+## Demo Project
+
+所有 Effect 相關的 DEMO 都被放在
+[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
 
 ## 注意事項
-### RenderRoot2D Component
+### 2D-Rendering-in-3D (RenderRoot2D Component)
 
 在 CC 中 RenderRoot2D 組件可讓 Sprite 於 3D 空間中呈現，達到 3D UI 的效果。而組件下子節點渲染順序與 Canvas 規則相同，但與其他 3D 物件的深度順序，需要開啟 Material 中的深度測試 (Depth Test)。
 

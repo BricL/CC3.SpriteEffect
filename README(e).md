@@ -6,50 +6,48 @@
 
 語言(Language) [CN](./README.md) | EN
 
-受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.8.x 開發的 Sprite Effect 組件。
+This project was inspired by [Unity mob-sakai's UIEffect](https://github.com/mob-sakai/UIEffect) and aims to develop custom sprite effect for CocosCreator 3.8+.
 
 <p align="center"><img src="doc/img/how_to_use.gif" width="800"></p>
 
 <p align="center"><img src="doc/img/anim_demo.gif" width="800"></p>
 
 
-## 安裝方法
-Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步驟如下：
+## Installation
+Sprite Effect is an extension package for CocosCreator 3.8+ and needs to be installed in the extensions folder. The steps are as follows:
 
->1. 下載 git 包
->2. 解壓至[project_folder]/extenstions/sprite_effect
->3. cd [project_folder]/extensions/sprite_effect
+>1. Clone the Git repository
+>2. Unzip the package and place it in "${PROJECT_FOLDER}/extensions/sprite_effect"
+>3. cd "${PROJECT_FOLDER}/extensions/sprite_effect"
 >4. npm install
 >5. npm run build
->6. 啟動 CocosCreator
->7. 至 Extension 頁籤下 Extension Manager
->8. 選擇 installed 頁籤，會有 sprite_effect 功能出現 (若無，可嘗試點擊 Reflash Extensions List 按鈕)
+>6. Start the CocosCreator Editor
+>7. Click on "Extension" in the menu bar and go to the Extension Manager.
+>8. Select the "Installed" tab, and see the "sprite_effect" extension here.
+
+## How to Use
+
+1. Select the node which you want to add the effect component.
+2. Click the "Add Component button" and choose the effect you want.
+
+> ATTENTION: Sometimes the effect may not show correctly the first time the component is added. Press the "Reload button" in the effect component's inspector to reload the effect and cirrect this issue.
 
 ## Demo Project
 
-所有 Effect 相關的 DEMO 都被放在
-[CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+All the demo of effect are hosted at [https://github.com/BricL/CC3.SpriteEffect.DemoProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject).
 
-## 使用方式
+## Notes
+### 2D-Rendering-in-3D (RenderRoot2D Component)
 
-1. 選取欲添加 Effect 的 Sprite Node。
-2. 點擊Add Component，選擇想要的 Effect。
+The RenderRoot2D component allows the 2D sprite to be rendered in 3D space to acrchive a 3D UI. The rendering order follows the same rules as the Canvas, and the depth order with other 3D object is determined by the z-bugger. Therefore, the Depth Test needs to be enabled.
 
-> :warning: 注意！Cocos Creator 3.x.x 有時指定 effect 後效果不會出現，目前的解決方法是手動點擊 Component 上的 reload，強制 Editor 重新讀取 effect。 
-
-
-## 注意事項
-### RenderRoot2D Component
-
-在 CC 中 RenderRoot2D 組件可讓 Sprite 於 3D 空間中呈現，達到 3D UI 的效果。而組件下子節點渲染順序與 Canvas 規則相同，但與其他 3D 物件的深度順序，需要開啟 Material 中的深度測試 (Depth Test)。
-
-Effect Component 提供了簡單的設定，開啟方式如下：
+The Sprite Effect supports an easy way to enable the Depth Test by following the steps bellow:
 
 <p align="center"><img src="doc/img/2D_in_3D.gif" width="512"></p>
 
-### 取消圖集自動的包 (Packable)
+### Disable the automatic atlas packing
 
-啟用 Packable 在打包時，自動產生的圖集會給予 sprite 重新指定的 uv 位置，導致相關 uv 計算錯誤。（除非官方可以提供相關的 shader function，暫時不知如何排解問題）
+If the Packable option is enabled in the texture importer, the automatic packing process will generate an atlas that reassigns the UV positions for sprites, leading to incorrect UV calculations.
 
 <p align="center"><img src="doc/img/packable.png" width="512"></p>
     
