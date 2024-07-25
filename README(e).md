@@ -52,7 +52,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 <p align="center"><img src="doc/img/packable.png" width="512"></p>
     
 
-## 各 Effect 實作思路：
+## All Effect List：
 
 0. [Effect Color](#effect-color)
 1. [Effect Flow Light](#effect-flow-light)
@@ -69,7 +69,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/effect_color.png" width="1024"></p>
 
-### 實作思路
+### Practical Approach
 
 * Tone Mode
     * GRAY (顏色灰階)
@@ -107,7 +107,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/effect_flow_light.gif" width="512"></p>
 
-### 實作思路
+### Practical Approach
 
 * 流光貼圖
 
@@ -157,7 +157,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/effect_distort.gif" width="256"></p>
 
-### 實作思路
+### Practical Approach
 
 * 要形成流動的效果，就對 uv 進行 "時間" 上的偏移。
 * 利用Offset後的uv采样噪声纹理
@@ -182,7 +182,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/effect_gaussian_blur.png" width="512"></p>
 
-### 實作思路
+### Practical Approach
 
 * 採用 5x5 的 Kernel 進行模糊處理，演算步驟如下：
 
@@ -228,7 +228,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/limited_bound_shadow.png" width="256"></p>
 
-### 實作思路
+### Practical Approach
 
 * 在 Pixel Shader 下，根據設定 Shadow 的顏色(RGB)、Sprite Alpha，加上對 uv 的偏移量(Offset)繪製出 Shadow，再將其結果與 Sprite 原來的顏色進行lerp。
 
@@ -245,7 +245,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 <p align="center"><img src="doc/img/shadow.png" width="256"></p>
 
-### 實作思路
+### Practical Approach
 
 * 此方法不受限於Sprite的大小範圍，可任意距離的shadow，但需要兩個Pass來完成。
 
@@ -282,11 +282,9 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 ## Effect Water Surface
 
-<p align="center"><img src="doc/img/effect_water.gif" width="512"></p>
+<p align="center"><img src="doc/img/effect_water.gif" width="512"></p> 
 
-### Water Flow 
-
-### 實作思路
+### Water Flow Practical Approach
 
 ```GLSL
 vec4 offset = texture(_noticeTex, uv0 + cc_time.w * _frequency);
@@ -296,9 +294,7 @@ vec2 uv1 = vec2 (uv0.x + cc_time.w * _flowDir.x * _speed,
 o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 ```
 
-### Water Ripple
-
-### 實作思路
+### Water Ripple Practical Approach
 
 * 計算 水波紋貼圖：
    * 以每個 UV 為中心
@@ -345,7 +341,7 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 
 <p align="center"><img src="doc/img/effect_disappear.gif" width="512"></p>
 
-### 實作思路
+### Practical Approach
 
 * 採用SmoothStep
     * t0 = _offset
@@ -361,7 +357,7 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 
 ## Effect Wave
 
-### 實作思路
+### Practical Approach
 
 * 基礎公式如下
 
@@ -379,7 +375,7 @@ $$
 
 ## Effect Dissolve
 
-### 實作思路
+### Practical Approach
 
 * 兩個smoothstep
 
@@ -404,7 +400,7 @@ $$
 
 <p align="center"><img src="doc/img/effect_colorizing.gif" width="512"></p>
 
-### 實作思路
+### Practical Approach
 
 * 對 Sprite 灰階化
 
@@ -421,7 +417,7 @@ $$
              o.a);
     ```
 
-## 參考文獻
+## References
 
 * [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect)
 
