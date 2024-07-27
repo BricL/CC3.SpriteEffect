@@ -8,9 +8,9 @@
 
 受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.8.x 開發的 Sprite Effect 組件。
 
-<p align="center"><img src="doc/img/how_to_use.gif" width="800"></p>
+<p align="center"><img src="doc/img/how_to_use.gif" width="512"></p>
 
-<p align="center"><img src="doc/img/anim_demo.gif" width="800"></p>
+<p align="center"><img src="doc/img/anim_demo.gif" width="512"></p>
 
 
 ## 安裝方法
@@ -36,6 +36,8 @@ Sprite Effect 為 CC 3.8.x 擴展套件，需安裝至擴展資料夾中，步�
 
 所有 Effect 相關的 DEMO 都被放在
 [CC3.SrpiteEffect.DempProject](https://github.com/BricL/CC3.SpriteEffect.DemoProject)
+
+<p align="center"><img src="doc/img/cc3_sprite_effect_demo.gif" width="350"></p>
 
 ## 注意事項
 ### 2D-Rendering-in-3D (RenderRoot2D Component)
