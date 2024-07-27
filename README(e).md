@@ -74,21 +74,21 @@ If the Packable option is enabled in the texture importer, the automatic packing
 ### Practical Approach
 
 * Tone Mode
-    * GRAY (顏色灰階)
+    * GRAY
         
         ``` GLSL
         float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
         ```
 
-    * NEGA (顏色反轉)
+    * NEGA
         
         ``` GLSL
         float color = 1.0 - o.rgb
         ```
 
-    * SEPIA (棕色舊化)
+    * SEPIA
         
-        一种带有暖色调的棕色，常用于描述古老的照片或者画作中的色调，計算如下：
+        A warm-toned brown, often used to describe the color tone in old photographs or paintings, calculated as follows:
 
         ``` GLSL
         o = vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)), 
@@ -99,11 +99,11 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 * Color Mode
 
-    * 針對指定顏色與Sprite上顏色進行常用的ADD(相加)、SUB(相減)、MUT(相乘)、FILL(填色)處理。
+    * Perform common operations ADD, SUB, MUT and FILL between the specified color and the sprite color.
 
 * Blur Mode
 
-    * 採用快速的One-Pass高斯模糊進行處理。詳細算法請見EffectGaussian。
+    * Use a one-pass Gaussian blur to achieve the blur effect on the sprite. For detailed algorithm, please refer to EffectGaussian.
 
 ## Effect Flow Light
 
@@ -111,9 +111,9 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 ### Practical Approach
 
-* 流光貼圖
+* Flow-Light
 
-    * 利用 SmoothStep function 產生流光貼圖，再與 Sprite 顏色相加。
+    * Use the SmoothStep function to generate the flow-light texture, then add it to the sprite color.
 
         ```GLSL
         float c = smoothstep(_lightWidth, _lightWidth - _soft, abs(uv.x + _offset));
@@ -122,7 +122,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
         <p align="center"><img src="doc/img/flow_light_smooth_step.png" width="512"></p>
 
-    * SmoothStep數學定義如下：
+    * The definition of SmoothStep function is as follows:
 
         $$
         smoothstep(edge0, edge1, x) = 0, \text{ if } x \leq edge0
@@ -136,9 +136,9 @@ If the Packable option is enabled in the texture importer, the automatic packing
         smoothstep(edge0, edge1, x) = t * t * (3 - 2 * t), \text{ where } t = \frac{x - edge0}{edge1 - edge0}, \text{ if } edge0 < x < edge1
         $$
 
-* 流光旋轉
+* Rotate the flow-light
 
-    * 利用2D旋轉矩陣，對uv座標進行轉動，便可達成轉動流光的方向。
+    * By using a 2D rotation matrix to rotate the UV coordinates, the direction of the flowing light can be changed.
 
         ```GLSL
         //以貼圖中心为旋转中心  
@@ -161,9 +161,9 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 ### Practical Approach
 
-* 要形成流動的效果，就對 uv 進行 "時間" 上的偏移。
-* 利用Offset後的uv采样噪声纹理
-* 將噪声纹理的值加到原始uv上，近似实现uv的扰动。
+* To create a flowing effect, use time variable to offset the UV coordinates. 
+* Use the UV coordinates after applying the offset to sample the noise texture.
+* Add the value of the noise texture to the original UV coordinates to approximate UV distortion.
 
     ```GLSL
     // 采样噪声纹理，根据时间计算偏移
@@ -186,7 +186,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 ### Practical Approach
 
-* 採用 5x5 的 Kernel 進行模糊處理，演算步驟如下：
+* Use a 5x5 Gaussian kernal to process the blur. The algorithm steps as follows:
 
     <p align="center"><img src="doc/img/gaussian_blur.png" width="1024"></p>
 
@@ -232,7 +232,9 @@ If the Packable option is enabled in the texture importer, the automatic packing
 
 ### Practical Approach
 
-* 在 Pixel Shader 下，根據設定 Shadow 的顏色(RGB)、Sprite Alpha，加上對 uv 的偏移量(Offset)繪製出 Shadow，再將其結果與 Sprite 原來的顏色進行lerp。
+* Draw the shadow based on the shadow color, sprite alpha, and UV offset. Then use lerp to combine the shadow with the original sprite color.
+
+* The advantage is speed, but the drawback is that the shadow range is limited by the size of the sprite.
 
     ```GLSL
     vec4 shadow = vec4(_shadowColor.rgb, texture(cc_spriteTexture, uv0 - _offset).a * _shadowColor.a);
@@ -241,19 +243,17 @@ If the Packable option is enabled in the texture importer, the automatic packing
     o = mix(shadow, o, o.a) * color;
     ```
 
-* 該方法的缺點就是偏移量會被 Sprite 的大小所限制，但優點是速度快。
-
 ### Two-Pass Shadow 
 
 <p align="center"><img src="doc/img/shadow.png" width="256"></p>
 
 ### Practical Approach
 
-* 此方法不受限於Sprite的大小範圍，可任意距離的shadow，但需要兩個Pass來完成。
+* This method is not limited by the size of the sprite, allowing for shadows at any distance, but it requires two passes to complete.
 
 * Pass 1
     
-    將 Uniform 的 Offset 參數在 Vertex Shader 中對頂點(Vertex)進行偏移。
+    Use the uniform offset variable to apply an offset to the vertex positions in the vertex shader.
 
     ```GLSL
     CGProgram shadow-vs {
@@ -280,7 +280,7 @@ If the Packable option is enabled in the texture importer, the automatic packing
     ```
 * Pass 2
     
-    正常繪製Sprite圖。
+    Draw the sprite normally.
 
 ## Effect Water Surface
 
@@ -298,24 +298,26 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 
 ### Water Ripple Practical Approach
 
-* 計算 水波紋貼圖：
-   * 以每個 UV 為中心
+* Generate the Ripple Texture：
+   * Centered on each UV coordinate
      
-   * 取樣 MAX_ITER(這裡為5) 個偏移量
+   * Sample `MAX_ITER` offset
      
-   * 以 UV + 偏移量成取樣點
+   * Use UV + offset as sampling points
      
-      * 偏移量函數是一個 cos(x) + sin(x) 構成的表示式 (in: vec2) = vec2(cos(time - in.x) + sin(time + in.y), cos(1.5 * time + in.x) + sin(time - in.y))
+      * The offset function is a representation composed of `cos(x) + sin(x)`. 
+      
+        `(in: vec2) = vec2(cos(time - in.x) + sin(time + in.y), cos(1.5 * time + in.x) + sin(time - in.y))`
         
-   * 將取樣點的 x 與 y 分量，分別帶入 1/cos(x), 1/sin(y)，形成一個 vec2
+   * For each sampleing point, use the x and y components to compute `1/cos(x), 1/sin(y)`, forming a vec2.
      
-   * 計算向量 vec2 長度 (1/cos(x), 1/sin(x))
+   * Calculate the length of `vec2(1/cos(x), 1/sin(x))`
      
-      * 取倒數 1/length(vec2)，讓距離 UV 越遠的取樣點引響亮度越小
+      * Take the reciprocal `1/length(vec2)`, so that sampling points further from the UV coordinate have a smaller impact on the brightness.
         
-   * 將取樣的每個點進行加總成為水波亮度值
+   * Sum the contributions of all sampling points to get the ripple brightness value.
      
-* 將 水波紋貼圖 ＋ Sprite 貼圖，得到結果
+* Combine the ripple texture with the sprite texture
 
     ```GLSL
     float calculateBrightness(vec2 uv)
@@ -345,15 +347,15 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 
 ### Practical Approach
 
-* 採用SmoothStep
-    * t0 = _offset
-    * t1 = t0 + _soft，控制柔和程度。
-    * uv0.y，對垂直方向進行效果，也可以改為uv0.x對橫向進行效果。
+* Use the SmoothStep function
+    * `t0 = _offset`
+    * `t1 = t0 + _soft`，control the level of softness.
+    * `uv0.y`，apply the effect in the vertical direction.
 
         ```GLSL
         float val = smoothstep(_offset, _offset + _soft, 1.0 - uv0.y);
         ```
-    * 如下圖所示：
+    * As shown below:
 
     <p align="center"><img src="doc/img/disapppear_smoothstep.gif" width="512"></p>
 
@@ -361,13 +363,13 @@ o = texture(cc_spriteTexture, uv1 + offset.xy * _amplitude);
 
 ### Practical Approach
 
-* 基礎公式如下
+* The formula is as follows:
 
 $$
 d \cdot \sin\left(x\cdot a+b\right)
 $$
 
-* 以uv.x為橫軸帶入sin，在以uv.y為水波高
+* Use `uv.x `as the horizontal axis and apply the sine function, with `uv.y` representing the wave height.
 
     ```GLSL
     float value = _waveHeight * sin((_waveSpeed * cc_time.x) + (uv0.x * _waveWidth));
@@ -379,11 +381,11 @@ $$
 
 ### Practical Approach
 
-* 兩個smoothstep
+* Two SmoothStep functions are used as follows:
 
-    * 一個負責edge color blend
+    * One for the edge color blend
 
-    * 一個負責alpha blend
+    * One for alpha blend
 
     ```GLSL
     float alpha = texture(_noisetex, uv0).r;
@@ -404,9 +406,9 @@ $$
 
 ### Practical Approach
 
-* 對 Sprite 灰階化
+* Grayscale the sprite.
 
-* 利用灰階後的數值，對各通道 invLerp remap 至各通道的 Min ~ Max 區間。
+* Use the grayscale values to remap each channel with 'invLerp' to the Min ~ Max range of each channel.
 
     ```GLSL
     o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
