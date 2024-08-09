@@ -13,7 +13,9 @@
 * 每個 Sprite 有代表自己的 index 傳入 Shader 中，以便取出自己所屬的參數。
 * Component 依據 index 將參數存入`參數貼圖`中。
 
-問題來了，如何產生 index 傳入 Shader 中？我想到最簡單的方法就是拿 Sprite.color 屬性當成 index，利用引擎原本就將該屬性綁定在頂點上的特性。
+* 問題來了，如何產生 index 傳入 Shader 中？
+
+  * 這裡用點小心思，想最簡單的方法是拿 Sprite.color 屬性當成 index，利用引擎原實作就綁定該屬性在頂點上。
 
 ## 上代碼
 
