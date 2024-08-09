@@ -29,8 +29,8 @@
     ```typescript
     @ccclass('SpriteEffectBase')
     export class SpriteEffectBase extends Sprite { 
-        private propsTexture: Texture2D | null = null;
-        private propBuffer: Float32Array | null = null;
+        private static propsTexture: Texture2D | null = null;
+        private static propBuffer: Float32Array | null = null;
 
         onLoad() {
             const w = 128;
@@ -67,13 +67,22 @@
 
     ```typescript
     @ccclass('SpriteEffectBase')
-    export class SpriteEffectBase extends Sprite { 
-        private propsTexture: Texture2D | null = null;
-        private propBuffer: Float32Array | null = null;
+    export class SpriteEffectBase extends Sprite {
+        @property({ type: EffectAsset, tooltip: '指定效果EffectAsset' })
+        public effectAsset: EffectAsset | null = null;
+    
+        private static propsTexture: Texture2D | null = null;
+        private static propBuffer: Float32Array | null = null;
 
         onLoad() {
             ...
-            let mat = this.initMaterial();
+            let mat = new Material();
+            mat.initialize(
+                {
+                    effectAsset: this.effectAsset,
+                    defines: {},
+                }
+            );
             mat.setProperty('propsTexture', propsTexture);
             this.customMaterial = mat;
             ...
@@ -81,6 +90,22 @@
         ...
     }
     ```
+* 在 laterUpdate 時，若有參數有異動時進行更新
+
+  ```typescript
+  @ccclass('SpriteEffectBase')
+  export class SpriteEffectBase extends Sprite {
+      ...
+      private static isDirty: boolean = false;
+      ...
+      lateUpdate(dt: number): void {    
+            if (this.isDirty) {
+                this.propsTexture.uploadData(this.propBuffer);
+                this.isDirty = false;
+            }
+      }
+  }
+  ```
 
 
 ## 參考文獻
