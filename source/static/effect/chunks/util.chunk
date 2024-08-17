@@ -1,6 +1,6 @@
 // 正推化: 將0~1的貼圖座標，轉換成Atlas上的UV
 vec2 normalizeUV (vec2 uv, vec4 baseUV) {
-   return vec2((uv.x - baseUV.x)/baseUV.z, (uv.y - baseUV.y)/baseUV.w);
+  return vec2((uv.x - baseUV.x)/baseUV.z, (uv.y - baseUV.y)/baseUV.w);
 }
 
 // 反正規化: 將0~1的貼圖座標，轉換回Atlas上的UV
