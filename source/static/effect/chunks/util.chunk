@@ -38,8 +38,8 @@ float invLerp(float a, float b, float value) {
 // propTexture: 參數贴图
 // idxEffectGroup: 效果索引
 // idxOfProps: 效果中的參數索引
-vec4 getPropFromPropTexture(sampler2D propTexture, vec4 idxEffectGroup, int idxOfProps) {
-  float w = idxEffectGroup.b * 255.0;
-  vec2 prop_uv = vec2(1.0/(idxEffectGroup.r * 255.0) * w, 1.0/(idxEffectGroup.g * 255.0) * float(idxOfProps));
+vec4 getPropFromPropTexture(sampler2D propTexture, vec4 encodeIdx, int idxOfProps) {
+  vec2 prop_uv = vec2((1.0/(encodeIdx.b * 255.0)) * (encodeIdx.r * 255.0), 
+                      (1.0/(encodeIdx.g * 255.0)) * float(idxOfProps));
   return texture(propTexture, prop_uv);
 }
