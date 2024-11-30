@@ -4,6 +4,8 @@
 
 [EN](./README(e).md) | *中文
 
+<p align="center"><img src="logo.png" width="256"></p>
+
 受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.8.x 開發的 Sprite Effect 組件。
 
 >「走過路過，別錯過，點顆星星，支持我！」
