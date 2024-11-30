@@ -8,6 +8,8 @@
 
 受 [Untiy mob-sakai UIEffect](https://github.com/mob-sakai/UIEffect) 啟發，針對 Cocos Creator 3.8.x 開發的 Sprite Effect 組件。
 
+>「走過路過，別錯過，點顆星星，支持我！」
+
 <p align="center"><img src="doc/img/how_to_use.gif" width="512"></p>
 
 <p align="center"><img src="doc/img/anim_demo.gif" width="512"></p>
