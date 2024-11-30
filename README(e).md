@@ -8,6 +8,8 @@
 
 This project was inspired by [Unity mob-sakai's UIEffect](https://github.com/mob-sakai/UIEffect) and aims to develop custom sprite effect for CocosCreator 3.8+.
 
+>"Don’t just pass by, give it a try—hit a star and show your support!"
+
 <p align="center"><img src="doc/img/how_to_use.gif" width="512"></p>
 
 <p align="center"><img src="doc/img/anim_demo.gif" width="512"></p>
