@@ -1,8 +1,6 @@
 # CC3.SpriteEffect 
 
-![Static Badge](https://img.shields.io/badge/Version-0.2.1a-blue) ![Static Badge](https://img.shields.io/badge/CocosCreator-3.8.x-green) 
-
-![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-android-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-ios-yellow)
+![Static Badge](https://img.shields.io/badge/Version-0.2.1a-blue) ![Static Badge](https://img.shields.io/badge/CocosCreator-3.8.x-green) ![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-android-yellow) ![Static Badge](https://img.shields.io/badge/Tested_On-ios-yellow)
 
 *EN | [中文](/./README.md)
 
