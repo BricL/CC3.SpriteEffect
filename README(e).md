@@ -4,6 +4,8 @@
 
 *EN | [中文](/./README.md)
 
+<p align="center"><img src="logo.png" width="256"></p>
+
 This project was inspired by [Unity mob-sakai's UIEffect](https://github.com/mob-sakai/UIEffect) and aims to develop custom sprite effect for CocosCreator 3.8+.
 
 >"Don’t just pass by, give it a try—hit a star and show your support!"
