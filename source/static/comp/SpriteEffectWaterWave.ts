@@ -130,7 +130,9 @@ export class SpriteEffectWaterWave extends SpriteEffectBase {
         mat.initialize(
             {
                 effectAsset: this.effectAsset,
-                defines: {},
+                defines: {
+                    SAMPLE_FROM_RT: this._sampleFromRT,
+                },
                 technique: this._is2Din3D ? 1 : 0
             }
         );

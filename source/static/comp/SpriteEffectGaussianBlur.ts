@@ -141,6 +141,7 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
     protected override initMaterial(): Material {
         let mat = new Material();
         let define_macro = {
+            SAMPLE_FROM_RT: this._sampleFromRT,
             HIGH: false,
             MEDIUM: false,
             USE_Y_DIRECTION: false,

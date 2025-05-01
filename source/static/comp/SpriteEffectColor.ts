@@ -206,6 +206,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     protected override initMaterial(): Material {
         let mat = new Material();
         let define_macro = {
+            SAMPLE_FROM_RT: this._sampleFromRT,
             USE_BLUR: false,
             IS_GRAY: false,
             IS_NEGA: false,
@@ -213,7 +214,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             IS_ADD: false,
             IS_SUB: false,
             IS_FILL: false,
-            IS_MULT: true
+            IS_MULT: true,
         };
 
         switch (this._toneMode) {

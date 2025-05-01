@@ -114,6 +114,7 @@ export class SpriteEffectTransition extends SpriteEffectBase {
      */
     protected override initMaterial(): Material {
         let define_macro = {
+            SAMPLE_FROM_RT: this._sampleFromRT,
             DIR_VERTICAL: true
         };
 

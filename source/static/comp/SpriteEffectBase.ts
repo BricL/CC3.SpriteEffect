@@ -1,4 +1,4 @@
-import { _decorator, Color, EffectAsset, error, log, Material, Sprite, Texture2D, Vec4 } from "cc";
+import { _decorator, Color, EffectAsset, error, IMaterialInfo, log, Material, Sprite, Texture2D, Vec4 } from "cc";
 import { EDITOR_NOT_IN_PREVIEW } from "cc/env";
 const { ccclass, property } = _decorator;
 
@@ -69,6 +69,25 @@ export abstract class SpriteEffectBase extends Sprite {
     protected _is2Din3D: boolean = false;
     //#endregion
 
+    //#region sampleFromRT
+    @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當Sprite來源RenderTexture時使用' })
+    public set sampleFromRT(val: boolean) {
+        this._sampleFromRT = val;
+        this.resetMaterial({
+            defines: {
+                SAMPLE_FROM_RT: this._sampleFromRT,
+            }
+        });
+    }
+
+    public get sampleFromRT(): boolean {
+        return this._sampleFromRT;
+    }
+
+    @property
+    protected _sampleFromRT: boolean = false;
+    //#endregion
+
 
     //#region abstract methods
     /**
@@ -96,6 +115,17 @@ export abstract class SpriteEffectBase extends Sprite {
      * @returns Material
     */
     protected abstract initMaterial(): Material;
+
+    /**
+     * @abstract
+     * Reset the material.
+     * @returns void
+     */
+    protected resetMaterial(matInfo: IMaterialInfo): void {
+        if (this.customMaterial) {
+            this.customMaterial.copy(this.customMaterial, matInfo);
+        }
+    }
     //#endregion
 
 
@@ -113,10 +143,10 @@ export abstract class SpriteEffectBase extends Sprite {
 
     protected init(pixelsUsage: number): void {
         const unionKey = this.getEffectUnionKey();
-        log(`init: ${unionKey}`);
 
         // Step1: 取的當前的effectIndex
         if (!SpriteEffectBase._s_effectMap.has(unionKey)) {
+            log(`init: ${unionKey} not found, create new one`);
             let effectData: EffectData = {
                 data: [],
                 uuids: []

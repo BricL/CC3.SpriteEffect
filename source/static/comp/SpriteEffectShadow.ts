@@ -143,7 +143,9 @@ export class SpriteEffectShadow extends SpriteEffectBase {
         mat.initialize(
             {
                 effectAsset: this.effectAsset,
-                defines: {},
+                defines: {
+                    SAMPLE_FROM_RT: this._sampleFromRT,
+                },
                 technique: technique
             }
         );
