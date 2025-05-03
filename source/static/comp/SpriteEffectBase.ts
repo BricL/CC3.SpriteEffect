@@ -57,6 +57,7 @@ export abstract class SpriteEffectBase extends Sprite {
             this.reflashParams();
         }
         else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -73,11 +74,18 @@ export abstract class SpriteEffectBase extends Sprite {
     @property({ group: { name: "Setter/Getter", id: "1" }, tooltip: '當Sprite來源RenderTexture時使用' })
     public set sampleFromRT(val: boolean) {
         this._sampleFromRT = val;
-        this.resetMaterial({
-            defines: {
-                SAMPLE_FROM_RT: this._sampleFromRT,
-            }
-        });
+        // this.resetMaterial({
+        //     defines: {
+        //         SAMPLE_FROM_RT: this._sampleFromRT,
+        //     }
+        // });
+        if (EDITOR_NOT_IN_PREVIEW) {
+            this.init(this.pixelsUsage);
+            this.reflashParams();
+        } else {
+            this.init(this.pixelsUsage);
+            this.reflashParams();
+        }
     }
 
     public get sampleFromRT(): boolean {
@@ -229,6 +237,11 @@ export abstract class SpriteEffectBase extends Sprite {
 
     protected reflashParams(): void {
         const unionKey = this.getEffectUnionKey();
+        if (SpriteEffectBase._s_effectMap.has(unionKey) === false) {
+            error(`${this.constructor.name}: effect data not found!`);
+            return;
+        }
+
         const idx = Math.floor(this._instanceID / PROP_TEXTURE_SIZE);
         const effectProps = SpriteEffectBase._s_effectMap.get(unionKey)!.data[idx];
 
@@ -277,6 +290,11 @@ export abstract class SpriteEffectBase extends Sprite {
 
     onDestroy(): void {
         const unionKey = this.getEffectUnionKey();
+        if (SpriteEffectBase._s_effectMap.has(unionKey) === false) {
+            error(`${this.constructor.name}: effect data not found!`);
+            return;
+        }
+
         const effectData = SpriteEffectBase._s_effectMap.get(unionKey)!;
         const idx = effectData.uuids.findIndex((v) => v === this.node.uuid);
 
@@ -290,8 +308,12 @@ export abstract class SpriteEffectBase extends Sprite {
 
     lateUpdate(dt: number): void {
         const unionKey = this.getEffectUnionKey();
-        const effectData = SpriteEffectBase._s_effectMap.get(unionKey)!;
+        if (SpriteEffectBase._s_effectMap.has(unionKey) === false) {
+            error(`${this.constructor.name}: effect data not found!`);
+            return;
+        }
 
+        const effectData = SpriteEffectBase._s_effectMap.get(unionKey)!;
         const idx = Math.floor(this._instanceID / PROP_TEXTURE_SIZE);
         const effectProps = effectData.data[idx];
 

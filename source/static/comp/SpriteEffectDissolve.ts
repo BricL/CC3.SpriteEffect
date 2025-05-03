@@ -108,7 +108,7 @@ export class SpriteEffectDissolve extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}`;
+        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**

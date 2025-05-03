@@ -1,5 +1,5 @@
 import { _decorator, Color, Enum, Material, Vec2 } from 'cc';
-import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
+import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 
 const { ccclass, property } = _decorator;
@@ -19,6 +19,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
             this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -88,7 +89,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._shadowType}`;
+        return `${this.constructor.name}_${this._shadowType}_${this._sampleFromRT}`;
     }
 
     /**

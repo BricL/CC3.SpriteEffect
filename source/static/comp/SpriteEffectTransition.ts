@@ -1,5 +1,5 @@
-import { _decorator, Color, Enum, Material, Texture2D } from 'cc';
-import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
+import { _decorator, Enum, Material, Texture2D } from 'cc';
+import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 
 const { ccclass, property } = _decorator;
@@ -23,6 +23,7 @@ export class SpriteEffectTransition extends SpriteEffectBase {
             this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -89,7 +90,7 @@ export class SpriteEffectTransition extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._dirMode}`;
+        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._dirMode}`;
     }
 
     /**

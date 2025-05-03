@@ -1,5 +1,5 @@
 import { _decorator, Enum, lerp, Material, UITransform, Vec2 } from 'cc';
-import { DEV, EDITOR_NOT_IN_PREVIEW } from 'cc/env';
+import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 const { ccclass, property } = _decorator;
 
@@ -97,7 +97,7 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._blurQualityMode}_${this._blurDirectionMode}`;
+        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._blurQualityMode}_${this._blurDirectionMode}`;
     }
 
     /**

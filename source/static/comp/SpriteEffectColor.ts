@@ -1,4 +1,4 @@
-import { _decorator, Enum, log, Material, Texture2D, UITransform, Vec2 } from 'cc';
+import { _decorator, Enum, Material, UITransform, Vec2 } from 'cc';
 import { EDITOR_NOT_IN_PREVIEW } from 'cc/env';
 import { SpriteEffectBase } from './SpriteEffectBase';
 
@@ -34,6 +34,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -75,6 +76,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -116,6 +118,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
             this.init(this.pixelsUsage);
             this.reflashParams();
         } else {
+            this.init(this.pixelsUsage);
             this.reflashParams();
         }
     }
@@ -155,7 +158,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     }
 
     protected getEffectUnionKey(): string {
-        const unionKey = `${this.constructor.name}_${this._is2Din3D}_${this._toneMode}_${this._colorMode}_${this._blurMode}`;
+        const unionKey = `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._toneMode}_${this._colorMode}_${this._blurMode}`;
         return unionKey;
     }
 
