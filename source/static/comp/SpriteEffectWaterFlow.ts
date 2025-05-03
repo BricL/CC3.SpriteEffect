@@ -109,7 +109,7 @@ export class SpriteEffectWaterFlow extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
+        return `SpriteEffectWaterFlow_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**

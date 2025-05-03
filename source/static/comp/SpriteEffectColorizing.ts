@@ -139,7 +139,7 @@ export class SpriteEffectColorizing extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
+        return `SpriteEffectColorizing_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**

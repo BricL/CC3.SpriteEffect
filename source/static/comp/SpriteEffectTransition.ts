@@ -90,7 +90,7 @@ export class SpriteEffectTransition extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._dirMode}`;
+        return `SpriteEffectTransition_${this._is2Din3D}_${this._sampleFromRT}_${this._dirMode}`;
     }
 
     /**

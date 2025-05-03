@@ -18,7 +18,7 @@ export class SpriteEffectTest extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
+        return `SpriteEffectTest_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**

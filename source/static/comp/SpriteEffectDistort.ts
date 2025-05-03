@@ -66,7 +66,7 @@ export class SpriteEffectDistort extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
+        return `SpriteEffectDistort_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**

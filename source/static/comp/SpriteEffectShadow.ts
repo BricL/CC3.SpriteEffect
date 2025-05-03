@@ -89,7 +89,7 @@ export class SpriteEffectShadow extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._shadowType}_${this._sampleFromRT}`;
+        return `SpriteEffectShadow_${this._shadowType}_${this._sampleFromRT}`;
     }
 
     /**

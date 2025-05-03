@@ -158,8 +158,7 @@ export class SpriteEffectColor extends SpriteEffectBase {
     }
 
     protected getEffectUnionKey(): string {
-        const unionKey = `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._toneMode}_${this._colorMode}_${this._blurMode}`;
-        return unionKey;
+        return `SpriteEffectColor_${this._is2Din3D}_${this._sampleFromRT}_${this._toneMode}_${this._colorMode}_${this._blurMode}`;
     }
 
     /**

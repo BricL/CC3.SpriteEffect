@@ -97,7 +97,7 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}_${this._blurQualityMode}_${this._blurDirectionMode}`;
+        return `SpriteEffectGaussianBlur_${this._is2Din3D}_${this._sampleFromRT}_${this._blurQualityMode}_${this._blurDirectionMode}`;
     }
 
     /**

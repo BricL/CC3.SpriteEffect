@@ -60,7 +60,7 @@ export class SpriteEffectWaterRipple extends SpriteEffectBase {
      * @override SpriteEffectBase
      */
     protected override getEffectUnionKey(): string {
-        return `${this.constructor.name}_${this._is2Din3D}_${this._sampleFromRT}`;
+        return `SpriteEffectWaterRipple_${this._is2Din3D}_${this._sampleFromRT}`;
     }
 
     /**
