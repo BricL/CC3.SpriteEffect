@@ -96,10 +96,10 @@ CCProgram sprite-fs %{
       #elif IS_NEGA
         o = mix(o, vec4(1.0 - o.rgb, o.a), toneFactor);
       #elif IS_SEPIA
-        o = mix(o, vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)), 
-                        dot(o.rgb, vec3(0.349, 0.686, 0.168)), 
-                        dot(o.rgb, vec3(0.272, 0.534, 0.131)), 
-                        o.a), 
+        o = mix(o, vec4(dot(o.rgb, vec3(0.393, 0.769, 0.189)),
+                        dot(o.rgb, vec3(0.349, 0.686, 0.168)),
+                        dot(o.rgb, vec3(0.272, 0.534, 0.131)),
+                        o.a),
                         toneFactor);
       #endif
 
@@ -128,23 +128,31 @@ CCProgram sprite-fs %{
 
     vec4 o = vec4(0.0);
     float sum = 0.0;
-    vec2 shift = vec2(0.0);
     vec2 texcood = normalizeUV(uv0, baseUV);
 
+    // 水平模糊
     for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
-      shift.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
-
-      for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
-        shift.y = blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0);
-        
-        float weight = BLUR_KERNEL_[x] * BLUR_KERNEL_[y];
+        float weight = BLUR_KERNEL_[x];
         sum += weight;
 
-        vec2 uv = denormalizeUV(texcood + shift, baseUV);
+        vec2 uv = denormalizeUV(texcood + vec2(blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0), 0.0), baseUV);
         o += CCSampleWithAlphaSeparated(tex, uv) * weight;
-      }
     }
-    return o / sum;
+    o /= sum;
+
+    // 垂直模糊
+    vec4 temp = vec4(0.0);
+    sum = 0.0;
+    for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
+        float weight = BLUR_KERNEL_[y];
+        sum += weight;
+
+        vec2 uv = denormalizeUV(texcood + vec2(0.0, blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0)), baseUV);
+        temp += CCSampleWithAlphaSeparated(tex, uv) * weight;
+    }
+    temp /= sum;
+
+    return mix(o, temp, 0.5); // 混合水平和垂直模糊
   }
 
   vec4 frag () {
@@ -161,14 +169,14 @@ CCProgram sprite-fs %{
     float blurFactor = props2.z;
 
     vec4 o = vec4(1, 1, 1, 1);
-    
+
   #if USE_BLUR
     o = Tex2DBlurring(cc_spriteTexture, uv0, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0, baseUV);
   #else
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
   #endif
     o = transformColorTone(toneFactor, effectColor, colorFactor, o);
-    
+
     ALPHA_TEST(o);
     return o;
   }
