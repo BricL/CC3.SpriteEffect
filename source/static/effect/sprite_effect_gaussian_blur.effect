@@ -187,16 +187,8 @@ CCProgram sprite-fs %{
     float blurFactor = props.z;
 
     vec4 o = vec4(1.0);
-    // vec2 uv = normalizeUV(uv0, baseUV);
     o = Tex2DBlurring(cc_spriteTexture, uv0, baseUV, blurFactor * vec2(1.0/textureSize.x, 1.0/textureSize.y) * 2.0 );
     o *= effectColor;
-
-    // if(_blur == 0.0) {
-    //   o = texture(cc_spriteTexture, uv0);
-    // } else {
-    //   o = Tex2DBlurring(cc_spriteTexture, uv, _blur * vec2(1.0/_textureSize.x, 1.0/_textureSize.y) * 1.0 , vec4(0.0, 0.0, 1.0, 1.0));
-    // }
-
     return o;
   }
 }%
