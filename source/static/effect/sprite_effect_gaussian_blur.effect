@@ -92,15 +92,17 @@ CCProgram sprite-fs %{
 
   uniform sampler2D propsTexture;
 
+  float BLUR_KERNEL_[13]; // 固定最大長度
+  const int BLUR_KERNEL_SIZE =
 #if HIGH
-  float BLUR_KERNEL_[13];
+  13;
 #elif MEDIUM
-  float BLUR_KERNEL_[9];
+  9;
 #else
-  float BLUR_KERNEL_[5];
+  5;
 #endif
 
-  vec4 Tex2DBlurring(sampler2D tex, vec2 texcood, vec4 baseUV, vec2 blur) {
+  vec4 Tex2DBlurring(sampler2D tex, vec2 uv0, vec4 baseUV, vec2 blur) {
 #if HIGH
     const int BLUR_KERNEL_SIZE = 13;
     BLUR_KERNEL_[0] = 0.0438;
@@ -136,30 +138,40 @@ CCProgram sprite-fs %{
     BLUR_KERNEL_[4] = 0.2486;
 #endif
 
+    vec2 texcood = normalizeUV(uv0, baseUV);
+    float mixFactor = 0.0;
     vec4 o = vec4(0.0);
     float sum = 0.0;
-    vec2 shift = vec2(0.0);
 
-    for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
-      shift.x = blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0);
-
-      for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
-        shift.y = blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0);
-        float weight = BLUR_KERNEL_[x] * BLUR_KERNEL_[y];
+    vec4 tempX = vec4(0.0);
+    #if USE_X_DIRECTION
+      for (int x = 0; x < BLUR_KERNEL_SIZE; x++) {
+        float weight = BLUR_KERNEL_[x];
         sum += weight;
 
-  #if USE_Y_DIRECTION
-        shift.x = .0;
-  #elif USE_X_DIRECTION
-        shift.y = .0;
-  #endif
-
-        vec2 uv = denormalizeUV(texcood + shift, baseUV);
+        vec2 uv = denormalizeUV(texcood + vec2(blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0), 0.0), baseUV);
         o += CCSampleWithAlphaSeparated(tex, uv) * weight;
       }
-    }
+      tempX = o / sum;
+      mixFactor += 1.0;
+    #endif
 
-    return o / sum;
+    vec4 tempY = vec4(0.0);
+    #if USE_Y_DIRECTION
+      o = vec4(0.0);
+      sum = 0.0;
+      for (int y=0; y<BLUR_KERNEL_SIZE; y++) {
+        float weight = BLUR_KERNEL_[y];
+        sum += weight;
+
+        vec2 uv = denormalizeUV(texcood + vec2(0.0, blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0)), baseUV);
+        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
+      }
+      tempY = o / sum;
+      mixFactor += 1.0;
+    #endif
+
+    return mixFactor > 0.0 ? (tempX + tempY) / mixFactor : vec4(0.0);
   }
 
   vec4 frag () {
@@ -173,8 +185,8 @@ CCProgram sprite-fs %{
     float blurFactor = props.z;
 
     vec4 o = vec4(1.0);
-    vec2 uv = normalizeUV(uv0, baseUV);
-    o = Tex2DBlurring(cc_spriteTexture, uv, baseUV, blurFactor * vec2(1.0/textureSize.x, 1.0/textureSize.y) * 2.0 );
+    // vec2 uv = normalizeUV(uv0, baseUV);
+    o = Tex2DBlurring(cc_spriteTexture, uv0, baseUV, blurFactor * vec2(1.0/textureSize.x, 1.0/textureSize.y) * 2.0 );
     o *= effectColor;
 
     // if(_blur == 0.0) {

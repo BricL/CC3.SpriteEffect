@@ -164,6 +164,10 @@ export class SpriteEffectGaussianBlur extends SpriteEffectBase {
             case BlurDirectionMode.USE_X_DIRECTION:
                 define_macro.USE_X_DIRECTION = true;
                 break;
+            case BlurDirectionMode.USE_BOTH_DIRECTION:
+                define_macro.USE_Y_DIRECTION = true;
+                define_macro.USE_X_DIRECTION = true;
+                break;
         }
 
         mat.initialize({
