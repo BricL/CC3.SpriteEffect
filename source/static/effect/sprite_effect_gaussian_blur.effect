@@ -5,8 +5,8 @@ CCEffect %{
     - vert: sprite-vs:vert 
       frag: sprite-fs:frag
       depthStencilState:
-         depthTest: false
-         depthWrite: false
+          depthTest: false
+          depthWrite: false
       blendState:
         targets:
         - blend: true
@@ -15,7 +15,7 @@ CCEffect %{
           blendSrcAlpha: src_alpha
           blendDstAlpha: one_minus_src_alpha
       rasterizerState:
-         cullMode: none
+          cullMode: none
       properties: &props
         alphaThreshold: { value: 0.5 }
         propsTexture: { value: white, editor: { type: sampler2D } }
@@ -24,8 +24,8 @@ CCEffect %{
     - vert: sprite-vs:vert 
       frag: sprite-fs:frag
       depthStencilState:
-         depthTest: true
-         depthWrite: false
+          depthTest: true
+          depthWrite: false
       blendState:
         targets:
         - blend: true
@@ -34,7 +34,7 @@ CCEffect %{
           blendSrcAlpha: src_alpha
           blendDstAlpha: one_minus_src_alpha
       rasterizerState:
-         cullMode: none
+          cullMode: none
       properties: *props
 }%
 
