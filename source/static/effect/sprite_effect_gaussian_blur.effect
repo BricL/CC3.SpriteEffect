@@ -138,7 +138,7 @@ CCProgram sprite-fs %{
     BLUR_KERNEL_[4] = 0.2486;
 #endif
 
-    vec2 texcood = normalizeUV(uv0, baseUV);
+    vec2 uv = normalizeUV(uv0, baseUV);
     float mixFactor = 0.0;
     vec4 o = vec4(0.0);
     float sum = 0.0;
@@ -149,8 +149,9 @@ CCProgram sprite-fs %{
         float weight = BLUR_KERNEL_[x];
         sum += weight;
 
-        vec2 uv = denormalizeUV(texcood + vec2(blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0), 0.0), baseUV);
-        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
+        vec2 offset = vec2(blur.x * (float(x) - float(BLUR_KERNEL_SIZE) / 2.0), 0.0);
+        vec2 texCoord = denormalizeUV(uv + offset, baseUV);
+        o += CCSampleWithAlphaSeparated(tex, texCoord) * weight;
       }
       tempX = o / sum;
       mixFactor += 1.0;
@@ -160,12 +161,13 @@ CCProgram sprite-fs %{
     #if USE_Y_DIRECTION
       o = vec4(0.0);
       sum = 0.0;
-      for (int y=0; y<BLUR_KERNEL_SIZE; y++) {
+      for (int y = 0; y < BLUR_KERNEL_SIZE; y++) {
         float weight = BLUR_KERNEL_[y];
         sum += weight;
 
-        vec2 uv = denormalizeUV(texcood + vec2(0.0, blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0)), baseUV);
-        o += CCSampleWithAlphaSeparated(tex, uv) * weight;
+        vec2 offset = vec2(0.0, blur.y * (float(y) - float(BLUR_KERNEL_SIZE) / 2.0));
+        vec2 texCoord = denormalizeUV(uv + offset, baseUV);
+        o += CCSampleWithAlphaSeparated(tex, texCoord) * weight;
       }
       tempY = o / sum;
       mixFactor += 1.0;
