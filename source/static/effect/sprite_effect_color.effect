@@ -118,7 +118,7 @@ CCProgram sprite-fs %{
 
   float BLUR_KERNEL_[5];
 
-  vec4 Tex2DBlurring(sampler2D tex, vec2 uv0, vec2 blur, vec4 baseUV) {
+  vec4 Tex2DBlurring(sampler2D tex, vec2 uv0, vec4 baseUV, vec2 blur) {
     const int BLUR_KERNEL_SIZE = 5;
     BLUR_KERNEL_[0] = 0.2486;
     BLUR_KERNEL_[1] = 0.7046;
@@ -171,7 +171,7 @@ CCProgram sprite-fs %{
     vec4 o = vec4(1, 1, 1, 1);
 
   #if USE_BLUR
-    o = Tex2DBlurring(cc_spriteTexture, uv0, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0, baseUV);
+    o = Tex2DBlurring(cc_spriteTexture, uv0, baseUV, blurFactor * vec2(1.0/blurTextureSize.x, 1.0/blurTextureSize.y) * 2.0);
   #else
     o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
   #endif
